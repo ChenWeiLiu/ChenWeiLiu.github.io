@@ -367,10 +367,11 @@ body {
 }
 
 .contact-links {
-    display: flex;
-    justify-content: center;
-    gap: 2rem;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    max-width: 800px;
+    margin: 0 auto;
 }
 
 .contact-link {
@@ -378,14 +379,13 @@ body {
     flex-direction: column;
     align-items: center;
     gap: 0.5rem;
-    padding: 1.5rem 2rem;
+    padding: 1.5rem 1rem;
     background: var(--surface);
     border-radius: 1rem;
     border: 1px solid var(--border-color);
     text-decoration: none;
     color: var(--text-primary);
     transition: all 0.3s ease;
-    min-width: 120px;
 }
 
 .contact-link:hover {
@@ -413,6 +413,7 @@ body {
         opacity: 0;
         transform: translateY(30px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -420,12 +421,16 @@ body {
 }
 
 @keyframes float {
-    0%, 100% {
+
+    0%,
+    100% {
         transform: translateY(0) rotate(0deg);
     }
+
     33% {
         transform: translateY(-20px) rotate(5deg);
     }
+
     66% {
         transform: translateY(10px) rotate(-5deg);
     }
@@ -479,11 +484,11 @@ body {
     }
 
     .contact-links {
-        flex-direction: column;
+        grid-template-columns: repeat(2, 1fr);
         gap: 1rem;
     }
 
     .contact-link {
-        width: 100%;
+        padding: 1.25rem 0.75rem;
     }
 }
