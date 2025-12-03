@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vocabulary Spelling Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f8ff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 20px;
+        }
+
+        .list-box {
+            width: 200px;
+            background: white;
+            border: 2px solid #4a90e2;
+            border-radius: 10px;
+            padding: 10px;
+            text-align: left;
+            min-height: 250px;
+        }
+
+        .list-box h2 {
+            text-align: center;
+        }
+
+        li {
+            font-size: 18px;
+            margin: 6px 0;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        li:hover {
+            background: #e0f0ff;
+            border-radius: 6px;
+        }
+
+        .tested {
+            color: gray;
+            text-decoration: line-through;
+        }
+
+        button {
+            padding: 16px 28px;
+            font-size: 22px;
+            margin: 12px;
+            border-radius: 14px;
+            border: none;
+            cursor: pointer;
+            background: #ff9f43;
+            color: white;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background: #ff7f00;
+        }
+
+        #currentWordDisplay {
+            font-size: 40px;
+            font-weight: bold;
+            margin-top: 10px;
+            min-height: 50px;
+        }
+
+        .word-box {
+            margin-top: 30px;
+            font-size: 28px;
+            font-weight: bold;
+            min-height: 40px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Vocabulary Spelling Test</h1>
+    <p>Press the button to hear a word. It will be spoken once.</p>
+    <div id="currentWordDisplay"></div>
+
+    <button onclick="nextWord()">Next Word</button>
+
+    <button onclick="replayWord()">Replay Current Word</button>
+    <button onclick="showPhonics()" style="background: #2ecc71;">Show Phonics</button>
+
+    <div class="container">
+        <div class="list-box">
+            <h2>Words To Study</h2>
+            <ul id="leftList"></ul>
+        </div>
+
+        <div class="list-box">
+            <h2>Words Tested</h2>
+            <ol id="rightList"></ol>
+        </div>
+    </div>
+
+    <div class="word-box" id="statusBox"></div>
+
+    <script>
+        let availableWords = [
+            { word: "think", breakdown: "th - ink", ipa: "/θɪŋk/", phonicsSounds: ["th", "ink"] },
+            { word: "wish", breakdown: "w - ish", ipa: "/wɪʃ/", phonicsSounds: ["wuh", "ish"] },
+            { word: "camp", breakdown: "c - amp", ipa: "/kæmp/", phonicsSounds: ["kuh", "amp"] },
+            { word: "sank", breakdown: "s - ank", ipa: "/sæŋk/", phonicsSounds: ["suh", "ank"] },
+            { word: "drink", breakdown: "dr - ink", ipa: "/drɪŋk/", phonicsSounds: ["druh", "ink"] },
+            { word: "hunt", breakdown: "h - unt", ipa: "/hʌnt/", phonicsSounds: ["huh", "unt"] },
+            { word: "stand", breakdown: "st - and", ipa: "/stænd/", phonicsSounds: ["stuh", "and"] },
+            { word: "pond", breakdown: "p - ond", ipa: "/pɑnd/", phonicsSounds: ["puh", "ond"] },
+            { word: "helmet", breakdown: "hel - met", ipa: "/ˈhɛlmɪt/", phonicsSounds: ["hel", "met"] },
+            { word: "reptile", breakdown: "rep - tile", ipa: "/ˈrɛptaɪl/", phonicsSounds: ["rep", "tile"] },
+            { word: "rewrite", breakdown: "re - write", ipa: "/ˌriˈraɪt/", phonicsSounds: ["re", "write"] },
+            { word: "unsure", breakdown: "un - sure", ipa: "/ʌnˈʃʊr/", phonicsSounds: ["un", "sure"] },
+            { word: "eager", breakdown: "ea - ger", ipa: "/ˈigər/", phonicsSounds: ["ee", "ger"] },
+            { word: "discard", breakdown: "dis - card", ipa: "/dɪsˈkɑrd/", phonicsSounds: ["dis", "card"] },
+            { word: "confident", breakdown: "con - fi - dent", ipa: "/ˈkɑnfɪdənt/", phonicsSounds: ["con", "fi", "dent"] }
+        ];
+
+        let testedWords = [];
+
+        let currentWordObj = null;
+        let usVoice = null;
+
+        function loadVoices() {
+            const voices = speechSynthesis.getVoices();
+            // 優先嘗試 Google US English (Chrome 常見) 或 Samantha (Mac 常見)
+            usVoice = voices.find(v => v.name === "Google US English");
+            if (!usVoice) usVoice = voices.find(v => v.name === "Samantha");
+            // 否則找任何標記為 en-US 的聲音
+            if (!usVoice) usVoice = voices.find(v => v.lang === "en-US");
+            // 最後的備案
+            if (!usVoice) usVoice = voices[0];
+        }
+
+        speechSynthesis.onvoiceschanged = loadVoices;
+        loadVoices();
+
+        function refreshLists() {
+            document.getElementById("leftList").innerHTML = availableWords
+                .map(w => `<li onclick="speakOnce('${w.word}')">${w.word}</li>`)
+                .join("");
+
+            document.getElementById("rightList").innerHTML = testedWords
+                .map(w => `<li class='tested' onclick="speakOnce('${w.word}')">${w.word}</li>`)
+                .join("");
+        }
+
+        function speakOnce(word) {
+            const utter = new SpeechSynthesisUtterance(word);
+            utter.lang = "en-US"; // 強制設定語言
+            utter.rate = 0.75;
+            utter.pitch = 1.0; // 調整為正常音調
+            if (usVoice) {
+                utter.voice = usVoice;
+            }
+            speechSynthesis.speak(utter);
+        }
+
+        function nextWord() {
+            if (availableWords.length === 0) {
+                document.getElementById("statusBox").innerText = "All words tested! Great job! 🎉";
+                document.body.style.background = "#d6ffd6";
+                return;
+            }
+
+            const index = Math.floor(Math.random() * availableWords.length);
+            currentWordObj = availableWords[index];
+
+            availableWords.splice(index, 1);
+            testedWords.push(currentWordObj);
+            refreshLists();
+
+            document.getElementById("currentWordDisplay").innerHTML =
+                `${currentWordObj.word}<br><span style="font-size:24px; color:#555;">${currentWordObj.breakdown} &nbsp; ${currentWordObj.ipa}</span>`;
+            document.getElementById("statusBox").innerText = "Playing word...";
+
+            speakOnce(currentWordObj.word);
+        }
+
+        function showPhonics() {
+            if (!currentWordObj) {
+                document.getElementById("statusBox").innerText = "No word selected yet!";
+                return;
+            }
+
+            document.getElementById("statusBox").innerText = "Playing phonics breakdown...";
+
+            // Use phonicsSounds if available, otherwise split breakdown
+            const parts = currentWordObj.phonicsSounds || currentWordObj.breakdown.split(" - ");
+
+            // Create a sequence of utterances
+            let delay = 0;
+
+            parts.forEach(part => {
+                setTimeout(() => speakOnce(part), delay);
+                delay += 1000; // 1 second gap between parts
+            });
+
+            // Play full word at the end
+            setTimeout(() => speakOnce(currentWordObj.word), delay);
+        }
+
+        function replayWord() {
+            if (!currentWordObj) {
+                document.getElementById("statusBox").innerText = "No word selected yet!";
+                return;
+            }
+            document.getElementById("statusBox").innerText = "Replaying word...";
+            speakOnce(currentWordObj.word);
+        }
+
+        refreshLists();
+    </script>
+</body>
+
+</html>
