@@ -39,11 +39,26 @@
             margin: 6px 0;
             cursor: pointer;
             transition: 0.2s;
+            padding: 4px 8px;
         }
 
         li:hover {
             background: #e0f0ff;
             border-radius: 6px;
+        }
+
+        .selected-word-tag {
+            background: #4a90e2;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .selected-word-tag:hover {
+            background: #357abd;
         }
 
         .tested {
@@ -88,10 +103,20 @@
     <p>Press the button to hear a word. It will be spoken once.</p>
     <div id="currentWordDisplay"></div>
 
-    <button onclick="nextWord()">Next Word</button>
+    <div id="selectedWordsDisplay" style="margin: 20px 0; min-height: 30px;">
+        <div style="font-size: 18px; color: #555; margin-bottom: 10px;">Selected Words:</div>
+        <div id="selectedWordsList" style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;"></div>
+    </div>
 
+    <button onclick="nextWord()">Next Word</button>
     <button onclick="replayWord()">Replay Current Word</button>
     <button onclick="showPhonics()" style="background: #2ecc71;">Show Phonics</button>
+
+    <div style="margin-top: 20px;">
+        <label for="voiceSelector" style="font-size: 18px; margin-right: 10px;">選擇發音：</label>
+        <select id="voiceSelector" onchange="changeVoice()" style="padding: 8px; font-size: 16px; border-radius: 8px;">
+        </select>
+    </div>
 
     <div class="container">
         <div class="list-box">
@@ -127,31 +152,95 @@
         ];
 
         let testedWords = [];
+        let selectedWords = []; // 用戶選擇要考的單字
 
         let currentWordObj = null;
         let usVoice = null;
 
         function loadVoices() {
             const voices = speechSynthesis.getVoices();
-            // 優先嘗試 Google US English (Chrome 常見) 或 Samantha (Mac 常見)
-            usVoice = voices.find(v => v.name === "Google US English");
-            if (!usVoice) usVoice = voices.find(v => v.name === "Samantha");
-            // 否則找任何標記為 en-US 的聲音
-            if (!usVoice) usVoice = voices.find(v => v.lang === "en-US");
-            // 最後的備案
-            if (!usVoice) usVoice = voices[0];
+            const enUSVoices = voices.filter(v => v.lang === "en-US");
+
+            // 填充下拉選單
+            const selector = document.getElementById("voiceSelector");
+            selector.innerHTML = "";
+
+            enUSVoices.forEach((voice, index) => {
+                const option = document.createElement("option");
+                option.value = index;
+                option.textContent = voice.name + (voice.lang !== "en-US" ? " (" + voice.lang + ")" : "");
+                selector.appendChild(option);
+            });
+
+            // 優先選擇 Flo
+            let defaultVoice = enUSVoices.find(v => v.name === "Flo");
+            if (!defaultVoice) defaultVoice = enUSVoices.find(v => v.lang === "en-US" && v.name.includes("Male"));
+            if (!defaultVoice) defaultVoice = enUSVoices.find(v => v.name === "Aaron"); // Mac 常見男聲
+            if (!defaultVoice) defaultVoice = enUSVoices.find(v => v.name === "Google US English"); // Chrome 常見
+            if (!defaultVoice) defaultVoice = enUSVoices.find(v => v.name === "Samantha"); // Mac 備案
+            if (!defaultVoice) defaultVoice = enUSVoices[0];
+
+            usVoice = defaultVoice;
+
+            // 設定下拉選單的預設值
+            const defaultIndex = enUSVoices.indexOf(defaultVoice);
+            if (defaultIndex !== -1) {
+                selector.selectedIndex = defaultIndex;
+            }
+
+            // 儲存所有可用的聲音供切換使用
+            window.availableVoices = enUSVoices;
+        }
+
+        function changeVoice() {
+            const selector = document.getElementById("voiceSelector");
+            const selectedIndex = selector.value;
+            usVoice = window.availableVoices[selectedIndex];
         }
 
         speechSynthesis.onvoiceschanged = loadVoices;
         loadVoices();
 
+        function toggleWordSelection(word) {
+            const wordObj = availableWords.find(w => w.word === word);
+            if (!wordObj) return;
+
+            // 將單字加入選擇列表
+            selectedWords.push(wordObj);
+
+            // 從可用列表中移除
+            const index = availableWords.findIndex(w => w.word === word);
+            if (index !== -1) {
+                availableWords.splice(index, 1);
+            }
+
+            refreshLists();
+        }
+
+        function removeFromSelected(word) {
+            const index = selectedWords.findIndex(w => w.word === word);
+            if (index !== -1) {
+                const wordObj = selectedWords[index];
+                selectedWords.splice(index, 1);
+                availableWords.push(wordObj);
+                refreshLists();
+            }
+        }
+
         function refreshLists() {
+            // 更新可用單字列表
             document.getElementById("leftList").innerHTML = availableWords
-                .map(w => `<li onclick="speakOnce('${w.word}')">${w.word}</li>`)
+                .map(w => `<li onclick="toggleWordSelection('${w.word}')">${w.word}</li>`)
                 .join("");
 
+            // 更新已測試單字列表
             document.getElementById("rightList").innerHTML = testedWords
                 .map(w => `<li class='tested' onclick="speakOnce('${w.word}')">${w.word}</li>`)
+                .join("");
+
+            // 更新選擇的單字顯示
+            document.getElementById("selectedWordsList").innerHTML = selectedWords
+                .map(w => `<span class="selected-word-tag" onclick="removeFromSelected('${w.word}')">${w.word} ×</span>`)
                 .join("");
         }
 
@@ -167,16 +256,28 @@
         }
 
         function nextWord() {
-            if (availableWords.length === 0) {
+            // 如果有選擇的單字,從選擇的單字中抽取
+            const wordsToTest = selectedWords.length > 0 ? selectedWords : availableWords;
+
+            if (wordsToTest.length === 0) {
                 document.getElementById("statusBox").innerText = "All words tested! Great job! 🎉";
                 document.body.style.background = "#d6ffd6";
                 return;
             }
 
-            const index = Math.floor(Math.random() * availableWords.length);
-            currentWordObj = availableWords[index];
+            const index = Math.floor(Math.random() * wordsToTest.length);
+            currentWordObj = wordsToTest[index];
 
-            availableWords.splice(index, 1);
+            // 從兩個列表中移除
+            const availableIndex = availableWords.findIndex(w => w.word === currentWordObj.word);
+            if (availableIndex !== -1) {
+                availableWords.splice(availableIndex, 1);
+            }
+            const selectedIndex = selectedWords.findIndex(w => w.word === currentWordObj.word);
+            if (selectedIndex !== -1) {
+                selectedWords.splice(selectedIndex, 1);
+            }
+
             testedWords.push(currentWordObj);
             refreshLists();
 
