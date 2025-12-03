@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lilian's Vocabulary Tests</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 36px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #888;
+            margin-bottom: 40px;
+            font-size: 18px;
+        }
+
+        .test-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .test-item {
+            background: #f8f9fa;
+            margin-bottom: 15px;
+            border-radius: 12px;
+            transition: all 0.3s;
+            overflow: hidden;
+        }
+
+        .test-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.2);
+        }
+
+        .test-link {
+            display: block;
+            padding: 20px 25px;
+            text-decoration: none;
+            color: #333;
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        .test-date {
+            color: #667eea;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+
+        .test-arrow {
+            float: right;
+            color: #667eea;
+            font-size: 20px;
+        }
+
+        .no-tests {
+            text-align: center;
+            color: #999;
+            padding: 40px;
+            font-size: 18px;
+        }
+
+        .add-button {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: #667eea;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 30px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s;
+        }
+
+        .add-button:hover {
+            transform: scale(1.1);
+            background: #764ba2;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>📚 Lilian's Vocabulary Tests</h1>
+        <div class="subtitle">Select a test date to begin</div>
+        <ul class="test-list" id="testList"></ul>
+    </div>
+
+    <script>
+        // GitHub 倉庫資訊（請根據您的倉庫修改）
+        const GITHUB_USER = 'ChenWeiLiu';  // 您的 GitHub 使用者名稱
+        const GITHUB_REPO = 'ChenWeiLiu.github.io';  // 您的倉庫名稱
+        const FOLDER_PATH = 'lilian';  // 當前資料夾路徑
+
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
+            return date.toLocaleDateString('zh-TW', options);
+        }
+
+        async function loadTestsFromGitHub() {
+            const testList = document.getElementById('testList');
+            testList.innerHTML = '<div class="no-tests">Loading tests...</div>';
+
+            try {
+                // 使用 GitHub API 獲取資料夾內容
+                const apiUrl = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${FOLDER_PATH}`;
+                const response = await fetch(apiUrl);
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch from GitHub API');
+                }
+
+                const files = await response.json();
+
+                // 過濾出 HTML 檔案，排除 index.html，並且檔名符合日期格式
+                const datePattern = /^\d{4}-\d{2}-\d{2}\.html$/;
+                const testFiles = files
+                    .filter(file => file.type === 'file' && datePattern.test(file.name))
+                    .map(file => file.name.replace('.html', ''));
+
+                if (testFiles.length === 0) {
+                    testList.innerHTML = '<div class="no-tests">No tests available yet.</div>';
+                    return;
+                }
+
+                // 按日期排序（最新的在前）
+                const sortedDates = testFiles.sort((a, b) => new Date(b) - new Date(a));
+
+                testList.innerHTML = sortedDates.map(date => `
+                    <li class="test-item">
+                        <a href="${date}.html" class="test-link">
+                            <span class="test-date">${formatDate(date)}</span>
+                            <span class="test-arrow">→</span>
+                        </a>
+                    </li>
+                `).join('');
+
+            } catch (error) {
+                console.error('Error loading tests:', error);
+                testList.innerHTML = '<div class="no-tests">Error loading tests. Please try again later.</div>';
+            }
+        }
+
+        loadTestsFromGitHub();
+    </script>
+</body>
+
+</html>
