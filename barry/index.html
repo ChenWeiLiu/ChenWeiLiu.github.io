@@ -8,7 +8,7 @@
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
             min-height: 100vh;
             padding: 40px 20px;
             margin: 0;
@@ -25,7 +25,7 @@
 
         h1 {
             text-align: center;
-            color: #f5576c;
+            color: #0072ff;
             margin-bottom: 10px;
             font-size: 36px;
         }
@@ -48,11 +48,12 @@
             border-radius: 12px;
             transition: all 0.3s;
             overflow: hidden;
+            border-left: 5px solid #00c6ff;
         }
 
         .test-item:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(245, 87, 108, 0.2);
+            box-shadow: 0 8px 20px rgba(0, 198, 255, 0.3);
         }
 
         .test-link {
@@ -65,14 +66,14 @@
         }
 
         .test-date {
-            color: #f5576c;
+            color: #0072ff;
             font-weight: bold;
             margin-right: 15px;
         }
 
         .test-arrow {
             float: right;
-            color: #f5576c;
+            color: #0072ff;
             font-size: 20px;
         }
 
@@ -89,7 +90,7 @@
             right: 30px;
             width: 60px;
             height: 60px;
-            background: #f5576c;
+            background: #0072ff;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -97,20 +98,20 @@
             color: white;
             font-size: 30px;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(245, 87, 108, 0.4);
+            box-shadow: 0 4px 15px rgba(0, 114, 255, 0.4);
             transition: all 0.3s;
         }
 
         .add-button:hover {
             transform: scale(1.1);
-            background: #f093fb;
+            background: #00c6ff;
         }
     </style>
 </head>
 
 <body>
     <div class="container">
-        <h1>📚 Barry's Vocabulary Tests</h1>
+        <h1>� Barry's Vocabulary Tests</h1>
         <div class="subtitle">Select a test date to begin</div>
         <ul class="test-list" id="testList"></ul>
     </div>
@@ -157,9 +158,9 @@
                 const sortedDates = testFiles.sort((a, b) => new Date(b) - new Date(a));
 
                 const g2Link = `
-                    <li class="test-item" style="border-left: 5px solid #f5576c;">
+                    <li class="test-item" style="border-left: 5px solid #ff9f43;">
                         <a href="G2_Spelling_Bee/index.html" class="test-link">
-                            <span class="test-date" style="color: #f5576c;">📂 G2 Spelling Bee</span>
+                            <span class="test-date" style="color: #ff9f43;">📂 G2 Spelling Bee</span>
                             <span class="test-arrow">→</span>
                         </a>
                     </li>
