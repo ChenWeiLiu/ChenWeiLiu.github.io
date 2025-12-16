@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ing Spelling Game</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif;
+            background: linear-gradient(135deg, #fff1eb 0%, #ace0f9 100%);
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            user-select: none;
+        }
+
+        .header {
+            width: 100%;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-sizing: border-box;
+            background: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(5px);
+        }
+
+        .level-badge {
+            background: #ff6b6b;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            box-shadow: 0 4px 0 #ee5253;
+        }
+
+        .stars {
+            font-size: 1.5rem;
+            color: #ffd700;
+            text-shadow: 2px 2px 0px #d35400;
+        }
+
+        .game-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 90%;
+            max-width: 900px;
+            /* Increased from 600px */
+            padding: 20px;
+        }
+
+        .word-card {
+            background: white;
+            padding: 40px 60px;
+            border-radius: 30px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            margin-bottom: 40px;
+            text-align: center;
+            animation: bounceIn 0.8s;
+            cursor: pointer;
+            /* Clickable */
+            transition: transform 0.2s;
+        }
+
+        .word-card:active {
+            transform: scale(0.95);
+        }
+
+        .target-word {
+            font-size: 6rem;
+            /* Larger text */
+            color: #2d3436;
+            font-weight: 800;
+            letter-spacing: 2px;
+        }
+
+        .instruction {
+            color: #636e72;
+            font-size: 3.6rem;
+            /* Enlarge 3x */
+            margin-top: 20px;
+            font-weight: bold;
+            /* Make it bolder to match size */
+        }
+
+        .choices {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            width: 100%;
+        }
+
+        .choice-btn {
+            background: #fff;
+            border: 4px solid #4834d4;
+            color: #4834d4;
+            padding: 25px;
+            font-size: 2rem;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: transform 0.1s, background 0.2s;
+            box-shadow: 0 8px 0 #a29bfe;
+            font-weight: bold;
+        }
+
+        .choice-btn:active {
+            transform: translateY(8px);
+            box-shadow: none;
+        }
+
+        .choice-btn:hover {
+            background: #f0f3ff;
+        }
+
+        /* Feedback Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .feedback-card {
+            background: white;
+            padding: 40px;
+            border-radius: 30px;
+            text-align: center;
+            max-width: 90%;
+            width: 400px;
+            position: relative;
+            animation: popUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .feedback-title {
+            font-size: 2.5rem;
+            margin: 0 0 20px 0;
+        }
+
+        .feedback-text {
+            font-size: 1.5rem;
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            font-weight: 500;
+        }
+
+        .next-btn {
+            background: #6c5ce7;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 6px 0 #4834d4;
+            transition: all 0.2s;
+        }
+
+        .next-btn:active {
+            transform: translateY(6px);
+            box-shadow: none;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 10px;
+            background: #dfe6e9;
+            border-radius: 5px;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: #00cec9;
+            width: 0%;
+            transition: width 0.5s;
+        }
+
+        /* Character */
+        .character-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 150px;
+            height: 150px;
+            z-index: -1;
+            transition: all 0.3s;
+        }
+
+        .character-img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(5px 5px 10px rgba(0, 0, 0, 0.2));
+        }
+
+        @keyframes bounceIn {
+            0% {
+                transform: scale(0.3);
+                opacity: 0;
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            70% {
+                transform: scale(0.9);
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes popUp {
+            from {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .feedback-correct {
+            border: 8px solid #00b894;
+        }
+
+        .feedback-wrong {
+            border: 8px solid #ff7675;
+        }
+
+        .highlight {
+            color: #d63031;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <div class="level-badge" id="levelBadge">Level 1</div>
+        <div class="stars" id="starsDisplay">⭐⭐⭐</div>
+    </div>
+
+    <div class="game-container">
+        <div class="word-card" onclick="speakWord(currentWord)" title="Click to listen">
+            <div class="target-word" id="questionWord">drop</div>
+            <div class="instruction">+ ing ?<br>(Click to listen 🔊)</div>
+        </div>
+
+        <div class="choices" id="choicesArea">
+            <button class="choice-btn" onclick="checkAnswer(0)">dropping</button>
+            <button class="choice-btn" onclick="checkAnswer(1)">droping</button>
+        </div>
+
+        <div class="progress-bar-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+    </div>
+
+    <div class="character-container" id="character">
+        <img src="hamster.png" alt="Hamster" class="character-img">
+    </div>
+
+    <!-- Feedback Modal -->
+    <div class="modal-overlay" id="feedbackModal">
+        <div class="feedback-card" id="feedbackCard">
+            <div class="feedback-title" id="feedbackTitle">🎉 Correct!</div>
+            <div class="feedback-text" id="feedbackText">
+                drop is short vowel + consonant.<br>
+                Need to double the p!
+            </div>
+            <button class="next-btn" onclick="nextQuestion()">Next ➡</button>
+        </div>
+    </div>
+
+    <script>
+        const levels = [
+            {
+                id: 1,
+                name: "Doubling Rule",
+                words: [
+                    "run", "sit", "hit", "get", "put", "cut", "big", "win", "hop", "map", "bat", "hot", "mad", "sad",
+                    "drop", "grip", "grab", "skip", "flap", "spot", "plug", "slip", "chat", "stop", "swim", "plan",
+                    "beg", "rub", "nod"
+                ],
+                ruleType: "double"
+            },
+            {
+                id: 2,
+                name: "No Doubling",
+                words: [
+                    "jump", "crash", "rest", "milk", "camp", "walk", "sing", "kick", "help", "hunt", "melt", "bend",
+                    "cook", "look", "read", "eat", "sleep", "wait", "rain", "meet", "go", "do", "play", "say"
+                ],
+                ruleType: "single"
+            },
+            {
+                id: 3,
+                name: "Mixed Challenge",
+                words: ["all"], // Special flag to mix
+                ruleType: "mix"
+            }
+        ];
+
+        let currentLevelIndex = 0;
+        let currentLevelWords = [];
+        let currentWord = "";
+        let score = 0;
+        let totalStars = 0;
+        let questionCount = 0;
+        const questionsPerLevel = 10; // Increased count for more practice
+
+        // Sound effects (using simple oscillator for browser compatibility)
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playTone(type) {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            if (type === 'correct') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(500, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(1000, audioCtx.currentTime + 0.1);
+                gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.5);
+            } else {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(200, audioCtx.currentTime);
+                osc.frequency.linearRampToValueAtTime(100, audioCtx.currentTime + 0.3);
+                gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.3);
+            }
+        }
+
+        function speakWord(word) {
+            const utter = new SpeechSynthesisUtterance(word);
+            utter.lang = 'en-US';
+            utter.rate = 0.8;
+
+            const voices = speechSynthesis.getVoices();
+            const samantha = voices.find(v => v.name === "Samantha");
+            if (samantha) {
+                utter.voice = samantha;
+            }
+
+            speechSynthesis.speak(utter);
+        }
+
+        function initLevel() {
+            const level = levels[currentLevelIndex];
+            document.getElementById('levelBadge').innerText = `Level ${level.id}: ${level.name}`;
+            document.getElementById('progressBar').style.width = '0%';
+            questionCount = 0;
+
+            if (level.ruleType === 'mix') {
+                // Combine all words
+                currentLevelWords = [...levels[0].words, ...levels[1].words];
+            } else {
+                currentLevelWords = [...level.words];
+            }
+
+            // Shuffle
+            currentLevelWords.sort(() => Math.random() - 0.5);
+
+            // Just take needed amount if not infinite
+            // currentLevelWords = currentLevelWords.slice(0, questionsPerLevel); // optional constraint
+
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            if (questionCount >= questionsPerLevel) {
+                // Level Complete
+                if (currentLevelIndex < levels.length - 1) {
+                    currentLevelIndex++;
+                    // Show level complete modal nicely (omitted for brevity, just alert or custom modal reutilization)
+                    alert("🎉 Level Complete! Movin' on up! 🚀");
+                    initLevel();
+                    return;
+                } else {
+                    alert("🏆 YOU WON! All levels clear! 🌟");
+                    currentLevelIndex = 0;
+                    initLevel();
+                    return;
+                }
+            }
+
+            // Pick a word (cycling through shuffled list)
+            currentWord = currentLevelWords[questionCount % currentLevelWords.length];
+
+            document.getElementById('questionWord').innerText = currentWord;
+            speakWord(currentWord);
+
+            // Determine correct form
+            // Check which list it belongs to to know rule
+            const isDouble = levels[0].words.includes(currentWord);
+
+            let correct = "";
+            let wrong = "";
+            const lastChar = currentWord.slice(-1);
+
+            if (isDouble) {
+                correct = currentWord + lastChar + "ing";
+                wrong = currentWord + "ing";
+            } else {
+                correct = currentWord + "ing";
+                wrong = currentWord + lastChar + "ing"; // Fake double
+            }
+
+            // Randomize buttons
+            const buttons = document.getElementById('choicesArea').children;
+            const correctPos = Math.random() < 0.5 ? 0 : 1;
+
+            buttons[correctPos].innerText = correct;
+            buttons[correctPos].onclick = () => showFeedback(true, isDouble, currentWord);
+
+            buttons[1 - correctPos].innerText = wrong;
+            buttons[1 - correctPos].onclick = () => showFeedback(false, isDouble, currentWord);
+        }
+
+        function showFeedback(isCorrect, shouldDouble, word) {
+            const modal = document.getElementById('feedbackModal');
+            const card = document.getElementById('feedbackCard');
+            const title = document.getElementById('feedbackTitle');
+            const text = document.getElementById('feedbackText');
+            // Character stays as image, no verification text needed for it now
+
+            modal.style.display = 'flex';
+
+            if (isCorrect) {
+                playTone('correct');
+                card.className = "feedback-card feedback-correct";
+                title.innerText = "🎉 Great Job!";
+                title.style.color = "#00b894";
+                score++;
+                document.getElementById('starsDisplay').innerText = "⭐".repeat(score);
+
+                // Explanations
+                if (shouldDouble) {
+                    text.innerHTML = `
+                        <b>${word}</b> is <span class='highlight'>short vowel + consonant</span>.<br>
+                        👉 Double the <b>${word.slice(-1)}</b> then add ing!
+                    `;
+                } else {
+                    text.innerHTML = `
+                        <b>${word}</b> is NOT 'short vowel + consonant'.<br>
+                        👉 Just add ing!<br>
+                        (No doubling needed!)
+                    `;
+                }
+            } else {
+                playTone('wrong');
+                card.className = "feedback-card feedback-wrong";
+                title.innerText = "😊 Try Again!";
+                title.style.color = "#ff7675";
+
+                if (shouldDouble) {
+                    text.innerHTML = `
+                        <b>${word}</b> has a <span class='highlight'>short vowel</span> in the middle.<br>
+                        👉 Don't forget to double the <b>${word.slice(-1)}</b>!
+                    `;
+                } else {
+                    text.innerHTML = `
+                        <b>${word}</b> is a regular word.<br>
+                        👉 No need to double, just add ing!
+                    `;
+                }
+            }
+
+            // Update Progress
+            if (isCorrect) {
+                questionCount++;
+                const pct = (questionCount / questionsPerLevel) * 100;
+                document.getElementById('progressBar').style.width = pct + "%";
+            }
+        }
+
+        function nextQuestion() {
+            document.getElementById('feedbackModal').style.display = 'none';
+            loadQuestion();
+        }
+
+        // Start
+        initLevel();
+
+    </script>
+</body>
+
+</html>

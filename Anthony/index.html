@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Anthony's Vocabulary Tests</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            text-align: center;
+            color: #9c27b0;
+            margin-bottom: 10px;
+            font-size: 36px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #888;
+            margin-bottom: 40px;
+            font-size: 18px;
+        }
+
+        .test-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .test-item {
+            background: #f8f9fa;
+            margin-bottom: 15px;
+            border-radius: 12px;
+            transition: all 0.3s;
+            overflow: hidden;
+            border-left: 5px solid #9c27b0;
+        }
+
+        .test-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(156, 39, 176, 0.3);
+        }
+
+        .test-link {
+            display: block;
+            padding: 20px 25px;
+            text-decoration: none;
+            color: #333;
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        .test-date {
+            color: #9c27b0;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+
+        .test-arrow {
+            float: right;
+            color: #9c27b0;
+            font-size: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🦄 Anthony's Vocabulary Tests</h1>
+        <div class="subtitle">Select a training to begin</div>
+        <ul class="test-list" id="testList">
+            <!-- Static Links for Training -->
+            <li class="test-item" style="border-left: 5px solid #9c27b0;">
+                <a href="calendar.html" class="test-link">
+                    <span class="test-date" style="color: #9c27b0;">📅 Time Words Training (Week & Month)</span>
+                    <span class="test-arrow">→</span>
+                </a>
+            </li>
+            <li class="test-item" style="border-left: 5px solid #2ecc71;">
+                <a href="numbers.html" class="test-link">
+                    <span class="test-date" style="color: #2ecc71;">🔢 Number Words Training (Numbers)</span>
+                    <span class="test-arrow">→</span>
+                </a>
+            </li>
+            <li class="test-item" style="border-left: 5px solid #ff6b6b;">
+                <a href="ing_game.html" class="test-link">
+                    <span class="test-date" style="color: #ff6b6b;">🎮 -ing Spelling Game (CVC Rule)</span>
+                    <span class="test-arrow">→</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</body>
+
+</html>

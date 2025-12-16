@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Number Words Training</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #e6f7ff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 20px;
+        }
+
+        .list-box {
+            width: 200px;
+            background: white;
+            border: 2px solid #4a90e2;
+            border-radius: 10px;
+            padding: 10px;
+            text-align: left;
+            min-height: 250px;
+        }
+
+        .list-box h2 {
+            text-align: center;
+            font-size: 20px;
+            margin: 10px 0;
+        }
+
+        li {
+            font-size: 18px;
+            margin: 6px 0;
+            cursor: pointer;
+            transition: 0.2s;
+            padding: 4px 8px;
+        }
+
+        li:hover {
+            background: #e0f0ff;
+            border-radius: 6px;
+        }
+
+        .selected-word-tag {
+            background: #4a90e2;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+            display: inline-block;
+            margin: 5px;
+        }
+
+        .selected-word-tag:hover {
+            background: #357abd;
+        }
+
+        .tested {
+            color: gray;
+            text-decoration: line-through;
+        }
+
+        button {
+            padding: 16px 28px;
+            font-size: 20px;
+            margin: 12px;
+            border-radius: 14px;
+            border: none;
+            cursor: pointer;
+            background: #ff9f43;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 4px 0 #e67e22;
+            transition: all 0.1s;
+        }
+
+        button:active {
+            transform: translateY(4px);
+            box-shadow: 0 0 0 #e67e22;
+        }
+
+        button:hover {
+            background: #ff7f00;
+        }
+
+        #currentWordDisplay {
+            font-size: 40px;
+            font-weight: bold;
+            margin-top: 10px;
+            min-height: 80px;
+        }
+
+        .word-box {
+            margin-top: 30px;
+            font-size: 28px;
+            font-weight: bold;
+            min-height: 40px;
+            color: #555;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>🔢 Number Words Training</h1>
+    <p>Press the button to hear a number. It will be spoken once.</p>
+    <div id="currentWordDisplay"></div>
+
+    <div id="selectedWordsDisplay" style="margin: 20px 0; min-height: 30px;">
+        <div style="font-size: 18px; color: #555; margin-bottom: 10px;">Selected Numbers:</div>
+        <div id="selectedWordsList" style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;"></div>
+    </div>
+
+    <button onclick="nextWord()">Next Number</button>
+    <button onclick="replayWord()">Replay</button>
+    <button onclick="showPhonics()" style="background: #2ecc71; box-shadow: 0 4px 0 #27ae60;">Show Phonics</button>
+
+    <div style="margin-top: 20px;">
+        <label for="voiceSelector" style="font-size: 18px; margin-right: 10px;">Select Voice:</label>
+        <select id="voiceSelector" onchange="changeVoice()" style="padding: 8px; font-size: 16px; border-radius: 8px;">
+        </select>
+    </div>
+
+    <div class="container">
+        <div class="list-box">
+            <h2>Numbers To Study</h2>
+            <ul id="leftList"></ul>
+        </div>
+
+        <div class="list-box">
+            <h2>Numbers Tested</h2>
+            <ol id="rightList"></ol>
+        </div>
+    </div>
+
+    <div class="word-box" id="statusBox"></div>
+
+    <script>
+        let availableWords = [
+            // 0-12
+            { word: "zero", breakdown: "z - ero", ipa: "/ˈzɪroʊ/", phonicsSounds: ["z", "ee", "row"] },
+            { word: "one", breakdown: "one", ipa: "/wʌn/", phonicsSounds: ["wuh", "un"] },
+            { word: "two", breakdown: "t - wo", ipa: "/tu/", phonicsSounds: ["t", "oo"] },
+            { word: "three", breakdown: "th - ree", ipa: "/θri/", phonicsSounds: ["th", "ree"] },
+            { word: "four", breakdown: "f - our", ipa: "/fɔr/", phonicsSounds: ["f", "or"] },
+            { word: "five", breakdown: "f - ive", ipa: "/faɪv/", phonicsSounds: ["f", "iy", "v"] },
+            { word: "six", breakdown: "s - ix", ipa: "/sɪks/", phonicsSounds: ["s", "ih", "ks"] },
+            { word: "seven", breakdown: "sev - en", ipa: "/ˈsɛvən/", phonicsSounds: ["seh", "ven"] },
+            { word: "eight", breakdown: "eigh - t", ipa: "/eɪt/", phonicsSounds: ["ay", "t"] },
+            { word: "nine", breakdown: "n - ine", ipa: "/naɪn/", phonicsSounds: ["n", "iy", "n"] },
+            { word: "ten", breakdown: "t - en", ipa: "/tɛn/", phonicsSounds: ["t", "eh", "n"] },
+            { word: "eleven", breakdown: "e - lev - en", ipa: "/ɪˈlɛvən/", phonicsSounds: ["ih", "leh", "ven"] },
+            { word: "twelve", breakdown: "tw - elve", ipa: "/twɛlv/", phonicsSounds: ["tw", "eh", "lv"] },
+            // Teens
+            { word: "thirteen", breakdown: "thir - teen", ipa: "/ˌθɜrˈtin/", phonicsSounds: ["thir", "teen"] },
+            { word: "fourteen", breakdown: "four - teen", ipa: "/ˌfɔrˈtin/", phonicsSounds: ["for", "teen"] },
+            { word: "fifteen", breakdown: "fif - teen", ipa: "/ˌfɪfˈtin/", phonicsSounds: ["fif", "teen"] },
+            { word: "sixteen", breakdown: "six - teen", ipa: "/ˌsɪkˈstin/", phonicsSounds: ["six", "teen"] },
+            { word: "seventeen", breakdown: "sev - en - teen", ipa: "/ˌsɛvənˈtin/", phonicsSounds: ["seh", "ven", "teen"] },
+            { word: "eighteen", breakdown: "eigh - teen", ipa: "/ˌeɪˈtin/", phonicsSounds: ["ay", "teen"] },
+            { word: "nineteen", breakdown: "nine - teen", ipa: "/ˌnaɪnˈtin/", phonicsSounds: ["nine", "teen"] },
+            // Tens
+            { word: "twenty", breakdown: "twen - ty", ipa: "/ˈtwɛnti/", phonicsSounds: ["twen", "tee"] },
+            { word: "thirty", breakdown: "thir - ty", ipa: "/ˈθɜrti/", phonicsSounds: ["thir", "tee"] },
+            { word: "forty", breakdown: "for - ty", ipa: "/ˈfɔrti/", phonicsSounds: ["for", "tee"] },
+            { word: "fifty", breakdown: "fif - ty", ipa: "/ˈfɪfti/", phonicsSounds: ["fif", "tee"] },
+            { word: "sixty", breakdown: "six - ty", ipa: "/ˈsɪksti/", phonicsSounds: ["six", "tee"] },
+            { word: "seventy", breakdown: "sev - en - ty", ipa: "/ˈsɛvənti/", phonicsSounds: ["seh", "ven", "tee"] },
+            { word: "eighty", breakdown: "eigh - ty", ipa: "/ˈeɪti/", phonicsSounds: ["ay", "tee"] },
+            { word: "ninety", breakdown: "nine - ty", ipa: "/ˈnaɪnti/", phonicsSounds: ["nine", "tee"] },
+            // Large
+            { word: "hundred", breakdown: "hun - dred", ipa: "/ˈhʌndrəd/", phonicsSounds: ["hun", "dred"] },
+            { word: "thousand", breakdown: "thou - sand", ipa: "/ˈθaʊzənd/", phonicsSounds: ["thou", "zand"] }
+        ];
+
+        let testedWords = [];
+        let selectedWords = [];
+
+        let currentWordObj = null;
+        let usVoice = null;
+
+        function loadVoices() {
+            const voices = speechSynthesis.getVoices();
+            const enUSVoices = voices.filter(v => v.lang === "en-US");
+            const selector = document.getElementById("voiceSelector");
+            selector.innerHTML = "";
+
+            enUSVoices.forEach((voice, index) => {
+                const option = document.createElement("option");
+                option.value = index;
+                option.textContent = voice.name + (voice.lang !== "en-US" ? " (" + voice.lang + ")" : "");
+                selector.appendChild(option);
+            });
+
+            let defaultVoice = enUSVoices.find(v => v.name === "Samantha") ||
+                enUSVoices.find(v => v.name === "Flo") ||
+                enUSVoices.find(v => v.lang === "en-US" && v.name.includes("Male")) ||
+                enUSVoices.find(v => v.name === "Aaron") ||
+                enUSVoices.find(v => v.name === "Google US English") ||
+                enUSVoices[0];
+
+            usVoice = defaultVoice;
+            const defaultIndex = enUSVoices.indexOf(defaultVoice);
+            if (defaultIndex !== -1) selector.selectedIndex = defaultIndex;
+            window.availableVoices = enUSVoices;
+        }
+
+        function changeVoice() {
+            const selector = document.getElementById("voiceSelector");
+            usVoice = window.availableVoices[selector.value];
+        }
+
+        speechSynthesis.onvoiceschanged = loadVoices;
+        loadVoices();
+
+        function toggleWordSelection(word) {
+            const wordObj = availableWords.find(w => w.word === word);
+            if (!wordObj) return;
+            selectedWords.push(wordObj);
+            const index = availableWords.findIndex(w => w.word === word);
+            if (index !== -1) availableWords.splice(index, 1);
+            refreshLists();
+        }
+
+        function removeFromSelected(word) {
+            const index = selectedWords.findIndex(w => w.word === word);
+            if (index !== -1) {
+                const wordObj = selectedWords[index];
+                selectedWords.splice(index, 1);
+                availableWords.push(wordObj);
+                refreshLists();
+            }
+        }
+
+        function refreshLists() {
+            // Sort available words by length/alphabetic to keep it tidy? Or just keep original order?
+            // Original order is logical (0,1,2...), so we should probably not sort alphabetically.
+            // But when items are added back from selection, they go to the end.
+            // Let's sort availableWords by a hidden index if we wanted to preserve order, but for now simple push/splice is fine.
+
+            document.getElementById("leftList").innerHTML = availableWords
+                .map(w => `<li onclick="toggleWordSelection('${w.word}')">${w.word}</li>`)
+                .join("");
+
+            document.getElementById("rightList").innerHTML = testedWords
+                .map(w => `<li class='tested' onclick="speakOnce('${w.word}')">${w.word}</li>`)
+                .join("");
+
+            document.getElementById("selectedWordsList").innerHTML = selectedWords
+                .map(w => `<span class="selected-word-tag" onclick="removeFromSelected('${w.word}')">${w.word} ×</span>`)
+                .join("");
+        }
+
+        function speakOnce(word) {
+            const utter = new SpeechSynthesisUtterance(word);
+            utter.lang = "en-US";
+            utter.rate = 0.75;
+            utter.pitch = 1.0;
+            if (usVoice) utter.voice = usVoice;
+            speechSynthesis.speak(utter);
+        }
+
+        function nextWord() {
+            const wordsToTest = selectedWords.length > 0 ? selectedWords : availableWords;
+
+            if (wordsToTest.length === 0) {
+                document.getElementById("statusBox").innerText = "All words tested! Great job! 🎉";
+                return;
+            }
+
+            const index = Math.floor(Math.random() * wordsToTest.length);
+            currentWordObj = wordsToTest[index];
+
+            const availableIndex = availableWords.findIndex(w => w.word === currentWordObj.word);
+            if (availableIndex !== -1) availableWords.splice(availableIndex, 1);
+
+            const selectedIndex = selectedWords.findIndex(w => w.word === currentWordObj.word);
+            if (selectedIndex !== -1) selectedWords.splice(selectedIndex, 1);
+
+            testedWords.push(currentWordObj);
+            refreshLists();
+
+            document.getElementById("currentWordDisplay").innerHTML =
+                `${currentWordObj.word}<br><span style="font-size:24px; color:#555;">${currentWordObj.breakdown} &nbsp; ${currentWordObj.ipa}</span>`;
+            document.getElementById("statusBox").innerText = "Playing number...";
+
+            speakOnce(currentWordObj.word);
+        }
+
+        function showPhonics() {
+            if (!currentWordObj) {
+                document.getElementById("statusBox").innerText = "No number selected yet!";
+                return;
+            }
+            document.getElementById("statusBox").innerText = "Playing phonics breakdown...";
+            const parts = currentWordObj.phonicsSounds || currentWordObj.breakdown.split(" - ");
+            let delay = 0;
+            parts.forEach(part => {
+                setTimeout(() => speakOnce(part), delay);
+                delay += 1000;
+            });
+            setTimeout(() => speakOnce(currentWordObj.word), delay);
+        }
+
+        function replayWord() {
+            if (!currentWordObj) return;
+            speakOnce(currentWordObj.word);
+        }
+
+        refreshLists();
+    </script>
+</body>
+
+</html>
