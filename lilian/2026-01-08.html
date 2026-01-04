@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vocabulary Spelling Test - 1/8</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f8ff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 20px;
+        }
+
+        .list-box {
+            width: 200px;
+            background: white;
+            border: 2px solid #4a90e2;
+            border-radius: 10px;
+            padding: 10px;
+            text-align: left;
+            min-height: 250px;
+        }
+
+        .list-box h2 {
+            text-align: center;
+        }
+
+        li {
+            font-size: 18px;
+            margin: 6px 0;
+            cursor: pointer;
+            transition: 0.2s;
+            padding: 4px 8px;
+        }
+
+        li:hover {
+            background: #e0f0ff;
+            border-radius: 6px;
+        }
+
+        .selected-word-tag {
+            background: #4a90e2;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .selected-word-tag:hover {
+            background: #357abd;
+        }
+
+        .tested {
+            color: gray;
+            text-decoration: line-through;
+        }
+
+        button {
+            padding: 16px 28px;
+            font-size: 22px;
+            margin: 12px;
+            border-radius: 14px;
+            border: none;
+            cursor: pointer;
+            background: #ff9f43;
+            color: white;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background: #ff7f00;
+        }
+
+        #currentWordDisplay {
+            font-size: 40px;
+            font-weight: bold;
+            margin-top: 10px;
+            min-height: 50px;
+        }
+
+        .word-box {
+            margin-top: 30px;
+            font-size: 28px;
+            font-weight: bold;
+            min-height: 40px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Vocabulary Spelling Test (1/8)</h1>
+    <p>Press the button to hear a word. It will be spoken once.</p>
+    <div id="currentWordDisplay"></div>
+
+    <div id="selectedWordsDisplay" style="margin: 20px 0; min-height: 30px;">
+        <div style="font-size: 18px; color: #555; margin-bottom: 10px;">Selected Words:</div>
+        <div id="selectedWordsList" style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;"></div>
+    </div>
+
+    <button onclick="nextWord()">Next Word</button>
+    <button onclick="replayWord()">Replay Current Word</button>
+    <button onclick="showPhonics()" style="background: #2ecc71;">Show Phonics</button>
+
+    <div style="margin-top: 20px;">
+        <label for="voiceSelector" style="font-size: 18px; margin-right: 10px;">選擇發音：</label>
+        <select id="voiceSelector" onchange="changeVoice()" style="padding: 8px; font-size: 16px; border-radius: 8px;">
+        </select>
+    </div>
+
+    <div class="container">
+        <div class="list-box">
+            <h2>Words To Study</h2>
+            <ul id="leftList"></ul>
+        </div>
+
+        <div class="list-box">
+            <h2>Words Tested</h2>
+            <ol id="rightList"></ol>
+        </div>
+    </div>
+
+    <div class="word-box" id="statusBox"></div>
+
+    <script>
+        let availableWords = [
+            { word: "elegant", breakdown: "el - e - gant", ipa: "/ˈɛlɪɡənt/", phonicsSounds: ["el", "eh", "gant"] },
+            { word: "subdued", breakdown: "sub - dued", ipa: "/səbˈdud/", phonicsSounds: ["sub", "dood"] },
+            { word: "subtitle", breakdown: "sub - ti - tle", ipa: "/ˈsʌbˌtaɪtəl/", phonicsSounds: ["sub", "ty", "tl"] },
+            { word: "foreboding", breakdown: "fore - bod - ing", ipa: "/fɔrˈboʊdɪŋ/", phonicsSounds: ["for", "boh", "ding"] },
+            { word: "forehead", breakdown: "fore - head", ipa: "/ˈfɔrhɛd/", phonicsSounds: ["for", "hed"] },
+            { word: "episode", breakdown: "ep - i - sode", ipa: "/ˈɛpɪˌsoʊd/", phonicsSounds: ["ep", "i", "sode"] },
+            { word: "submarine", breakdown: "sub - ma - rine", ipa: "/ˈsʌbməˌrin/", phonicsSounds: ["sub", "muh", "reen"] },
+            { word: "scowl", breakdown: "scowl", ipa: "/skaʊl/", phonicsSounds: ["skowl"] },
+            { word: "sulk", breakdown: "sulk", ipa: "/sʌlk/", phonicsSounds: ["sulk"] },
+            { word: "feisty", breakdown: "feis - ty", ipa: "/ˈfaɪsti/", phonicsSounds: ["fy", "stee"] },
+            { word: "rigid", breakdown: "rig - id", ipa: "/ˈrɪdʒɪd/", phonicsSounds: ["ri", "jid"] },
+            { word: "intimidated", breakdown: "in - tim - i - dat - ed", ipa: "/ɪnˈtɪmɪˌdeɪtɪd/", phonicsSounds: ["in", "tim", "ih", "day", "ted"] },
+            { word: "submerged", breakdown: "sub - merged", ipa: "/səbˈmɜrdʒd/", phonicsSounds: ["sub", "merjd"] },
+            { word: "disheveled", breakdown: "di - shev - eled", ipa: "/dɪˈʃɛvəld/", phonicsSounds: ["dih", "shev", "uhld"] },
+            { word: "forecast", breakdown: "fore - cast", ipa: "/ˈfɔrˌkæst/", phonicsSounds: ["for", "kast"] }
+        ];
+
+        let testedWords = [];
+        let selectedWords = []; // 用戶選擇要考的單字
+
+        let currentWordObj = null;
+        let usVoice = null;
+
+        function loadVoices() {
+            const voices = speechSynthesis.getVoices();
+            const enUSVoices = voices.filter(v => v.lang === "en-US");
+
+            // 填充下拉選單
+            const selector = document.getElementById("voiceSelector");
+            selector.innerHTML = "";
+
+            enUSVoices.forEach((voice, index) => {
+                const option = document.createElement("option");
+                option.value = index;
+                option.textContent = voice.name + (voice.lang !== "en-US" ? " (" + voice.lang + ")" : "");
+                selector.appendChild(option);
+            });
+
+            // 優先選擇 Flo
+            let defaultVoice = enUSVoices.find(v => v.name === "Flo");
+            if (!defaultVoice) defaultVoice = enUSVoices.find(v => v.lang === "en-US" && v.name.includes("Male"));
+            if (!defaultVoice) defaultVoice = enUSVoices.find(v => v.name === "Aaron"); // Mac 常見男聲
+            if (!defaultVoice) defaultVoice = enUSVoices.find(v => v.name === "Google US English"); // Chrome 常見
+            if (!defaultVoice) defaultVoice = enUSVoices.find(v => v.name === "Samantha"); // Mac 備案
+            if (!defaultVoice) defaultVoice = enUSVoices[0];
+
+            usVoice = defaultVoice;
+
+            // 設定下拉選單的預設值
+            const defaultIndex = enUSVoices.indexOf(defaultVoice);
+            if (defaultIndex !== -1) {
+                selector.selectedIndex = defaultIndex;
+            }
+
+            // 儲存所有可用的聲音供切換使用
+            window.availableVoices = enUSVoices;
+        }
+
+        function changeVoice() {
+            const selector = document.getElementById("voiceSelector");
+            const selectedIndex = selector.value;
+            usVoice = window.availableVoices[selectedIndex];
+        }
+
+        speechSynthesis.onvoiceschanged = loadVoices;
+        loadVoices();
+
+        function toggleWordSelection(word) {
+            const wordObj = availableWords.find(w => w.word === word);
+            if (!wordObj) return;
+
+            // 將單字加入選擇列表
+            selectedWords.push(wordObj);
+
+            // 從可用列表中移除
+            const index = availableWords.findIndex(w => w.word === word);
+            if (index !== -1) {
+                availableWords.splice(index, 1);
+            }
+
+            refreshLists();
+        }
+
+        function removeFromSelected(word) {
+            const index = selectedWords.findIndex(w => w.word === word);
+            if (index !== -1) {
+                const wordObj = selectedWords[index];
+                selectedWords.splice(index, 1);
+                availableWords.push(wordObj);
+                refreshLists();
+            }
+        }
+
+        function refreshLists() {
+            // 更新可用單字列表
+            document.getElementById("leftList").innerHTML = availableWords
+                .map(w => `<li onclick="toggleWordSelection('${w.word}')">${w.word}</li>`)
+                .join("");
+
+            // 更新已測試單字列表
+            document.getElementById("rightList").innerHTML = testedWords
+                .map(w => `<li class='tested' onclick="speakOnce('${w.word}')">${w.word}</li>`)
+                .join("");
+
+            // 更新選擇的單字顯示
+            document.getElementById("selectedWordsList").innerHTML = selectedWords
+                .map(w => `<span class="selected-word-tag" onclick="removeFromSelected('${w.word}')">${w.word} ×</span>`)
+                .join("");
+        }
+
+        function speakOnce(word) {
+            const utter = new SpeechSynthesisUtterance(word);
+            utter.lang = "en-US"; // 強制設定語言
+            utter.rate = 0.75;
+            utter.pitch = 1.0; // 調整為正常音調
+            if (usVoice) {
+                utter.voice = usVoice;
+            }
+            speechSynthesis.speak(utter);
+        }
+
+        function nextWord() {
+            // 如果有選擇的單字，從選擇的單字中抽取
+            const wordsToTest = selectedWords.length > 0 ? selectedWords : availableWords;
+
+            if (wordsToTest.length === 0) {
+                document.getElementById("statusBox").innerText = "All words tested! Great job! 🎉";
+                document.body.style.background = "#d6ffd6";
+                return;
+            }
+
+            const index = Math.floor(Math.random() * wordsToTest.length);
+            currentWordObj = wordsToTest[index];
+
+            // 從兩個列表中移除
+            const availableIndex = availableWords.findIndex(w => w.word === currentWordObj.word);
+            if (availableIndex !== -1) {
+                availableWords.splice(availableIndex, 1);
+            }
+            const selectedIndex = selectedWords.findIndex(w => w.word === currentWordObj.word);
+            if (selectedIndex !== -1) {
+                selectedWords.splice(selectedIndex, 1);
+            }
+
+            testedWords.push(currentWordObj);
+            refreshLists();
+
+            document.getElementById("currentWordDisplay").innerHTML =
+                `${currentWordObj.word}<br><span style="font-size:24px; color:#555;">${currentWordObj.breakdown} &nbsp; ${currentWordObj.ipa}</span>`;
+            document.getElementById("statusBox").innerText = "Playing word...";
+
+            speakOnce(currentWordObj.word);
+        }
+
+        function showPhonics() {
+            if (!currentWordObj) {
+                document.getElementById("statusBox").innerText = "No word selected yet!";
+                return;
+            }
+
+            document.getElementById("statusBox").innerText = "Playing phonics breakdown...";
+
+            // Use phonicsSounds if available, otherwise split breakdown
+            const parts = currentWordObj.phonicsSounds || currentWordObj.breakdown.split(" - ");
+
+            // Create a sequence of utterances
+            let delay = 0;
+
+            parts.forEach(part => {
+                setTimeout(() => speakOnce(part), delay);
+                delay += 1000; // 1 second gap between parts
+            });
+
+            // Play full word at the end
+            setTimeout(() => speakOnce(currentWordObj.word), delay);
+        }
+
+        function replayWord() {
+            if (!currentWordObj) {
+                document.getElementById("statusBox").innerText = "No word selected yet!";
+                return;
+            }
+            document.getElementById("statusBox").innerText = "Replaying word...";
+            speakOnce(currentWordObj.word);
+        }
+
+        refreshLists();
+    </script>
+</body>
+
+</html>

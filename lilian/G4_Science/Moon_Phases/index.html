@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moon Phases Labeling - Lilian's G4 Science</title>
+    <link rel="stylesheet" href="moonGame.css">
+    <meta name="description" content="An interactive game to practice labeling moon phases for Grade 4 Science.">
+</head>
+
+<body>
+    <div id="stars"></div>
+
+    <div class="container" id="game-container">
+        <h1>Moon Phases Labeling</h1>
+
+        <div class="instruction">
+            Look at the Diagram below and use the options to label the Moon Phases!<br>
+            <strong>A-H positions</strong> (16 points total).
+        </div>
+
+        <div class="game-layout">
+            <div class="image-section">
+                <img id="moon-diagram" src="" alt="Moon Phase Diagram">
+            </div>
+
+            <div class="quiz-section">
+                <div id="quiz-items">
+                    <!-- Questions will be injected here by JS -->
+                </div>
+                <button id="submit-btn" class="submit-btn" type="button">Submit Answers</button>
+            </div>
+        </div>
+
+        <div id="feedback" class="feedback">
+            <div id="score-text" class="score-text"></div>
+            <div id="summary-details" class="summary-details"></div>
+        </div>
+    </div>
+
+    <script src="moonGame.js"></script>
+</body>
+
+</html>
