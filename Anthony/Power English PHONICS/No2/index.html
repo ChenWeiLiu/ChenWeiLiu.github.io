@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Power English PHONICS No.2 - Audio Player</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+            --text-dark: #2d3748;
+            --text-light: #718096;
+            --accent-blue: #4299e1;
+            --accent-green: #48bb78;
+            --accent-orange: #ed8936;
+            --accent-purple: #9f7aea;
+            --accent-pink: #ed64a6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 50%, #d299c2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px 20px;
+            background: var(--card-bg);
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            color: var(--text-light);
+            font-size: 1.1rem;
+        }
+
+        /* Now Playing Section */
+        .now-playing {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(10px);
+        }
+
+        .now-playing-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .now-playing-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--primary-gradient);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .now-playing-info h3 {
+            font-size: 1.3rem;
+            color: var(--text-dark);
+            font-weight: 700;
+        }
+
+        .now-playing-info p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .audio-player {
+            width: 100%;
+            height: 50px;
+            border-radius: 12px;
+            outline: none;
+        }
+
+        audio::-webkit-media-controls-panel {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        /* Section Styling */
+        .section {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(10px);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(102, 126, 234, 0.2);
+        }
+
+        .section-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 800;
+            color: white;
+        }
+
+        .section-icon.consonants {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .section-icon.vowels {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .section-subtitle {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        /* Track Grid */
+        .track-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 15px;
+        }
+
+        .track-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px;
+            background: linear-gradient(135deg, #f8f9ff 0%, #f0f4ff 100%);
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .track-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.25);
+            border-color: #667eea;
+        }
+
+        .track-item.playing {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-color: transparent;
+        }
+
+        .track-item.playing .track-title,
+        .track-item.playing .track-subtitle {
+            color: white;
+        }
+
+        .track-item.playing .track-number {
+            background: rgba(255, 255, 255, 0.3);
+            color: white;
+        }
+
+        .track-number {
+            min-width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: white;
+        }
+
+        .track-info {
+            flex: 1;
+        }
+
+        .track-title {
+            font-weight: 700;
+            color: var(--text-dark);
+            font-size: 1rem;
+            margin-bottom: 2px;
+        }
+
+        .track-subtitle {
+            color: var(--text-light);
+            font-size: 0.85rem;
+        }
+
+        .track-play-icon {
+            font-size: 1.2rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .track-item:hover .track-play-icon {
+            opacity: 1;
+        }
+
+        .track-item.playing .track-play-icon {
+            opacity: 1;
+        }
+
+        /* Vowel Unit Styling */
+        .vowel-unit {
+            margin-bottom: 20px;
+        }
+
+        .vowel-unit:last-child {
+            margin-bottom: 0;
+        }
+
+        .vowel-unit-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+            padding: 10px 15px;
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            border-radius: 12px;
+        }
+
+        .vowel-letter {
+            font-size: 1.5rem;
+            font-weight: 800;
+        }
+
+        .vowel-letter.a {
+            color: #e53e3e;
+        }
+
+        .vowel-letter.e {
+            color: #38a169;
+        }
+
+        .vowel-letter.i {
+            color: #3182ce;
+        }
+
+        .vowel-letter.o {
+            color: #805ad5;
+        }
+
+        .vowel-letter.u {
+            color: #d69e2e;
+        }
+
+        .vowel-unit-title {
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        /* Color Themes for Different Letters */
+        .letter-b,
+        .letter-c,
+        .letter-d {
+            --letter-color: #4299e1;
+        }
+
+        .letter-f,
+        .letter-g,
+        .letter-h {
+            --letter-color: #48bb78;
+        }
+
+        .letter-j,
+        .letter-k,
+        .letter-l {
+            --letter-color: #ed8936;
+        }
+
+        .letter-m,
+        .letter-n,
+        .letter-p {
+            --letter-color: #ed64a6;
+        }
+
+        .letter-q,
+        .letter-r,
+        .letter-s {
+            --letter-color: #9f7aea;
+        }
+
+        .letter-t,
+        .letter-v,
+        .letter-w {
+            --letter-color: #38b2ac;
+        }
+
+        .letter-x,
+        .letter-y,
+        .letter-z {
+            --letter-color: #667eea;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8rem;
+            }
+
+            .track-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section {
+                padding: 18px;
+            }
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>🎧 Power English PHONICS No.2</h1>
+            <p>自然發音練習 - 點擊任意曲目開始播放</p>
+        </header>
+
+        <!-- Now Playing Section -->
+        <div class="now-playing">
+            <div class="now-playing-header">
+                <div class="now-playing-icon">🎵</div>
+                <div class="now-playing-info">
+                    <h3 id="current-track-title">請選擇要播放的曲目</h3>
+                    <p id="current-track-subtitle">Click any track to start playing</p>
+                </div>
+            </div>
+            <audio id="audio-player" class="audio-player" controls>
+                Your browser does not support the audio element.
+            </audio>
+        </div>
+
+        <!-- Part 1: Consonants -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-icon consonants">1</div>
+                <div>
+                    <div class="section-title">Part 1: Consonants 子音</div>
+                    <div class="section-subtitle">21 個子音字母發音練習</div>
+                </div>
+            </div>
+            <div class="track-grid" id="consonants-grid">
+                <!-- Consonants Game -->
+                <div class="track-item" data-src="mp3/0BEL2001_B2_1000 Consonants Game.mp3" data-title="Consonants Game"
+                    data-subtitle="子音遊戲">
+                    <div class="track-number">🎮</div>
+                    <div class="track-info">
+                        <div class="track-title">Consonants Game</div>
+                        <div class="track-subtitle">子音遊戲</div>
+                    </div>
+                    <div class="track-play-icon">▶️</div>
+                </div>
+                <!-- Unit 1: Bb -->
+                <div class="track-item" data-src="mp3/0BEL2001_B2_1001_b.mp3" data-title="The sound of Bb"
+                    data-subtitle="Unit 1 - 字母 B 的發音">
+                    <div class="track-number">Bb</div>
+                    <div class="track-info">
+                        <div class="track-title">The sound of Bb</div>
+                        <div class="track-subtitle">Unit 1</div>
+                    </div>
+                    <div class="track-play-icon">▶️</div>
+                </div>
+                <!-- Unit 2: Cc -->
+                <div class="track-item" data-src="mp3/0BEL2001_B2_1002_c.mp3" data-title="The sound of Cc"
+                    data-subtitle="Unit 2 - 字母 C 的發音">
+                    <div class="track-number">Cc</div>
+                    <div class="track-info">
+                        <div class="track-title">The sound of Cc</div>
+                        <div class="track-subtitle">Unit 2</div>
+                    </div>
+                    <div class="track-play-icon">▶️</div>
+                </div>
+                <!-- Unit 3: Dd -->
+                <div class="track-item" data-src="mp3/0BEL2001_B2_1003_d.mp3" data-title="The sound of Dd"
+                    data-subtitle="Unit 3 - 字母 D 的發音">
+                    <div class="track-number">Dd</div>
+                    <div class="track-info">
+                        <div class="track-title">The sound of Dd</div>
+                        <div class="track-subtitle">Unit 3</div>
+                    </div>
+                    <div class="track-play-icon">▶️</div>
+                </div>
+                <!-- Unit 4: Ff -->
+                <div class="track-item" data-src="mp3/0BEL2001_B2_1004_f.mp3" data-title="The sound of Ff"
+                    data-subtitle="Unit 4 - 字母 F 的發音">
+                    <div class="track-number">Ff</div>
+                    <div class="track-info">
+                        <div class="track-title">The sound of Ff</div>
+                        <div class="track-subtitle">Unit 4</div>
+                    </div>
+                    <div class="track-play-icon">▶️</div>
+                </div>
+                <!-- Unit 5: Gg -->
+                <div class="track-item" data-src="mp3/0BEL2001_B2_1005_g.mp3" data-title="The sound of Gg"
+                    data-subtitle="Unit 5 - 字母 G 的發音">
+                    <div class="track-number">Gg</div>
+                    <div class="track-info">
+                        <div class="track-title">The sound of Gg</div>
+                        <div class="track-subtitle">Unit 5</div>
+                    </div>
+                    <div class="track-play-icon">▶️</div>
+                </div>
+                <!-- Unit 6: Hh -->
+                <div class="track-item" data-src="mp3/0BEL2001_B2_1006_h.mp3" data-title="The sound of Hh"
+                    data-subtitle="Unit 6 - 字母 H 的發音">
+                    <div class="track-number">Hh</div>
+                    <div class="track-info">
+                        <div class="track-title">The sound of Hh</div>
+                        <div class="track-subtitle">Unit 6</div>
+                    </div>
+                    <div class="track-play-icon">▶️</div>
+                </div>
+                <!-- Unit 7: Jj -->
+                <div class="track-item" data-src="mp3/0BEL2001_B2_1007_j.mp3" data-title="The sound of Jj"
+                    data-subtitle="Unit 7 - 字母 J 的發音">
+                    <div class="track-number">Jj</div>
+                    <div class="track-info">
+                        <div class="track-title">The sound of Jj</div>
+                        <div class="track-subtitle">Unit 7</div>
+                    </div>
+                    <div class="track-play-icon">▶️</div>
+                </div>
+                <!-- Unit 8: Kk -->
+                <div class="track-item" data-src="mp3/0BEL2001_B2_1008_k.mp3" data-title="The sound of Kk"
+                    data-subtitle="Unit 8 - 字母 K 的發音">
+                    <div class="track-number">Kk</div>
+                    <div class="track-info">
+                        <div class="track-title">The sound of Kk</div>
+                        <div class="track-subtitle">Unit 8</div>
+                    </div>
+                    <div class="track-play-icon">▶️</div>
+                </div>
+                <!-- Unit 9: Ll -->
+                <div class="track-item" data-src="mp3/0BEL2001_B2_1009_l.mp3" data-title="The sound of Ll"
+                    data-subtitle="Unit 9 - 字母 L 的發音">
+                    <div class="track-number">Ll</div>
+                    <div class="track-info">
+                        <div class="track-title">The sound of Ll</div>
+                        <div class="track-subtitle">Unit 9</div>
+                    </div>
+                    <div class="track-play-icon">▶️</div>
+                </div>
+                <!-- Unit 10: Mm -->
+                <div class="track-item" data-src="mp3/0BEL2001_B2_1010_m.mp3" data-title="The sound of Mm"
+                    data-subtitle="Unit 10 - 字母 M 的發音">
+                    <div class="track-number">Mm</div>
+                    <div class="track-info">
+                        <div class="track-title">The sound of Mm</div>
+                        <div class="track-subtitle">Unit 10</div>
+                    </div>
+                    <div class="track-play-icon">▶️</div>
+                </div>
+                <!-- Unit 11: Nn -->
+                <div class="track-item" data-src="mp3/0BEL2001_B2_1011_n.mp3" data-title="The sound of Nn"
+                    data-subtitle="Unit 11 - 字母 N 的發音">
+                    <div class="track-number">Nn</div>
+                    <div class="track-info">
+                        <div class="track-title">The sound of Nn</div>
+                        <div class="track-subtitle">Unit 11</div>
+                    </div>
+                    <div class="track-play-icon">▶️</div>
+                </div>
+                <!-- Unit 12: Pp -->
+                <div class="track-item" data-src="mp3/0BEL2001_B2_1012_p.mp3" data-title="The sound of Pp"
+                    data-subtitle="Unit 12 - 字母 P 的發音">
+                    <div class="track-number">Pp</div>
+                    <div class="track-info">
+                        <div class="track-title">The sound of Pp</div>
+                        <div class="track-subtitle">Unit 12</div>
+                    </div>
+                    <div class="track-play-icon">▶️</div>
+                </div>
+                <!-- Unit 13: Qq -->
+                <div class="track-item" data-src="mp3/0BEL2001_B2_1013_q.mp3" data-title="The sound of Qq"
+                    data-subtitle="Unit 13 - 字母 Q 的發音">
+                    <div class="track-number">Qq</div>
+                    <div class="track-info">
+                        <div class="track-title">The sound of Qq</div>
+                        <div class="track-subtitle">Unit 13</div>
+                    </div>
+                    <div class="track-play-icon">▶️</div>
+                </div>
+                <!-- Unit 14: Rr -->
+                <div class="track-item" data-src="mp3/0BEL2001_B2_1014_r.mp3" data-title="The sound of Rr"
+                    data-subtitle="Unit 14 - 字母 R 的發音">
+                    <div class="track-number">Rr</div>
+                    <div class="track-info">
+                        <div class="track-title">The sound of Rr</div>
+                        <div class="track-subtitle">Unit 14</div>
+                    </div>
+                    <div class="track-play-icon">▶️</div>
+                </div>
+                <!-- Unit 15: Ss -->
+                <div class="track-item" data-src="mp3/0BEL2001_B2_1015_s.mp3" data-title="The sound of Ss"
+                    data-subtitle="Unit 15 - 字母 S 的發音">
+                    <div class="track-number">Ss</div>
+                    <div class="track-info">
+                        <div class="track-title">The sound of Ss</div>
+                        <div class="track-subtitle">Unit 15</div>
+                    </div>
+                    <div class="track-play-icon">▶️</div>
+                </div>
+                <!-- Unit 16: Tt -->
+                <div class="track-item" data-src="mp3/0BEL2001_B2_1016_t.mp3" data-title="The sound of Tt"
+                    data-subtitle="Unit 16 - 字母 T 的發音">
+                    <div class="track-number">Tt</div>
+                    <div class="track-info">
+                        <div class="track-title">The sound of Tt</div>
+                        <div class="track-subtitle">Unit 16</div>
+                    </div>
+                    <div class="track-play-icon">▶️</div>
+                </div>
+                <!-- Unit 17: Vv -->
+                <div class="track-item" data-src="mp3/0BEL2001_B2_1017_v.mp3" data-title="The sound of Vv"
+                    data-subtitle="Unit 17 - 字母 V 的發音">
+                    <div class="track-number">Vv</div>
+                    <div class="track-info">
+                        <div class="track-title">The sound of Vv</div>
+                        <div class="track-subtitle">Unit 17</div>
+                    </div>
+                    <div class="track-play-icon">▶️</div>
+                </div>
+                <!-- Unit 18: Ww -->
+                <div class="track-item" data-src="mp3/0BEL2001_B2_1018_w.mp3" data-title="The sound of Ww"
+                    data-subtitle="Unit 18 - 字母 W 的發音">
+                    <div class="track-number">Ww</div>
+                    <div class="track-info">
+                        <div class="track-title">The sound of Ww</div>
+                        <div class="track-subtitle">Unit 18</div>
+                    </div>
+                    <div class="track-play-icon">▶️</div>
+                </div>
+                <!-- Unit 19: Xx -->
+                <div class="track-item" data-src="mp3/0BEL2001_B2_1019_x.mp3" data-title="The sound of Xx"
+                    data-subtitle="Unit 19 - 字母 X 的發音">
+                    <div class="track-number">Xx</div>
+                    <div class="track-info">
+                        <div class="track-title">The sound of Xx</div>
+                        <div class="track-subtitle">Unit 19</div>
+                    </div>
+                    <div class="track-play-icon">▶️</div>
+                </div>
+                <!-- Unit 20: Yy -->
+                <div class="track-item" data-src="mp3/0BEL2001_B2_1020_y.mp3" data-title="The sound of Yy"
+                    data-subtitle="Unit 20 - 字母 Y 的發音">
+                    <div class="track-number">Yy</div>
+                    <div class="track-info">
+                        <div class="track-title">The sound of Yy</div>
+                        <div class="track-subtitle">Unit 20</div>
+                    </div>
+                    <div class="track-play-icon">▶️</div>
+                </div>
+                <!-- Unit 21: Zz -->
+                <div class="track-item" data-src="mp3/0BEL2001_B2_1021_z.mp3" data-title="The sound of Zz"
+                    data-subtitle="Unit 21 - 字母 Z 的發音">
+                    <div class="track-number">Zz</div>
+                    <div class="track-info">
+                        <div class="track-title">The sound of Zz</div>
+                        <div class="track-subtitle">Unit 21</div>
+                    </div>
+                    <div class="track-play-icon">▶️</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Part 2: Short Vowels -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-icon vowels">2</div>
+                <div>
+                    <div class="section-title">Part 2: Short Vowels 短母音</div>
+                    <div class="section-subtitle">5 個短母音發音練習 (a, e, i, o, u)</div>
+                </div>
+            </div>
+
+            <!-- Short Vowels Game -->
+            <div class="track-grid" style="margin-bottom: 20px;">
+                <div class="track-item" data-src="mp3/0BEL2001_B2_2000 Short Vowels Game.mp3"
+                    data-title="Short Vowels Game" data-subtitle="短母音遊戲">
+                    <div class="track-number">🎮</div>
+                    <div class="track-info">
+                        <div class="track-title">Short Vowels Game</div>
+                        <div class="track-subtitle">短母音遊戲</div>
+                    </div>
+                    <div class="track-play-icon">▶️</div>
+                </div>
+            </div>
+
+            <!-- Unit 1: Short Vowel a -->
+            <div class="vowel-unit">
+                <div class="vowel-unit-header">
+                    <span class="vowel-letter a">Aa</span>
+                    <span class="vowel-unit-title">Unit 1: Short Vowel a 短母音 a</span>
+                </div>
+                <div class="track-grid">
+                    <div class="track-item" data-src="mp3/0BEL2001_B2_2100_Short Vowel a.mp3" data-title="Short Vowel a"
+                        data-subtitle="短母音 a 介紹">
+                        <div class="track-number" style="background: linear-gradient(135deg, #e53e3e, #fc8181);">a</div>
+                        <div class="track-info">
+                            <div class="track-title">Short Vowel a</div>
+                            <div class="track-subtitle">短母音 a 介紹</div>
+                        </div>
+                        <div class="track-play-icon">▶️</div>
+                    </div>
+                    <div class="track-item" data-src="mp3/0BEL2001_B2_2101_ad, at.mp3" data-title="ad, at"
+                        data-subtitle="1-1 發音練習">
+                        <div class="track-number" style="background: linear-gradient(135deg, #e53e3e, #fc8181);">1-1
+                        </div>
+                        <div class="track-info">
+                            <div class="track-title">ad, at</div>
+                            <div class="track-subtitle">1-1 發音練習</div>
+                        </div>
+                        <div class="track-play-icon">▶️</div>
+                    </div>
+                    <div class="track-item" data-src="mp3/0BEL2001_B2_2102_ag, an.mp3" data-title="ag, an"
+                        data-subtitle="1-2 發音練習">
+                        <div class="track-number" style="background: linear-gradient(135deg, #e53e3e, #fc8181);">1-2
+                        </div>
+                        <div class="track-info">
+                            <div class="track-title">ag, an</div>
+                            <div class="track-subtitle">1-2 發音練習</div>
+                        </div>
+                        <div class="track-play-icon">▶️</div>
+                    </div>
+                    <div class="track-item" data-src="mp3/0BEL2001_B2_2103_am, ap, and.mp3" data-title="am, ap, and"
+                        data-subtitle="1-3 發音練習">
+                        <div class="track-number" style="background: linear-gradient(135deg, #e53e3e, #fc8181);">1-3
+                        </div>
+                        <div class="track-info">
+                            <div class="track-title">am, ap, and</div>
+                            <div class="track-subtitle">1-3 發音練習</div>
+                        </div>
+                        <div class="track-play-icon">▶️</div>
+                    </div>
+                    <div class="track-item" data-src="mp3/0BEL2001_B2_2104_Story Time.mp3" data-title="Story Time"
+                        data-subtitle="1-4 故事時間">
+                        <div class="track-number" style="background: linear-gradient(135deg, #e53e3e, #fc8181);">📖
+                        </div>
+                        <div class="track-info">
+                            <div class="track-title">Story Time</div>
+                            <div class="track-subtitle">1-4 故事時間</div>
+                        </div>
+                        <div class="track-play-icon">▶️</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Unit 2: Short Vowel e -->
+            <div class="vowel-unit">
+                <div class="vowel-unit-header">
+                    <span class="vowel-letter e">Ee</span>
+                    <span class="vowel-unit-title">Unit 2: Short Vowel e 短母音 e</span>
+                </div>
+                <div class="track-grid">
+                    <div class="track-item" data-src="mp3/0BEL2001_B2_2200_Short Vowel e.mp3" data-title="Short Vowel e"
+                        data-subtitle="短母音 e 介紹">
+                        <div class="track-number" style="background: linear-gradient(135deg, #38a169, #68d391);">e</div>
+                        <div class="track-info">
+                            <div class="track-title">Short Vowel e</div>
+                            <div class="track-subtitle">短母音 e 介紹</div>
+                        </div>
+                        <div class="track-play-icon">▶️</div>
+                    </div>
+                    <div class="track-item" data-src="mp3/0BEL2001_B2_2201_ed, et.mp3" data-title="ed, et"
+                        data-subtitle="2-1 發音練習">
+                        <div class="track-number" style="background: linear-gradient(135deg, #38a169, #68d391);">2-1
+                        </div>
+                        <div class="track-info">
+                            <div class="track-title">ed, et</div>
+                            <div class="track-subtitle">2-1 發音練習</div>
+                        </div>
+                        <div class="track-play-icon">▶️</div>
+                    </div>
+                    <div class="track-item" data-src="mp3/0BEL2001_B2_2202_ell, eg.mp3" data-title="ell, eg"
+                        data-subtitle="2-2 發音練習">
+                        <div class="track-number" style="background: linear-gradient(135deg, #38a169, #68d391);">2-2
+                        </div>
+                        <div class="track-info">
+                            <div class="track-title">ell, eg</div>
+                            <div class="track-subtitle">2-2 發音練習</div>
+                        </div>
+                        <div class="track-play-icon">▶️</div>
+                    </div>
+                    <div class="track-item" data-src="mp3/0BEL2001_B2_2203_en, end, est.mp3" data-title="en, end, est"
+                        data-subtitle="2-3 發音練習">
+                        <div class="track-number" style="background: linear-gradient(135deg, #38a169, #68d391);">2-3
+                        </div>
+                        <div class="track-info">
+                            <div class="track-title">en, end, est</div>
+                            <div class="track-subtitle">2-3 發音練習</div>
+                        </div>
+                        <div class="track-play-icon">▶️</div>
+                    </div>
+                    <div class="track-item" data-src="mp3/0BEL2001_B2_2204_Story Time.mp3" data-title="Story Time"
+                        data-subtitle="2-4 故事時間">
+                        <div class="track-number" style="background: linear-gradient(135deg, #38a169, #68d391);">📖
+                        </div>
+                        <div class="track-info">
+                            <div class="track-title">Story Time</div>
+                            <div class="track-subtitle">2-4 故事時間</div>
+                        </div>
+                        <div class="track-play-icon">▶️</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Unit 3: Short Vowel i -->
+            <div class="vowel-unit">
+                <div class="vowel-unit-header">
+                    <span class="vowel-letter i">Ii</span>
+                    <span class="vowel-unit-title">Unit 3: Short Vowel i 短母音 i</span>
+                </div>
+                <div class="track-grid">
+                    <div class="track-item" data-src="mp3/0BEL2001_B2_2300_Short Vowel i.mp3" data-title="Short Vowel i"
+                        data-subtitle="短母音 i 介紹">
+                        <div class="track-number" style="background: linear-gradient(135deg, #3182ce, #63b3ed);">i</div>
+                        <div class="track-info">
+                            <div class="track-title">Short Vowel i</div>
+                            <div class="track-subtitle">短母音 i 介紹</div>
+                        </div>
+                        <div class="track-play-icon">▶️</div>
+                    </div>
+                    <div class="track-item" data-src="mp3/0BEL2001_B2_2301_id, in, ip.mp3" data-title="id, in, ip"
+                        data-subtitle="3-1 發音練習">
+                        <div class="track-number" style="background: linear-gradient(135deg, #3182ce, #63b3ed);">3-1
+                        </div>
+                        <div class="track-info">
+                            <div class="track-title">id, in, ip</div>
+                            <div class="track-subtitle">3-1 發音練習</div>
+                        </div>
+                        <div class="track-play-icon">▶️</div>
+                    </div>
+                    <div class="track-item" data-src="mp3/0BEL2001_B2_2302_ig, it, ill.mp3" data-title="ig, it, ill"
+                        data-subtitle="3-2 發音練習">
+                        <div class="track-number" style="background: linear-gradient(135deg, #3182ce, #63b3ed);">3-2
+                        </div>
+                        <div class="track-info">
+                            <div class="track-title">ig, it, ill</div>
+                            <div class="track-subtitle">3-2 發音練習</div>
+                        </div>
+                        <div class="track-play-icon">▶️</div>
+                    </div>
+                    <div class="track-item" data-src="mp3/0BEL2001_B2_2303_ick, ing, ink.mp3" data-title="ick, ing, ink"
+                        data-subtitle="3-3 發音練習">
+                        <div class="track-number" style="background: linear-gradient(135deg, #3182ce, #63b3ed);">3-3
+                        </div>
+                        <div class="track-info">
+                            <div class="track-title">ick, ing, ink</div>
+                            <div class="track-subtitle">3-3 發音練習</div>
+                        </div>
+                        <div class="track-play-icon">▶️</div>
+                    </div>
+                    <div class="track-item" data-src="mp3/0BEL2001_B2_2304_Story Time.mp3" data-title="Story Time"
+                        data-subtitle="3-4 故事時間">
+                        <div class="track-number" style="background: linear-gradient(135deg, #3182ce, #63b3ed);">📖
+                        </div>
+                        <div class="track-info">
+                            <div class="track-title">Story Time</div>
+                            <div class="track-subtitle">3-4 故事時間</div>
+                        </div>
+                        <div class="track-play-icon">▶️</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Unit 4: Short Vowel o -->
+            <div class="vowel-unit">
+                <div class="vowel-unit-header">
+                    <span class="vowel-letter o">Oo</span>
+                    <span class="vowel-unit-title">Unit 4: Short Vowel o 短母音 o</span>
+                </div>
+                <div class="track-grid">
+                    <div class="track-item" data-src="mp3/0BEL2001_B2_2400_Short Vowel o.mp3" data-title="Short Vowel o"
+                        data-subtitle="短母音 o 介紹">
+                        <div class="track-number" style="background: linear-gradient(135deg, #805ad5, #b794f4);">o</div>
+                        <div class="track-info">
+                            <div class="track-title">Short Vowel o</div>
+                            <div class="track-subtitle">短母音 o 介紹</div>
+                        </div>
+                        <div class="track-play-icon">▶️</div>
+                    </div>
+                    <div class="track-item" data-src="mp3/0BEL2001_B2_2401_og, op, ox.mp3" data-title="og, op, ox"
+                        data-subtitle="4-1 發音練習">
+                        <div class="track-number" style="background: linear-gradient(135deg, #805ad5, #b794f4);">4-1
+                        </div>
+                        <div class="track-info">
+                            <div class="track-title">og, op, ox</div>
+                            <div class="track-subtitle">4-1 發音練習</div>
+                        </div>
+                        <div class="track-play-icon">▶️</div>
+                    </div>
+                    <div class="track-item" data-src="mp3/0BEL2001_B2_2402_od, ot, ock.mp3" data-title="od, ot, ock"
+                        data-subtitle="4-2 發音練習">
+                        <div class="track-number" style="background: linear-gradient(135deg, #805ad5, #b794f4);">4-2
+                        </div>
+                        <div class="track-info">
+                            <div class="track-title">od, ot, ock</div>
+                            <div class="track-subtitle">4-2 發音練習</div>
+                        </div>
+                        <div class="track-play-icon">▶️</div>
+                    </div>
+                    <div class="track-item" data-src="mp3/0BEL2001_B2_2403_Story Time.mp3" data-title="Story Time"
+                        data-subtitle="4-3 故事時間">
+                        <div class="track-number" style="background: linear-gradient(135deg, #805ad5, #b794f4);">📖
+                        </div>
+                        <div class="track-info">
+                            <div class="track-title">Story Time</div>
+                            <div class="track-subtitle">4-3 故事時間</div>
+                        </div>
+                        <div class="track-play-icon">▶️</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Unit 5: Short Vowel u -->
+            <div class="vowel-unit">
+                <div class="vowel-unit-header">
+                    <span class="vowel-letter u">Uu</span>
+                    <span class="vowel-unit-title">Unit 5: Short Vowel u 短母音 u</span>
+                </div>
+                <div class="track-grid">
+                    <div class="track-item" data-src="mp3/0BEL2001_B2_2500_Short Vowel u.mp3" data-title="Short Vowel u"
+                        data-subtitle="短母音 u 介紹">
+                        <div class="track-number" style="background: linear-gradient(135deg, #d69e2e, #ecc94b);">u</div>
+                        <div class="track-info">
+                            <div class="track-title">Short Vowel u</div>
+                            <div class="track-subtitle">短母音 u 介紹</div>
+                        </div>
+                        <div class="track-play-icon">▶️</div>
+                    </div>
+                    <div class="track-item" data-src="mp3/0BEL2001_B2_2501_ub, ug.mp3" data-title="ub, ug"
+                        data-subtitle="5-1 發音練習">
+                        <div class="track-number" style="background: linear-gradient(135deg, #d69e2e, #ecc94b);">5-1
+                        </div>
+                        <div class="track-info">
+                            <div class="track-title">ub, ug</div>
+                            <div class="track-subtitle">5-1 發音練習</div>
+                        </div>
+                        <div class="track-play-icon">▶️</div>
+                    </div>
+                    <div class="track-item" data-src="mp3/0BEL2001_B2_2502_un, ut.mp3" data-title="un, ut"
+                        data-subtitle="5-2 發音練習">
+                        <div class="track-number" style="background: linear-gradient(135deg, #d69e2e, #ecc94b);">5-2
+                        </div>
+                        <div class="track-info">
+                            <div class="track-title">un, ut</div>
+                            <div class="track-subtitle">5-2 發音練習</div>
+                        </div>
+                        <div class="track-play-icon">▶️</div>
+                    </div>
+                    <div class="track-item" data-src="mp3/0BEL2001_B2_2503_um, uck, ump.mp3" data-title="um, uck, ump"
+                        data-subtitle="5-3 發音練習">
+                        <div class="track-number" style="background: linear-gradient(135deg, #d69e2e, #ecc94b);">5-3
+                        </div>
+                        <div class="track-info">
+                            <div class="track-title">um, uck, ump</div>
+                            <div class="track-subtitle">5-3 發音練習</div>
+                        </div>
+                        <div class="track-play-icon">▶️</div>
+                    </div>
+                    <div class="track-item" data-src="mp3/0BEL2001_B2_2504_Story Time.mp3" data-title="Story Time"
+                        data-subtitle="5-4 故事時間">
+                        <div class="track-number" style="background: linear-gradient(135deg, #d69e2e, #ecc94b);">📖
+                        </div>
+                        <div class="track-info">
+                            <div class="track-title">Story Time</div>
+                            <div class="track-subtitle">5-4 故事時間</div>
+                        </div>
+                        <div class="track-play-icon">▶️</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>🎧 Power English PHONICS No.2 - Anthony 的自然發音練習</p>
+        </footer>
+    </div>
+
+    <script>
+        const audioPlayer = document.getElementById('audio-player');
+        const currentTrackTitle = document.getElementById('current-track-title');
+        const currentTrackSubtitle = document.getElementById('current-track-subtitle');
+        const allTracks = document.querySelectorAll('.track-item');
+        let currentTrackIndex = -1;
+        const trackArray = Array.from(allTracks);
+
+        // Click handler for all track items
+        allTracks.forEach((track, index) => {
+            track.addEventListener('click', () => {
+                playTrack(index);
+            });
+        });
+
+        function playTrack(index) {
+            const track = trackArray[index];
+            const src = track.dataset.src;
+            const title = track.dataset.title;
+            const subtitle = track.dataset.subtitle;
+
+            // Update audio source
+            audioPlayer.src = src;
+            audioPlayer.play();
+
+            // Update now playing info
+            currentTrackTitle.textContent = title;
+            currentTrackSubtitle.textContent = subtitle;
+
+            // Update visual state
+            allTracks.forEach(t => t.classList.remove('playing'));
+            track.classList.add('playing');
+
+            currentTrackIndex = index;
+        }
+
+        // Auto-play next track when current one ends
+        audioPlayer.addEventListener('ended', () => {
+            if (currentTrackIndex < trackArray.length - 1) {
+                playTrack(currentTrackIndex + 1);
+            }
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space' && e.target.tagName !== 'INPUT') {
+                e.preventDefault();
+                if (audioPlayer.paused) {
+                    audioPlayer.play();
+                } else {
+                    audioPlayer.pause();
+                }
+            } else if (e.code === 'ArrowRight') {
+                if (currentTrackIndex < trackArray.length - 1) {
+                    playTrack(currentTrackIndex + 1);
+                }
+            } else if (e.code === 'ArrowLeft') {
+                if (currentTrackIndex > 0) {
+                    playTrack(currentTrackIndex - 1);
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
