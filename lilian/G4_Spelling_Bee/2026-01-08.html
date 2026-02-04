@@ -62,8 +62,8 @@
         }
 
         .tested {
-            color: gray;
-            text-decoration: line-through;
+            color: #27ae60;
+            font-size: 27px;
         }
 
         button {
@@ -111,6 +111,10 @@
     <button onclick="nextWord()">Next Word</button>
     <button onclick="replayWord()">Replay Current Word</button>
     <button onclick="showPhonics()" style="background: #2ecc71;">Show Phonics</button>
+    <button onclick="startAutoQuiz()" id="autoQuizBtn" style="background: #9b59b6;">🎯 自動測驗模式</button>
+    <button onclick="stopAutoQuiz()" id="stopQuizBtn" style="background: #e74c3c; display: none;">⏹ 停止測驗</button>
+
+    <div id="autoQuizStatus" style="margin-top: 15px; font-size: 24px; color: #9b59b6; font-weight: bold;"></div>
 
     <div style="margin-top: 20px;">
         <label for="voiceSelector" style="font-size: 18px; margin-right: 10px;">選擇發音：</label>
@@ -314,6 +318,43 @@
             document.getElementById("statusBox").innerText = "Replaying word...";
             speakOnce(currentWordObj.word);
         }
+
+        // ============= 自動測驗模式 =============
+        let isAutoQuizRunning = false;
+        let autoQuizTimeouts = [];
+        let autoQuizWordsQueue = [];
+        function speakEnglish(word, rate = 0.75) {
+            return new Promise(resolve => { const utter = new SpeechSynthesisUtterance(word); utter.lang = "en-US"; utter.rate = rate; utter.pitch = 1.0; if (usVoice) utter.voice = usVoice; utter.onend = resolve; speechSynthesis.speak(utter); });
+        }
+        function wait(ms) { return new Promise(resolve => { const timeoutId = setTimeout(resolve, ms); autoQuizTimeouts.push(timeoutId); }); }
+        async function autoQuizWord(wordObj, index) {
+            if (!isAutoQuizRunning) return;
+            document.getElementById("autoQuizStatus").innerText = `Word ${index + 1} of ${autoQuizWordsQueue.length}`;
+            document.getElementById("currentWordDisplay").innerHTML = `Word number ${index + 1}`;
+            await speakEnglish(`Word number ${index + 1}`, 0.9); if (!isAutoQuizRunning) return; await wait(300); if (!isAutoQuizRunning) return;
+            for (let cycle = 0; cycle < 2; cycle++) {
+                if (!isAutoQuizRunning) return; const rate = cycle === 0 ? 0.3 : 1.0;
+                await speakEnglish(wordObj.word, rate); if (!isAutoQuizRunning) return; await wait(400); if (!isAutoQuizRunning) return;
+                const parts = wordObj.phonicsSounds || wordObj.breakdown.split(" - ");
+                for (const part of parts) { if (!isAutoQuizRunning) return; await speakEnglish(part, rate); await wait(300); }
+                if (!isAutoQuizRunning) return; await wait(300); if (!isAutoQuizRunning) return;
+                await speakEnglish(wordObj.word, rate); if (!isAutoQuizRunning) return; await wait(500); if (!isAutoQuizRunning) return;
+            }
+            const availableIndex = availableWords.findIndex(w => w.word === wordObj.word); if (availableIndex !== -1) availableWords.splice(availableIndex, 1);
+            const selectedIndex = selectedWords.findIndex(w => w.word === wordObj.word); if (selectedIndex !== -1) selectedWords.splice(selectedIndex, 1);
+            testedWords.push(wordObj); refreshLists(); currentWordObj = wordObj;
+            document.getElementById("currentWordDisplay").innerHTML = `${wordObj.word}<br><span style="font-size:24px; color:#555;">${wordObj.breakdown} &nbsp; ${wordObj.ipa}</span>`;
+        }
+        function shuffleArray(array) { const shuffled = [...array]; for (let i = shuffled.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1));[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]; } return shuffled; }
+        async function runAutoQuiz() {
+            const wordsToQuiz = selectedWords.length > 0 ? [...selectedWords] : [...availableWords]; autoQuizWordsQueue = shuffleArray(wordsToQuiz);
+            if (autoQuizWordsQueue.length === 0) { document.getElementById("autoQuizStatus").innerText = "沒有單字可以考試！"; stopAutoQuiz(); return; }
+            document.getElementById("autoQuizStatus").innerText = `開始自動測驗，共 ${autoQuizWordsQueue.length} 個單字`; await wait(1000);
+            for (let i = 0; i < autoQuizWordsQueue.length; i++) { if (!isAutoQuizRunning) break; await autoQuizWord(autoQuizWordsQueue[i], i); if (!isAutoQuizRunning) break; if (i < autoQuizWordsQueue.length - 1) await wait(1000); }
+            if (isAutoQuizRunning) { document.getElementById("autoQuizStatus").innerText = "🎉 所有單字都考完了！太棒了！"; document.getElementById("statusBox").innerText = "All words tested! Great job! 🎉"; document.body.style.background = "#d6ffd6"; stopAutoQuiz(); }
+        }
+        function startAutoQuiz() { isAutoQuizRunning = true; document.getElementById("autoQuizBtn").style.display = "none"; document.getElementById("stopQuizBtn").style.display = "inline-block"; runAutoQuiz(); }
+        function stopAutoQuiz() { isAutoQuizRunning = false; speechSynthesis.cancel(); autoQuizTimeouts.forEach(id => clearTimeout(id)); autoQuizTimeouts = []; document.getElementById("autoQuizBtn").style.display = "inline-block"; document.getElementById("stopQuizBtn").style.display = "none"; if (document.getElementById("autoQuizStatus").innerText.indexOf("🎉") === -1) { document.getElementById("autoQuizStatus").innerText = "測驗已停止"; } }
 
         refreshLists();
     </script>
