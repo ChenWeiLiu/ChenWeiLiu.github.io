@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vocabulary Spelling Test - Letter G</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f8ff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 20px;
+        }
+
+        .list-box {
+            width: 200px;
+            background: white;
+            border: 2px solid #4a90e2;
+            border-radius: 10px;
+            padding: 10px;
+            text-align: left;
+            min-height: 250px;
+        }
+
+        .list-box h2 {
+            text-align: center;
+        }
+
+        li {
+            font-size: 18px;
+            margin: 6px 0;
+            cursor: pointer;
+            transition: 0.2s;
+            padding: 4px 8px;
+        }
+
+        li:hover {
+            background: #e0f0ff;
+            border-radius: 6px;
+        }
+
+        .selected-word-tag {
+            background: #4a90e2;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .selected-word-tag:hover {
+            background: #357abd;
+        }
+
+        .tested {
+            color: #27ae60;
+            font-size: 27px;
+        }
+
+        button {
+            padding: 16px 28px;
+            font-size: 22px;
+            margin: 12px;
+            border-radius: 14px;
+            border: none;
+            cursor: pointer;
+            background: #ff9f43;
+            color: white;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background: #ff7f00;
+        }
+
+        #currentWordDisplay {
+            font-size: 40px;
+            font-weight: bold;
+            margin-top: 10px;
+            min-height: 50px;
+        }
+
+        .word-box {
+            margin-top: 30px;
+            font-size: 28px;
+            font-weight: bold;
+            min-height: 40px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Vocabulary Spelling Test (Letter G)</h1>
+    <p>Press the button to hear a word. It will be spoken once.</p>
+    <div id="currentWordDisplay"></div>
+    <div id="selectedWordsDisplay" style="margin: 20px 0; min-height: 30px;">
+        <div style="font-size: 18px; color: #555; margin-bottom: 10px;">Selected Words:</div>
+        <div id="selectedWordsList" style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;"></div>
+    </div>
+    <button onclick="nextWord()">Next Word</button>
+    <button onclick="replayWord()">Replay Current Word</button>
+    <button onclick="showPhonics()" style="background: #2ecc71;">Show Phonics</button>
+    <button onclick="startAutoQuiz()" id="autoQuizBtn" style="background: #9b59b6;">🎯 自動測驗模式</button>
+    <button onclick="stopAutoQuiz()" id="stopQuizBtn" style="background: #e74c3c; display: none;">⏹ 停止測驗</button>
+    <div id="autoQuizStatus" style="margin-top: 15px; font-size: 24px; color: #9b59b6; font-weight: bold;"></div>
+    <div style="margin-top: 20px;">
+        <label for="voiceSelector" style="font-size: 18px; margin-right: 10px;">選擇發音：</label>
+        <select id="voiceSelector" onchange="changeVoice()"
+            style="padding: 8px; font-size: 16px; border-radius: 8px;"></select>
+    </div>
+    <div class="container">
+        <div class="list-box">
+            <h2>Words To Study</h2>
+            <ul id="leftList"></ul>
+        </div>
+        <div class="list-box">
+            <h2>Words Tested</h2>
+            <ol id="rightList"></ol>
+        </div>
+    </div>
+    <div class="word-box" id="statusBox"></div>
+
+    <script>
+        let availableWords = [
+            { word: "generate", breakdown: "gen - er - ate", ipa: "/ˈdʒɛnəˌreɪt/", phonicsSounds: ["jen", "er", "ate"] },
+            { word: "genuine", breakdown: "gen - u - ine", ipa: "/ˈdʒɛnjuɪn/", phonicsSounds: ["jen", "yoo", "in"] },
+            { word: "gigantic", breakdown: "gi - gan - tic", ipa: "/dʒaɪˈɡæntɪk/", phonicsSounds: ["jye", "gan", "tik"] },
+            { word: "glance", breakdown: "glance", ipa: "/ɡlæns/", phonicsSounds: ["glans"] },
+            { word: "glorious", breakdown: "glo - ri - ous", ipa: "/ˈɡlɔriəs/", phonicsSounds: ["glor", "ee", "us"] },
+            { word: "graduate", breakdown: "grad - u - ate", ipa: "/ˈɡrædʒuˌeɪt/", phonicsSounds: ["graj", "oo", "ate"] }
+        ];
+
+        let testedWords = [];
+        let selectedWords = [];
+        let currentWordObj = null;
+        let usVoice = null;
+
+        function loadVoices() { const voices = speechSynthesis.getVoices(); const enUSVoices = voices.filter(v => v.lang === "en-US"); const selector = document.getElementById("voiceSelector"); selector.innerHTML = ""; enUSVoices.forEach((voice, index) => { const option = document.createElement("option"); option.value = index; option.textContent = voice.name + (voice.lang !== "en-US" ? " (" + voice.lang + ")" : ""); selector.appendChild(option); }); let defaultVoice = enUSVoices.find(v => v.name === "Flo"); if (!defaultVoice) defaultVoice = enUSVoices.find(v => v.lang === "en-US" && v.name.includes("Male")); if (!defaultVoice) defaultVoice = enUSVoices.find(v => v.name === "Aaron"); if (!defaultVoice) defaultVoice = enUSVoices.find(v => v.name === "Google US English"); if (!defaultVoice) defaultVoice = enUSVoices.find(v => v.name === "Samantha"); if (!defaultVoice) defaultVoice = enUSVoices[0]; usVoice = defaultVoice; const defaultIndex = enUSVoices.indexOf(defaultVoice); if (defaultIndex !== -1) { selector.selectedIndex = defaultIndex; } window.availableVoices = enUSVoices; }
+        function changeVoice() { const selector = document.getElementById("voiceSelector"); const selectedIndex = selector.value; usVoice = window.availableVoices[selectedIndex]; }
+        speechSynthesis.onvoiceschanged = loadVoices; loadVoices();
+        function toggleWordSelection(word) { const wordObj = availableWords.find(w => w.word === word); if (!wordObj) return; selectedWords.push(wordObj); const index = availableWords.findIndex(w => w.word === word); if (index !== -1) { availableWords.splice(index, 1); } refreshLists(); }
+        function removeFromSelected(word) { const index = selectedWords.findIndex(w => w.word === word); if (index !== -1) { const wordObj = selectedWords[index]; selectedWords.splice(index, 1); availableWords.push(wordObj); refreshLists(); } }
+        function refreshLists() { document.getElementById("leftList").innerHTML = availableWords.map(w => `<li onclick="toggleWordSelection('${w.word}')">${w.word}</li>`).join(""); document.getElementById("rightList").innerHTML = testedWords.map(w => `<li class='tested' onclick="speakOnce('${w.word}')">${w.word}</li>`).join(""); document.getElementById("selectedWordsList").innerHTML = selectedWords.map(w => `<span class="selected-word-tag" onclick="removeFromSelected('${w.word}')">${w.word} ×</span>`).join(""); }
+        function speakOnce(word) { const utter = new SpeechSynthesisUtterance(word); utter.lang = "en-US"; utter.rate = 0.75; utter.pitch = 1.0; if (usVoice) { utter.voice = usVoice; } speechSynthesis.speak(utter); }
+        function nextWord() { const wordsToTest = selectedWords.length > 0 ? selectedWords : availableWords; if (wordsToTest.length === 0) { document.getElementById("statusBox").innerText = "All words tested! Great job! 🎉"; document.body.style.background = "#d6ffd6"; return; } const index = Math.floor(Math.random() * wordsToTest.length); currentWordObj = wordsToTest[index]; const availableIndex = availableWords.findIndex(w => w.word === currentWordObj.word); if (availableIndex !== -1) { availableWords.splice(availableIndex, 1); } const selectedIndex = selectedWords.findIndex(w => w.word === currentWordObj.word); if (selectedIndex !== -1) { selectedWords.splice(selectedIndex, 1); } testedWords.push(currentWordObj); refreshLists(); document.getElementById("currentWordDisplay").innerHTML = `${currentWordObj.word}<br><span style="font-size:24px; color:#555;">${currentWordObj.breakdown} &nbsp; ${currentWordObj.ipa}</span>`; document.getElementById("statusBox").innerText = "Playing word..."; speakOnce(currentWordObj.word); }
+        function showPhonics() { if (!currentWordObj) { document.getElementById("statusBox").innerText = "No word selected yet!"; return; } document.getElementById("statusBox").innerText = "Playing phonics breakdown..."; const parts = currentWordObj.phonicsSounds || currentWordObj.breakdown.split(" - "); let delay = 0; parts.forEach(part => { setTimeout(() => speakOnce(part), delay); delay += 1000; }); setTimeout(() => speakOnce(currentWordObj.word), delay); }
+        function replayWord() { if (!currentWordObj) { document.getElementById("statusBox").innerText = "No word selected yet!"; return; } document.getElementById("statusBox").innerText = "Replaying word..."; speakOnce(currentWordObj.word); }
+        let isAutoQuizRunning = false; let autoQuizTimeouts = []; let autoQuizWordsQueue = [];
+        function speakEnglish(word, rate = 0.75) { return new Promise(resolve => { const utter = new SpeechSynthesisUtterance(word); utter.lang = "en-US"; utter.rate = rate; utter.pitch = 1.0; if (usVoice) utter.voice = usVoice; utter.onend = resolve; speechSynthesis.speak(utter); }); }
+        function wait(ms) { return new Promise(resolve => { const timeoutId = setTimeout(resolve, ms); autoQuizTimeouts.push(timeoutId); }); }
+        async function autoQuizWord(wordObj, index) { if (!isAutoQuizRunning) return; document.getElementById("autoQuizStatus").innerText = `Word ${index + 1} of ${autoQuizWordsQueue.length}`; document.getElementById("currentWordDisplay").innerHTML = `Word number ${index + 1}`; await speakEnglish(`Word number ${index + 1}`, 0.9); if (!isAutoQuizRunning) return; await wait(300); if (!isAutoQuizRunning) return; for (let cycle = 0; cycle < 2; cycle++) { if (!isAutoQuizRunning) return; const rate = cycle === 0 ? 0.3 : 1.0; await speakEnglish(wordObj.word, rate); if (!isAutoQuizRunning) return; await wait(400); if (!isAutoQuizRunning) return; const parts = wordObj.phonicsSounds || wordObj.breakdown.split(" - "); for (const part of parts) { if (!isAutoQuizRunning) return; await speakEnglish(part, rate); await wait(300); } if (!isAutoQuizRunning) return; await wait(300); if (!isAutoQuizRunning) return; await speakEnglish(wordObj.word, rate); if (!isAutoQuizRunning) return; await wait(500); if (!isAutoQuizRunning) return; } const availableIndex = availableWords.findIndex(w => w.word === wordObj.word); if (availableIndex !== -1) availableWords.splice(availableIndex, 1); const selectedIndex = selectedWords.findIndex(w => w.word === wordObj.word); if (selectedIndex !== -1) selectedWords.splice(selectedIndex, 1); testedWords.push(wordObj); refreshLists(); currentWordObj = wordObj; document.getElementById("currentWordDisplay").innerHTML = `${wordObj.word}<br><span style="font-size:24px; color:#555;">${wordObj.breakdown} &nbsp; ${wordObj.ipa}</span>`; }
+        function shuffleArray(array) { const shuffled = [...array]; for (let i = shuffled.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1));[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]; } return shuffled; }
+        async function runAutoQuiz() { const wordsToQuiz = selectedWords.length > 0 ? [...selectedWords] : [...availableWords]; autoQuizWordsQueue = shuffleArray(wordsToQuiz); if (autoQuizWordsQueue.length === 0) { document.getElementById("autoQuizStatus").innerText = "沒有單字可以考試！"; stopAutoQuiz(); return; } document.getElementById("autoQuizStatus").innerText = `開始自動測驗，共 ${autoQuizWordsQueue.length} 個單字`; await wait(1000); for (let i = 0; i < autoQuizWordsQueue.length; i++) { if (!isAutoQuizRunning) break; await autoQuizWord(autoQuizWordsQueue[i], i); if (!isAutoQuizRunning) break; if (i < autoQuizWordsQueue.length - 1) await wait(1000); } if (isAutoQuizRunning) { document.getElementById("autoQuizStatus").innerText = "🎉 所有單字都考完了！太棒了！"; document.getElementById("statusBox").innerText = "All words tested! Great job! 🎉"; document.body.style.background = "#d6ffd6"; stopAutoQuiz(); } }
+        function startAutoQuiz() { isAutoQuizRunning = true; document.getElementById("autoQuizBtn").style.display = "none"; document.getElementById("stopQuizBtn").style.display = "inline-block"; runAutoQuiz(); }
+        function stopAutoQuiz() { isAutoQuizRunning = false; speechSynthesis.cancel(); autoQuizTimeouts.forEach(id => clearTimeout(id)); autoQuizTimeouts = []; document.getElementById("autoQuizBtn").style.display = "inline-block"; document.getElementById("stopQuizBtn").style.display = "none"; if (document.getElementById("autoQuizStatus").innerText.indexOf("🎉") === -1) { document.getElementById("autoQuizStatus").innerText = "測驗已停止"; } }
+        refreshLists();
+    </script>
+</body>
+
+</html>

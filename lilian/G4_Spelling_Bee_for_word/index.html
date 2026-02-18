@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>G4 Spelling Bee - Word Practice</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 24px;
+            padding: 40px 50px;
+            max-width: 800px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 36px;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        h1 span {
+            color: #764ba2;
+        }
+
+        .subtitle {
+            text-align: center;
+            font-size: 16px;
+            color: #888;
+            margin-bottom: 36px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 16px;
+        }
+
+        .grid a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            font-size: 28px;
+            font-weight: bold;
+            border-radius: 16px;
+            height: 100px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            position: relative;
+        }
+
+        .grid a:hover {
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+        }
+
+        .grid a:active {
+            transform: scale(0.97);
+        }
+
+        .grid a .count {
+            position: absolute;
+            bottom: 8px;
+            font-size: 11px;
+            font-weight: normal;
+            opacity: 0.8;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #aaa;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>📝 <span>Spelling Bee</span> Practice</h1>
+        <p class="subtitle">Choose a letter to start practicing</p>
+        <div class="grid">
+            <a href="Letter_A.html">A<span class="count">15 words</span></a>
+            <a href="Letter_B.html">B<span class="count">10 words</span></a>
+            <a href="Letter_C.html">C<span class="count">18 words</span></a>
+            <a href="Letter_D.html">D<span class="count">12 words</span></a>
+            <a href="Letter_E.html">E<span class="count">11 words</span></a>
+            <a href="Letter_F.html">F<span class="count">8 words</span></a>
+            <a href="Letter_G.html">G<span class="count">7 words</span></a>
+            <a href="Letter_H.html">H<span class="count">10 words</span></a>
+            <a href="Letter_I.html">I<span class="count">16 words</span></a>
+            <a href="Letter_J.html">J<span class="count">2 words</span></a>
+            <a href="Letter_L.html">L<span class="count">5 words</span></a>
+            <a href="Letter_M.html">M<span class="count">9 words</span></a>
+            <a href="Letter_N.html">N<span class="count">5 words</span></a>
+            <a href="Letter_O.html">O<span class="count">6 words</span></a>
+            <a href="Letter_P.html">P<span class="count">20 words</span></a>
+            <a href="Letter_R.html">R<span class="count">15 words</span></a>
+            <a href="Letter_S.html">S<span class="count">29 words</span></a>
+            <a href="Letter_T.html">T<span class="count">15 words</span></a>
+            <a href="Letter_U.html">U<span class="count">2 words</span></a>
+            <a href="Letter_V.html">V<span class="count">5 words</span></a>
+            <a href="Letter_W.html">W<span class="count">7 words</span></a>
+            <a href="Letter_Y.html">Y<span class="count">2 words</span></a>
+        </div>
+        <footer>G4 Spelling Bee Word Practice &bull; Total: 22 Letters</footer>
+    </div>
+</body>
+
+</html>
