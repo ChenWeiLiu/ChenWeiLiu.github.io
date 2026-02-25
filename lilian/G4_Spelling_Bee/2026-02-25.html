@@ -340,9 +340,6 @@
             return new Promise(resolve => {
                 if (!isAutoQuizRunning) { resolve(); return; }
 
-                // iOS 需要先 cancel 再播放，避免佇列問題
-                speechSynthesis.cancel();
-
                 const utter = new SpeechSynthesisUtterance(word);
                 utter.lang = "en-US";
                 utter.rate = rate;
@@ -475,7 +472,20 @@
             isAutoQuizRunning = true;
             document.getElementById("autoQuizBtn").style.display = "none";
             document.getElementById("stopQuizBtn").style.display = "inline-block";
-            runAutoQuiz();
+
+            // iOS Safari 要求第一次 speak 必須在使用者點擊事件中直接觸發
+            // 先播放一個空白 utterance 來「解鎖」語音引擎
+            const primer = new SpeechSynthesisUtterance(" ");
+            primer.lang = "en-US";
+            primer.volume = 0.01; // 幾乎靜音
+            primer.rate = 2;
+            if (usVoice) primer.voice = usVoice;
+            speechSynthesis.speak(primer);
+
+            // 等 primer 完成後再開始測驗
+            setTimeout(() => {
+                if (isAutoQuizRunning) runAutoQuiz();
+            }, 300);
         }
 
         function stopAutoQuiz() {
