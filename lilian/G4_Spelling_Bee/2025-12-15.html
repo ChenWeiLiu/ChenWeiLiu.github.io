@@ -326,25 +326,83 @@
 
         function speakChinese(text) {
             return new Promise(resolve => {
+                if (!isAutoQuizRunning) { resolve(); return; }
+
                 const utter = new SpeechSynthesisUtterance(text);
                 utter.lang = "zh-TW";
                 utter.rate = 1.0;
-                utter.onend = resolve;
+
+                let resolved = false;
+                const safeResolve = () => {
+                    if (!resolved) {
+                        resolved = true;
+                        resolve();
+                    }
+                };
+
+                utter.onend = safeResolve;
+                utter.onerror = safeResolve;
+
+                const fallbackMs = Math.max(1500, text.length * 400) + 500;
+                const fallbackId = setTimeout(safeResolve, fallbackMs);
+                autoQuizTimeouts.push(fallbackId);
+
                 speechSynthesis.speak(utter);
+
+                const keepAliveId = setInterval(() => {
+                    if (resolved || !isAutoQuizRunning) {
+                        clearInterval(keepAliveId);
+                        return;
+                    }
+                    if (speechSynthesis.paused) {
+                        speechSynthesis.resume();
+                    }
+                }, 3000);
+                autoQuizTimeouts.push(keepAliveId);
             });
         }
 
         function speakEnglish(word, rate = 0.75) {
             return new Promise(resolve => {
+                if (!isAutoQuizRunning) { resolve(); return; }
+
                 const utter = new SpeechSynthesisUtterance(word);
                 utter.lang = "en-US";
                 utter.rate = rate;
                 utter.pitch = 1.0;
-                if (usVoice) {
-                    utter.voice = usVoice;
-                }
-                utter.onend = resolve;
+                if (usVoice) utter.voice = usVoice;
+
+                let resolved = false;
+                const safeResolve = () => {
+                    if (!resolved) {
+                        resolved = true;
+                        resolve();
+                    }
+                };
+
+                utter.onend = safeResolve;
+                utter.onerror = safeResolve;
+
+                // Timeout fallback for iOS
+                const wordsCount = word.split(/\s+/).length;
+                const baseMs = Math.max(800, wordsCount * 600);
+                const fallbackMs = Math.ceil(baseMs / rate) + 500;
+                const fallbackId = setTimeout(safeResolve, fallbackMs);
+                autoQuizTimeouts.push(fallbackId);
+
                 speechSynthesis.speak(utter);
+
+                // Keep alive for iOS
+                const keepAliveId = setInterval(() => {
+                    if (resolved || !isAutoQuizRunning) {
+                        clearInterval(keepAliveId);
+                        return;
+                    }
+                    if (speechSynthesis.paused) {
+                        speechSynthesis.resume();
+                    }
+                }, 3000);
+                autoQuizTimeouts.push(keepAliveId);
             });
         }
 
@@ -477,20 +535,30 @@
             isAutoQuizRunning = true;
             document.getElementById("autoQuizBtn").style.display = "none";
             document.getElementById("stopQuizBtn").style.display = "inline-block";
-            runAutoQuiz();
+
+            // iOS Safari: prime speech synthesis with user gesture
+            const primer = new SpeechSynthesisUtterance(" ");
+            primer.lang = "en-US";
+            primer.volume = 0.01;
+            primer.rate = 2;
+            if (usVoice) primer.voice = usVoice;
+            speechSynthesis.speak(primer);
+
+            setTimeout(() => {
+                if (isAutoQuizRunning) runAutoQuiz();
+            }, 300);
         }
 
         function stopAutoQuiz() {
             isAutoQuizRunning = false;
             speechSynthesis.cancel();
-
-            // 清除所有等待中的 timeout
-            autoQuizTimeouts.forEach(id => clearTimeout(id));
+            autoQuizTimeouts.forEach(id => {
+                clearTimeout(id);
+                clearInterval(id);
+            });
             autoQuizTimeouts = [];
-
             document.getElementById("autoQuizBtn").style.display = "inline-block";
             document.getElementById("stopQuizBtn").style.display = "none";
-
             if (document.getElementById("autoQuizStatus").innerText.indexOf("🎉") === -1) {
                 document.getElementById("autoQuizStatus").innerText = "測驗已停止";
             }
