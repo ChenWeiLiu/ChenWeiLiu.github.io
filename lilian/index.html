@@ -131,6 +131,33 @@
             const testList = document.getElementById('testList');
             testList.innerHTML = '<div class="no-tests">Loading tests...</div>';
 
+            const g4Link = `
+                <li class="test-item" style="border-left: 5px solid #ff9f43;">
+                    <a href="G4_Spelling_Bee/index.html" class="test-link">
+                        <span class="test-date" style="color: #ff9f43;">📂 G4 Spelling Bee</span>
+                        <span class="test-arrow">→</span>
+                    </a>
+                </li>
+                <li class="test-item" style="border-left: 5px solid #2ecc71;">
+                    <a href="G4_Spelling_Bee_for_word/index.html" class="test-link">
+                        <span class="test-date" style="color: #2ecc71;">📖 G4 Spelling Bee (By Word)</span>
+                        <span class="test-arrow">→</span>
+                    </a>
+                </li>
+                <li class="test-item" style="border-left: 5px solid #a855f7;">
+                    <a href="g4%20sem%201/" class="test-link">
+                        <span class="test-date" style="color: #a855f7;">📁 G4 Sem 1</span>
+                        <span class="test-arrow">→</span>
+                    </a>
+                </li>
+                <li class="test-item" style="border-left: 5px solid #e74c3c;">
+                    <a href="review-of-incorrect-words.html" class="test-link">
+                        <span class="test-date" style="color: #e74c3c;">📝 錯誤單字複習</span>
+                        <span class="test-arrow">→</span>
+                    </a>
+                </li>
+            `;
+
             try {
                 // 使用 GitHub API 獲取資料夾內容
                 const apiUrl = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${FOLDER_PATH}`;
@@ -156,33 +183,6 @@
                 // 按日期排序（最新的在前）
                 const sortedDates = testFiles.sort((a, b) => new Date(b) - new Date(a));
 
-                const g4Link = `
-                    <li class="test-item" style="border-left: 5px solid #ff9f43;">
-                        <a href="G4_Spelling_Bee/index.html" class="test-link">
-                            <span class="test-date" style="color: #ff9f43;">📂 G4 Spelling Bee</span>
-                            <span class="test-arrow">→</span>
-                        </a>
-                    </li>
-                    <li class="test-item" style="border-left: 5px solid #2ecc71;">
-                        <a href="G4_Spelling_Bee_for_word/index.html" class="test-link">
-                            <span class="test-date" style="color: #2ecc71;">📖 G4 Spelling Bee (By Word)</span>
-                            <span class="test-arrow">→</span>
-                        </a>
-                    </li>
-                    <li class="test-item" style="border-left: 5px solid #a855f7;">
-                        <a href="g4%20sem%201/" class="test-link">
-                            <span class="test-date" style="color: #a855f7;">📁 G4 Sem 1</span>
-                            <span class="test-arrow">→</span>
-                        </a>
-                    </li>
-                    <li class="test-item" style="border-left: 5px solid #e74c3c;">
-                        <a href="review-of-incorrect-words.html" class="test-link">
-                            <span class="test-date" style="color: #e74c3c;">📝 錯誤單字複習</span>
-                            <span class="test-arrow">→</span>
-                        </a>
-                    </li>
-                `;
-
                 testList.innerHTML = g4Link + sortedDates.map(date => `
                     <li class="test-item">
                         <a href="${date}.html" class="test-link">
@@ -194,7 +194,15 @@
 
             } catch (error) {
                 console.error('Error loading tests:', error);
-                testList.innerHTML = '<div class="no-tests">Error loading tests. Please try again later.</div>';
+                const fallbackDates = ['2026-09-11', '2026-09-04'];
+                testList.innerHTML = g4Link + fallbackDates.map(date => `
+                    <li class="test-item">
+                        <a href="${date}.html" class="test-link">
+                            <span class="test-date">${formatDate(date)}</span>
+                            <span class="test-arrow">→</span>
+                        </a>
+                    </li>
+                `).join('');
             }
         }
 

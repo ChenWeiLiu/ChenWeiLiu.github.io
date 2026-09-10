@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>單字小考 - 9/4</title>
+    <title>單字小考 - 9/11</title>
     <style>
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
@@ -22,7 +22,7 @@
         }
 
         .list-box {
-            width: 220px;
+            width: 270px;
             background: white;
             border: 2px solid #4a90e2;
             border-radius: 10px;
@@ -48,10 +48,20 @@
             transition: 0.2s;
             padding: 4px 8px;
             border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
         }
 
         li:hover {
             background: #e0f0ff;
+        }
+
+        .pos-badge {
+            font-size: 14px;
+            color: #6c757d;
+            font-weight: normal;
+            margin-left: 6px;
         }
 
         .selected-word-tag {
@@ -70,7 +80,13 @@
 
         .tested {
             color: #27ae60;
-            font-size: 36px;
+            font-size: 28px;
+        }
+
+        .tested .pos-badge {
+            color: #27ae60;
+            opacity: 0.8;
+            font-size: 18px;
         }
 
         button {
@@ -118,6 +134,9 @@
             border-radius: 16px;
             border: 2px solid #66bb6a;
             box-shadow: 0 4px 12px rgba(102, 187, 106, 0.15);
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .learn-controls h3 {
@@ -169,7 +188,7 @@
 </head>
 
 <body>
-    <h1>單字小考 (9/4)</h1>
+    <h1>單字小考 (9/11)</h1>
     <p style="font-size: 18px; color: #555;">Press the button to hear a word. It will be spoken once.</p>
     <div id="currentWordDisplay"></div>
 
@@ -217,12 +236,12 @@
     <div class="container">
         <div class="list-box">
             <h2>Words To Study</h2>
-            <ul id="leftList"></ul>
+            <ul id="leftList" style="padding-left: 15px; margin: 0;"></ul>
         </div>
 
         <div class="list-box">
             <h2>Words Tested</h2>
-            <ol id="rightList"></ol>
+            <ol id="rightList" style="padding-left: 25px; margin: 0;"></ol>
         </div>
     </div>
 
@@ -230,21 +249,21 @@
 
     <script>
         let availableWords = [
-            { word: "locomotive", breakdown: "lo - co - mo - tive", ipa: "/ˌloʊkəˈmoʊtɪv/", phonicsSounds: ["lo", "kuh", "mo", "tiv"], pos: "n. 名詞", translation: "火車頭" },
-            { word: "chug", breakdown: "chug", ipa: "/tʃʌɡ/", phonicsSounds: ["chug"], pos: "v. 動詞", translation: "發出噗噗聲" },
-            { word: "gadget", breakdown: "gad - get", ipa: "/ˈɡædʒɪt/", phonicsSounds: ["gaj", "it"], pos: "n. 名詞", translation: "小裝置" },
-            { word: "phonograph", breakdown: "pho - no - graph", ipa: "/ˈfoʊnəɡræf/", phonicsSounds: ["fo", "nuh", "graf"], pos: "n. 名詞", translation: "留聲機" },
-            { word: "sputter", breakdown: "sput - ter", ipa: "/ˈspʌtər/", phonicsSounds: ["sput", "er"], pos: "v. 動詞", translation: "發出斷續聲" },
-            { word: "flop", breakdown: "flop", ipa: "/flɒp/", phonicsSounds: ["flop"], pos: "n. 名詞", translation: "徹底失敗" },
-            { word: "incandescent", breakdown: "in - can - des - cent", ipa: "/ˌɪnkænˈdɛsənt/", phonicsSounds: ["in", "kan", "des", "unt"], pos: "adj. 形容詞", translation: "白熱發光的" },
-            { word: "cylinder", breakdown: "cyl - in - der", ipa: "/ˈsɪlɪndər/", phonicsSounds: ["sil", "in", "der"], pos: "n. 名詞", translation: "圓柱體" },
-            { word: "patent", breakdown: "pa - tent", ipa: "/ˈpætənt/", phonicsSounds: ["pat", "unt"], pos: "n. 名詞", translation: "專利" },
-            { word: "telephone", breakdown: "tel - e - phone", ipa: "/ˈtɛlɪfoʊn/", phonicsSounds: ["tel", "uh", "fone"], pos: "n. 名詞", translation: "電話" },
-            { word: "microphone", breakdown: "mi - cro - phone", ipa: "/ˈmaɪkrəfoʊn/", phonicsSounds: ["my", "kruh", "fone"], pos: "n. 名詞", translation: "麥克風" },
-            { word: "megaphone", breakdown: "meg - a - phone", ipa: "/ˈmɛɡəfoʊn/", phonicsSounds: ["meg", "uh", "fone"], pos: "n. 名詞", translation: "擴音器" },
-            { word: "symphony", breakdown: "sym - pho - ny", ipa: "/ˈsɪmfəni/", phonicsSounds: ["sim", "fuh", "nee"], pos: "n. 名詞", translation: "交響曲" },
-            { word: "exit", breakdown: "ex - it", ipa: "/ˈɛɡzɪt/", phonicsSounds: ["eg", "zit"], pos: "v. 動詞", translation: "離開" },
-            { word: "exclude", breakdown: "ex - clude", ipa: "/ɪkˈskluːd/", phonicsSounds: ["ik", "sklood"], pos: "v. 動詞", translation: "排除" }
+            { word: "grasp", posType: "verb", breakdown: "grasp", ipa: "/ɡræsp/", phonicsSounds: ["grasp"], pos: "v. 動詞", translation: "抓緊；握牢", definition: "to seize and hold firmly", sentence: "You need to grasp the handle tightly if you want to open the door." },
+            { word: "gravity", posType: "noun", breakdown: "grav - i - ty", ipa: "/ˈɡrævəti/", phonicsSounds: ["grav", "ih", "tee"], pos: "n. 名詞", translation: "地心引力；重力", definition: "the force that attracts a body toward the center of the earth", sentence: "The scientist discovered that objects fall to the ground due to gravity." },
+            { word: "breath", posType: "noun", breakdown: "breath", ipa: "/brɛθ/", phonicsSounds: ["breath"], pos: "n. 名詞", translation: "呼吸；氣息", definition: "the air taken into or expelled from the lungs", sentence: "The man needed to take a deep breath before he started his stressful work." },
+            { word: "feather", posType: "noun", breakdown: "feath - er", ipa: "/ˈfɛðər/", phonicsSounds: ["feth", "er"], pos: "n. 名詞", translation: "羽毛", definition: "a soft, light thing that covers a bird's body and helps it fly", sentence: "The feather floated gently to the ground after the parrot flew up into the air." },
+            { word: "energy", posType: "noun", breakdown: "en - er - gy", ipa: "/ˈɛnərdʒi/", phonicsSounds: ["en", "er", "jee"], pos: "n. 名詞", translation: "能源；能量", definition: "the power needed to do things, from sources like the sun, wind, or oil", sentence: "Renewable energy sources are becoming more popular these days to protect the environment." },
+            { word: "frantic", posType: "adjective", breakdown: "fran - tic", ipa: "/ˈfræntɪk/", phonicsSounds: ["fran", "tik"], pos: "adj. 形容詞", translation: "狂亂的；慌亂的", definition: "wildly excited with fear, anxiety, or other emotion", sentence: "The crazy guy made frantic efforts to finish the project on time." },
+            { word: "direct", posType: "adjective", breakdown: "di - rect", ipa: "/dəˈrɛkt/", phonicsSounds: ["duh", "rekt"], pos: "adj. 形容詞", translation: "直接的；筆直的", definition: "going straight from one place to another without stopping or changing direction", sentence: "The tourist took a direct route to the airport and didn't stop to get anything on the way." },
+            { word: "hymn", posType: "noun", breakdown: "hymn", ipa: "/hɪm/", phonicsSounds: ["him"], pos: "n. 名詞", translation: "聖歌；讚美詩", definition: "a religious song that a choir sings in church", sentence: "The American choir sang a hymn together at the church service on Sunday." },
+            { word: "swift", posType: "adjective", breakdown: "swift", ipa: "/swɪft/", phonicsSounds: ["swift"], pos: "adj. 形容詞", translation: "快速的；敏捷的", definition: "moving or capable of moving at high speed", sentence: "The swift river flowed through the valley down to the lake below." },
+            { word: "comic", posType: "adjective", breakdown: "com - ic", ipa: "/ˈkɑːmɪk/", phonicsSounds: ["kom", "ik"], pos: "adj. 形容詞", translation: "滑稽的；喜劇的", definition: "causing or meant to cause laughter", sentence: "The comic scene in the movie had everyone laughing after they saw it." },
+            { word: "solid", posType: "adjective", breakdown: "sol - id", ipa: "/ˈsɑːlɪd/", phonicsSounds: ["sol", "id"], pos: "adj. 形容詞", translation: "固體的；堅固的", definition: "firm and stable in shape", sentence: "The table in the dining room was made of solid oak." },
+            { word: "weather", posType: "noun", breakdown: "weath - er", ipa: "/ˈwɛðər/", phonicsSounds: ["weth", "er"], pos: "n. 名詞", translation: "天氣；氣候", definition: "the state of the atmosphere at a place and time", sentence: "The family experienced extreme weather conditions during their trip abroad." },
+            { word: "promise", posType: "verb", breakdown: "prom - ise", ipa: "/ˈprɑːmɪs/", phonicsSounds: ["prom", "is"], pos: "v. 動詞", translation: "答應；承諾", definition: "to say you will definitely do something", sentence: "The young businessman promised to call his coworker as soon as he signed the deal." },
+            { word: "crush", posType: "verb", breakdown: "crush", ipa: "/krʌʃ/", phonicsSounds: ["crush"], pos: "v. 動詞", translation: "壓碎；壓扁", definition: "to press or squeeze with a force that destroys or deforms", sentence: "The heavy machine in the factory can crush anything you put under it." },
+            { word: "distance", posType: "noun", breakdown: "dis - tance", ipa: "/ˈdɪstəns/", phonicsSounds: ["dis", "tuns"], pos: "n. 名詞", translation: "距離；路程", definition: "an amount of space between two things or people", sentence: "The distance between the two cities in the USA is about 100 miles." }
         ];
 
         let testedWords = [];
@@ -267,13 +286,14 @@
                 selector.appendChild(option);
             });
 
-            let defaultVoice = enUSVoices.find(v => v.name.includes("Shelley") && (v.name.includes("美國") || v.name.includes("US") || v.lang === "en-US"));
-            if (!defaultVoice) defaultVoice = enUSVoices.find(v => v.name.includes("Shelley"));
-            if (!defaultVoice) defaultVoice = enUSVoices.find(v => v.name === "Flo" || v.name.includes("Flo"));
-            if (!defaultVoice) defaultVoice = enUSVoices.find(v => v.lang === "en-US" && v.name.includes("Male"));
-            if (!defaultVoice) defaultVoice = enUSVoices.find(v => v.name === "Aaron");
-            if (!defaultVoice) defaultVoice = enUSVoices.find(v => v.name === "Google US English");
+            // 優先選擇 Google US English 發音
+            let defaultVoice = enUSVoices.find(v => v.name === "Google US English");
+            if (!defaultVoice) defaultVoice = enUSVoices.find(v => v.name.includes("Google") && (v.lang === "en-US" || v.name.includes("US")));
+            if (!defaultVoice) defaultVoice = enUSVoices.find(v => v.name.includes("Google"));
             if (!defaultVoice) defaultVoice = enUSVoices.find(v => v.name === "Samantha");
+            if (!defaultVoice) defaultVoice = enUSVoices.find(v => v.name === "Aaron");
+            if (!defaultVoice) defaultVoice = enUSVoices.find(v => v.name === "Alex");
+            if (!defaultVoice) defaultVoice = enUSVoices.find(v => v.name === "Flo");
             if (!defaultVoice) defaultVoice = enUSVoices[0];
 
             usVoice = defaultVoice;
@@ -321,19 +341,22 @@
 
         function refreshLists() {
             document.getElementById("leftList").innerHTML = availableWords
-                .map(w => `<li onclick="toggleWordSelection('${w.word}')">${w.word}</li>`)
+                .map(w => `<li onclick="toggleWordSelection('${w.word}')"><span>${w.word}</span><span class="pos-badge">(${w.posType})</span></li>`)
                 .join("");
 
             document.getElementById("rightList").innerHTML = testedWords
-                .map(w => `<li class='tested' onclick="speakOnce('${w.word}')">${w.word}</li>`)
+                .map(w => `<li class='tested' onclick="speakOnce('${w.word}')"><span>${w.word}</span><span class="pos-badge">(${w.posType})</span></li>`)
                 .join("");
 
             document.getElementById("selectedWordsList").innerHTML = selectedWords
-                .map(w => `<span class="selected-word-tag" onclick="removeFromSelected('${w.word}')">${w.word} ×</span>`)
+                .map(w => `<span class="selected-word-tag" onclick="removeFromSelected('${w.word}')">${w.word} (${w.posType}) ×</span>`)
                 .join("");
         }
 
+        // 只唸單字本身，不唸詞性
         function speakOnce(word) {
+            speechSynthesis.cancel();
+            speechSynthesis.resume();
             const utter = new SpeechSynthesisUtterance(word);
             utter.lang = "en-US";
             utter.rate = 0.75;
@@ -341,6 +364,17 @@
             if (usVoice) {
                 utter.voice = usVoice;
             }
+            utter.onerror = (e) => {
+                console.warn("Speech synthesis error, falling back:", e);
+                if (utter.voice) {
+                    const fallback = new SpeechSynthesisUtterance(word);
+                    fallback.lang = "en-US";
+                    fallback.rate = 0.75;
+                    const gVoice = window.availableVoices ? window.availableVoices.find(v => v.name.includes("Google")) : null;
+                    if (gVoice && gVoice !== utter.voice) fallback.voice = gVoice;
+                    speechSynthesis.speak(fallback);
+                }
+            };
             speechSynthesis.speak(utter);
         }
 
@@ -369,11 +403,14 @@
             refreshLists();
 
             document.getElementById("currentWordDisplay").innerHTML =
-                `${currentWordObj.word}<br>` +
+                `${currentWordObj.word} <span style="font-size:26px; color:#666; font-weight:normal;">(${currentWordObj.posType})</span><br>` +
                 `<span style="font-size:24px; color:#555;">${currentWordObj.breakdown} &nbsp; ${currentWordObj.ipa}</span><br>` +
-                `<span style="font-size:20px; color:#2c3e50; font-weight:normal;">[${currentWordObj.pos}] ${currentWordObj.translation}</span>`;
+                `<span style="font-size:20px; color:#2c3e50; font-weight:normal;">[${currentWordObj.pos}] ${currentWordObj.translation}</span><br>` +
+                `<span style="font-size:16px; color:#666; font-style:italic; font-weight:normal; display:inline-block; margin-top:6px; max-width:680px;">💡 ${currentWordObj.definition}</span><br>` +
+                `<span style="font-size:16px; color:#2980b9; font-weight:normal; display:inline-block; margin-top:4px; max-width:680px;">📝 ${currentWordObj.sentence}</span>`;
             document.getElementById("statusBox").innerText = "Playing word...";
 
+            // 考試發音只唸單字
             speakOnce(currentWordObj.word);
         }
 
@@ -491,6 +528,7 @@
                 if (!isAutoQuizRunning) return;
                 const rate = cycle === 0 ? 0.3 : 1.0;
 
+                // 只唸單字
                 await speakEnglish(wordObj.word, rate);
                 if (!isAutoQuizRunning) return;
                 await wait(400);
@@ -504,6 +542,7 @@
                 if (!isAutoQuizRunning) return;
                 await wait(300);
 
+                // 只唸單字
                 await speakEnglish(wordObj.word, rate);
                 if (!isAutoQuizRunning) return;
                 await wait(500);
@@ -517,9 +556,11 @@
             refreshLists();
             currentWordObj = wordObj;
             document.getElementById("currentWordDisplay").innerHTML =
-                `${wordObj.word}<br>` +
+                `${wordObj.word} <span style="font-size:26px; color:#666; font-weight:normal;">(${wordObj.posType})</span><br>` +
                 `<span style="font-size:24px; color:#555;">${wordObj.breakdown} &nbsp; ${wordObj.ipa}</span><br>` +
-                `<span style="font-size:20px; color:#2c3e50; font-weight:normal;">[${wordObj.pos}] ${wordObj.translation}</span>`;
+                `<span style="font-size:20px; color:#2c3e50; font-weight:normal;">[${wordObj.pos}] ${wordObj.translation}</span><br>` +
+                `<span style="font-size:16px; color:#666; font-style:italic; font-weight:normal; display:inline-block; margin-top:6px; max-width:680px;">💡 ${wordObj.definition}</span><br>` +
+                `<span style="font-size:16px; color:#2980b9; font-weight:normal; display:inline-block; margin-top:4px; max-width:680px;">📝 ${wordObj.sentence}</span>`;
         }
 
         function shuffleArray(array) {
@@ -586,6 +627,7 @@
 
         // ============= 共用工具 =============
         function primeSpeech() {
+            speechSynthesis.resume();
             const primer = new SpeechSynthesisUtterance(" ");
             primer.lang = "en-US";
             primer.volume = 0.01;
@@ -615,15 +657,15 @@
             const stepDisplay = document.getElementById("learnStepDisplay");
 
             progress.innerText = `第 ${round} / ${totalRounds} 輪 — 第 ${wordIndex + 1} / ${totalWords} 個單字`;
-            wordDisplay.innerText = wordObj.word;
+            wordDisplay.innerHTML = `${wordObj.word} <span style="font-size:24px; color:#2e7d32; font-weight:normal;">(${wordObj.posType})</span>`;
 
-            // Step 1: 唸單字（慢速）
+            // Step 1: 唸單字（慢速）— 只唸單字
             stepDisplay.innerText = "🔊 唸單字（慢速）";
             await speakWithPromise(wordObj.word, 0.4);
             if (!isAutoLearnRunning) return;
             await waitMs(500);
 
-            // Step 2: 逐字母拼讀（一次連續唸出）
+            // Step 2: 逐字母拼讀（只拼單字字母）
             const letters = wordObj.word.toUpperCase().split("");
             stepDisplay.innerText = "🔤 拼讀字母：" + letters.join(" - ");
             const spellingText = letters.join(", ");
@@ -642,7 +684,7 @@
             if (!isAutoLearnRunning) return;
             await waitMs(300);
 
-            // Step 4: 再唸一次（正常速度）
+            // Step 4: 再唸一次（正常速度）— 只唸單字
             stepDisplay.innerText = "🔊 完整唸一次";
             await speakWithPromise(wordObj.word, 0.85);
             if (!isAutoLearnRunning) return;
@@ -650,9 +692,11 @@
             // Step 5: 停頓讓孩子跟讀
             stepDisplay.innerText = "⏸️ 跟讀時間...";
             wordDisplay.innerHTML =
-                `${wordObj.word}<br>` +
+                `${wordObj.word} <span style="font-size:24px; color:#2e7d32; font-weight:normal;">(${wordObj.posType})</span><br>` +
                 `<span style="font-size:20px; color:#666;">${wordObj.breakdown} &nbsp; ${wordObj.ipa}</span><br>` +
-                `<span style="font-size:18px; color:#2e7d32; font-weight:normal;">[${wordObj.pos}] ${wordObj.translation}</span>`;
+                `<span style="font-size:18px; color:#2e7d32; font-weight:normal;">[${wordObj.pos}] ${wordObj.translation}</span><br>` +
+                `<span style="font-size:15px; color:#555; font-style:italic; font-weight:normal; display:inline-block; margin-top:4px;">💡 ${wordObj.definition}</span><br>` +
+                `<span style="font-size:15px; color:#1b5e20; font-weight:normal; display:inline-block; margin-top:2px;">📝 ${wordObj.sentence}</span>`;
             await waitMs(3000);
         }
 
