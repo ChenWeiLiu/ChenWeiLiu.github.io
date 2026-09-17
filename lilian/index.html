@@ -194,7 +194,7 @@
 
             } catch (error) {
                 console.error('Error loading tests:', error);
-                const fallbackDates = ['2026-09-11', '2026-09-04'];
+                const fallbackDates = ['2026-09-18', '2026-09-11', '2026-09-04'];
                 testList.innerHTML = g4Link + fallbackDates.map(date => `
                     <li class="test-item">
                         <a href="${date}.html" class="test-link">
