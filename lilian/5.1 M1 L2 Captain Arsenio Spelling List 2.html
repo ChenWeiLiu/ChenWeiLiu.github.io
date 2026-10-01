@@ -212,6 +212,45 @@
             color: #555;
             min-height: 25px;
         }
+
+        .word-set-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin: 16px 0 4px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 10px 22px;
+            font-size: 17px;
+            font-weight: bold;
+            border-radius: 30px;
+            border: 2px solid #4a90e2;
+            cursor: pointer;
+            background: white;
+            color: #4a90e2;
+            transition: 0.2s;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+        }
+
+        .tab-btn:hover {
+            background: #e0f0ff;
+            transform: translateY(-1px);
+        }
+
+        .tab-btn.active {
+            background: #4a90e2;
+            color: white;
+            box-shadow: 0 4px 12px rgba(74, 144, 226, 0.35);
+        }
+
+        .tab-label {
+            text-align: center;
+            font-size: 15px;
+            color: #777;
+            margin-bottom: 4px;
+        }
     </style>
 </head>
 
@@ -221,6 +260,14 @@
     </div>
 
     <h1>單字小考 - 5.1 M1 L2 Captain Arsenio Spelling List 2</h1>
+
+    <div class="tab-label">選擇考試範圍：</div>
+    <div class="word-set-tabs">
+        <button class="tab-btn active" id="tabArsenio" onclick="switchWordSet('arsenio')">📚 Captain Arsenio 單字（15字）</button>
+        <button class="tab-btn" id="tabBedroom" onclick="switchWordSet('bedroom')">🛏️ 生活臥室單字 Week 5（10字）</button>
+        <button class="tab-btn" id="tabAll" onclick="switchWordSet('all')">🔀 全部混合（25字）</button>
+    </div>
+
     <p style="font-size: 18px; color: #555;">Press the button to hear a word. It will be spoken once.</p>
     <div id="currentWordDisplay"></div>
 
@@ -280,7 +327,8 @@
     <div class="word-box" id="statusBox"></div>
 
     <script>
-        let availableWords = [
+        // ============= 單字資料庫 =============
+        const arsenioWords = [
             { word: "mighty", posType: "adjective", breakdown: "might - y", ipa: "/ˈmaɪti/", phonicsSounds: ["my", "tee"], pos: "adj. 形容詞", translation: "強大的；有力的", definition: "having or showing great strength or power", sentence: "The mighty athlete lifted a seriously heavy barbell at the Olympics." },
             { word: "stroll", posType: "verb", breakdown: "stroll", ipa: "/stroʊl/", phonicsSounds: ["strohl"], pos: "v. 動詞", translation: "漫步；閒逛", definition: "to walk in a slow, relaxed way", sentence: "We decided to stroll through the park on a sunny afternoon last Sunday." },
             { word: "compose", posType: "verb", breakdown: "com - pose", ipa: "/kəmˈpoʊz/", phonicsSounds: ["kum", "pohz"], pos: "v. 動詞", translation: "作曲；撰寫；使鎮定", definition: "to create or write music or poetry", sentence: "Mozart was a musical genius who already composed masterpieces when he was a kid." },
@@ -298,11 +346,61 @@
             { word: "throw", posType: "verb", breakdown: "throw", ipa: "/θroʊ/", phonicsSounds: ["throh"], pos: "v. 動詞", translation: "投擲；丟；扔", definition: "to send something through the air", sentence: "The baseball player threw the ball across the field to the other player." }
         ];
 
+        const bedroomWords = [
+            { word: "bed frame", posType: "noun", breakdown: "bed frame", ipa: "/bɛd freɪm/", phonicsSounds: ["bed", "fraym"], pos: "n. 名詞", translation: "床架", definition: "the structure that supports a mattress and forms a bed", sentence: "Mom bought a new wooden bed frame to replace the old one in my room." },
+            { word: "curtains", posType: "noun", breakdown: "cur - tains", ipa: "/ˈkɜːrtənz/", phonicsSounds: ["ker", "tunz"], pos: "n. 名詞", translation: "窗簾", definition: "pieces of fabric hung at windows to block light or provide privacy", sentence: "She opened the curtains to let the warm morning sunlight into the bedroom." },
+            { word: "blind", posType: "noun", breakdown: "blind", ipa: "/blaɪnd/", phonicsSounds: ["blynd"], pos: "n. 名詞", translation: "百葉窗", definition: "a window covering made of horizontal slats that can be adjusted", sentence: "He pulled down the blind to block the afternoon sun from shining in his eyes." },
+            { word: "pillow", posType: "noun", breakdown: "pil - low", ipa: "/ˈpɪloʊ/", phonicsSounds: ["pil", "oh"], pos: "n. 名詞", translation: "枕頭", definition: "a soft cushion used to support the head while sleeping", sentence: "She hugged her pillow tightly and fell asleep almost immediately." },
+            { word: "nightstand", posType: "noun", breakdown: "night - stand", ipa: "/ˈnaɪtstænd/", phonicsSounds: ["nyt", "stand"], pos: "n. 名詞", translation: "床頭櫃", definition: "a small table or cabinet placed beside a bed", sentence: "He put his phone on the nightstand before turning off the light and going to sleep." },
+            { word: "blanket", posType: "noun", breakdown: "blan - ket", ipa: "/ˈblæŋkɪt/", phonicsSounds: ["blank", "it"], pos: "n. 名詞", translation: "毯子", definition: "a large piece of thick fabric used to keep warm in bed", sentence: "She wrapped herself in a cozy blanket while reading a book on a cold night." },
+            { word: "closet", posType: "noun", breakdown: "clos - et", ipa: "/ˈklɒzɪt/", phonicsSounds: ["kloz", "it"], pos: "n. 名詞", translation: "衣櫃；壁橱", definition: "a small room or space used to store clothes and other items", sentence: "She organized her closet and donated the clothes she no longer wears." },
+            { word: "mattress", posType: "noun", breakdown: "mat - tress", ipa: "/ˈmætrɪs/", phonicsSounds: ["mat", "ris"], pos: "n. 名詞", translation: "床墊", definition: "a large flat pad placed on a bed frame for sleeping on", sentence: "They bought a new mattress because the old one was too soft and hurt their backs." },
+            { word: "lamp", posType: "noun", breakdown: "lamp", ipa: "/læmp/", phonicsSounds: ["lamp"], pos: "n. 名詞", translation: "立燈；檯燈", definition: "a device that gives light, often placed on a table or floor", sentence: "She turned on the lamp beside her bed so she could read without waking her sister." },
+            { word: "clothes hanger", posType: "noun", breakdown: "clothes hang - er", ipa: "/kloʊðz ˈhæŋər/", phonicsSounds: ["klohz", "hang", "er"], pos: "n. 名詞", translation: "衣架", definition: "a shaped frame used for hanging clothes to keep them neat", sentence: "He hung his shirt on a clothes hanger so it would not get wrinkled." }
+        ];
+
+        let availableWords = [...arsenioWords];
         let testedWords = [];
         let selectedWords = [];
 
         let currentWordObj = null;
         let usVoice = null;
+
+        // ============= 切換單字組 =============
+        function switchWordSet(set) {
+            // 停止所有進行中的模式
+            if (isModeRunning()) stopCurrentMode();
+            if (isAutoQuizRunning) stopAutoQuiz();
+            if (isAutoLearnRunning) stopAutoLearn();
+
+            // 重置考試狀態
+            testedWords = [];
+            selectedWords = [];
+            currentWordObj = null;
+            document.getElementById('currentWordDisplay').innerHTML = '';
+            document.getElementById('statusBox').innerText = '';
+            document.getElementById('autoQuizStatus').innerText = '';
+            document.getElementById('learnProgress').innerText = '';
+            document.getElementById('learnWordDisplay').innerText = '';
+            document.getElementById('learnStepDisplay').innerText = '';
+            document.body.style.background = '#f0f8ff';
+
+            // 載入對應單字組
+            if (set === 'arsenio') {
+                availableWords = [...arsenioWords];
+            } else if (set === 'bedroom') {
+                availableWords = [...bedroomWords];
+            } else {
+                availableWords = [...arsenioWords, ...bedroomWords];
+            }
+
+            // 更新 tab 狀態
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            const tabMap = { arsenio: 'tabArsenio', bedroom: 'tabBedroom', all: 'tabAll' };
+            document.getElementById(tabMap[set]).classList.add('active');
+
+            refreshLists();
+        }
 
         function loadVoices() {
             const voices = speechSynthesis.getVoices();
