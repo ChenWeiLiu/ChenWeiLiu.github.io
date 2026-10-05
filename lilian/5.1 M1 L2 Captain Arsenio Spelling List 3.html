@@ -212,6 +212,45 @@
             color: #555;
             min-height: 25px;
         }
+
+        .word-set-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin: 16px 0 4px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 10px 22px;
+            font-size: 17px;
+            font-weight: bold;
+            border-radius: 30px;
+            border: 2px solid #4a90e2;
+            cursor: pointer;
+            background: white;
+            color: #4a90e2;
+            transition: 0.2s;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+        }
+
+        .tab-btn:hover {
+            background: #e0f0ff;
+            transform: translateY(-1px);
+        }
+
+        .tab-btn.active {
+            background: #4a90e2;
+            color: white;
+            box-shadow: 0 4px 12px rgba(74, 144, 226, 0.35);
+        }
+
+        .tab-label {
+            text-align: center;
+            font-size: 15px;
+            color: #777;
+            margin-bottom: 4px;
+        }
     </style>
 </head>
 
@@ -221,6 +260,14 @@
     </div>
 
     <h1>單字小考 - 5.1 M1 L2 Captain Arsenio Spelling List 3</h1>
+
+    <div class="tab-label">選擇考試範圍：</div>
+    <div class="word-set-tabs">
+        <button class="tab-btn active" id="tabArsenio" onclick="switchWordSet('arsenio')">📚 Captain Arsenio 單字（15字）</button>
+        <button class="tab-btn" id="tabTools" onclick="switchWordSet('tools')">🔧 生活工具單字 Week 6（10字）</button>
+        <button class="tab-btn" id="tabAll" onclick="switchWordSet('all')">🔀 全部混合（25字）</button>
+    </div>
+
     <p style="font-size: 18px; color: #555;">Press the button to hear a word. It will be spoken once.</p>
     <div id="currentWordDisplay"></div>
 
@@ -280,7 +327,8 @@
     <div class="word-box" id="statusBox"></div>
 
     <script>
-        let availableWords = [
+        // ============= 單字資料庫 =============
+        const arsenioWords = [
             { word: "scuba diver", posType: "noun", breakdown: "scu - ba di - ver", ipa: "/ˈskuːbə ˈdaɪvər/", phonicsSounds: ["skoo", "buh", "dy", "ver"], pos: "n. 名詞", translation: "水肺潛水員", definition: "a person who dives underwater using a scuba apparatus", sentence: "The scuba diver explored the coral reef and found some orange fish." },
             { word: "philosopher", posType: "noun", breakdown: "phi - los - o - pher", ipa: "/fɪˈlɒsəfər/", phonicsSounds: ["fih", "los", "oh", "fer"], pos: "n. 名詞", translation: "哲學家", definition: "a person who studies the nature of life, truth, and knowledge", sentence: "The Greek philosopher spoke about the meaning of life but he was sent to prison." },
             { word: "mission", posType: "noun", breakdown: "mis - sion", ipa: "/ˈmɪʃən/", phonicsSounds: ["mish", "un"], pos: "n. 名詞", translation: "任務；使命", definition: "a specific task or goal that someone is given to accomplish", sentence: "The secret agent's mission was to steal the information without ever getting caught." },
@@ -298,11 +346,61 @@
             { word: "ingenious", posType: "adjective", breakdown: "in - ge - ni - ous", ipa: "/ɪnˈdʒiːniəs/", phonicsSounds: ["in", "jee", "nee", "us"], pos: "adj. 形容詞", translation: "聰明的；巧妙的；獨創的", definition: "clever, original, and inventive", sentence: "His ingenious solution to the problem of taking care of a baby impressed everyone." }
         ];
 
+        const toolsWords = [
+            { word: "rake", posType: "noun", breakdown: "rake", ipa: "/reɪk/", phonicsSounds: ["rayk"], pos: "n. 名詞", translation: "耙子", definition: "a long-handled tool with teeth used for gathering leaves or smoothing soil", sentence: "Dad used a rake to gather all the fallen autumn leaves in the yard." },
+            { word: "shovel", posType: "noun", breakdown: "shov - el", ipa: "/ˈʃʌvəl/", phonicsSounds: ["shuv", "ul"], pos: "n. 名詞", translation: "鏟子", definition: "a tool with a broad blade used for moving dirt, snow, or sand", sentence: "We used a shovel to clear the snow off the driveway after the storm." },
+            { word: "paintbrush", posType: "noun", breakdown: "paint - brush", ipa: "/ˈpeɪntbrʌʃ/", phonicsSounds: ["paynt", "brush"], pos: "n. 名詞", translation: "油漆刷；畫筆", definition: "a brush used for applying paint to a surface", sentence: "She dipped her paintbrush into the blue paint and coated the wall." },
+            { word: "saw", posType: "noun", breakdown: "saw", ipa: "/sɔː/", phonicsSounds: ["saw"], pos: "n. 名詞", translation: "鋸子", definition: "a tool with a sharp toothed blade used for cutting wood or metal", sentence: "The carpenter used a saw to cut the wooden board into two pieces." },
+            { word: "wrench", posType: "noun", breakdown: "wrench", ipa: "/rɛntʃ/", phonicsSounds: ["rench"], pos: "n. 名詞", translation: "板手", definition: "a metal tool used for gripping and turning nuts and bolts", sentence: "The plumber tightened the loose water pipe using an adjustable wrench." },
+            { word: "screwdriver", posType: "noun", breakdown: "screw - driv - er", ipa: "/ˈskruːˌdraɪvər/", phonicsSounds: ["skroo", "dry", "ver"], pos: "n. 名詞", translation: "螺絲起子", definition: "a tool with a flattened or cross-shaped tip used to turn screws", sentence: "He used a screwdriver to tighten the loose screws on the bookshelf." },
+            { word: "electric drill", posType: "noun", breakdown: "e - lec - tric drill", ipa: "/ɪˈlɛktrɪk drɪl/", phonicsSounds: ["ih", "lek", "trik", "dril"], pos: "n. 名詞", translation: "電鑽", definition: "a power tool used for making holes in hard materials or driving fasteners", sentence: "Dad used an electric drill to make a hole in the wall to hang the clock." },
+            { word: "vise", posType: "noun", breakdown: "vise", ipa: "/vaɪs/", phonicsSounds: ["vys"], pos: "n. 名詞", translation: "老虎鉗；桌鉗", definition: "a clamping device attached to a workbench to hold an object firmly", sentence: "The craftsman secured the metal pipe in the vise before cutting it." },
+            { word: "tape measure", posType: "noun", breakdown: "tape meas - ure", ipa: "/teɪp ˈmɛʒər/", phonicsSounds: ["tayp", "mezh", "er"], pos: "n. 名詞", translation: "皮尺；捲尺", definition: "a flexible ruler used to measure length or distance", sentence: "She used a tape measure to check the width of the doorway." },
+            { word: "tool belt", posType: "noun", breakdown: "tool belt", ipa: "/tuːl bɛlt/", phonicsSounds: ["tool", "belt"], pos: "n. 名詞", translation: "工具皮帶", definition: "a belt with pockets worn around the waist to carry tools", sentence: "The construction worker wore a sturdy tool belt around his waist." }
+        ];
+
+        let availableWords = [...arsenioWords];
         let testedWords = [];
         let selectedWords = [];
 
         let currentWordObj = null;
         let usVoice = null;
+
+        // ============= 切換單字組 =============
+        function switchWordSet(set) {
+            // 停止所有進行中的模式
+            if (isModeRunning()) stopCurrentMode();
+            if (isAutoQuizRunning) stopAutoQuiz();
+            if (isAutoLearnRunning) stopAutoLearn();
+
+            // 重置考試狀態
+            testedWords = [];
+            selectedWords = [];
+            currentWordObj = null;
+            document.getElementById('currentWordDisplay').innerHTML = '';
+            document.getElementById('statusBox').innerText = '';
+            document.getElementById('autoQuizStatus').innerText = '';
+            document.getElementById('learnProgress').innerText = '';
+            document.getElementById('learnWordDisplay').innerText = '';
+            document.getElementById('learnStepDisplay').innerText = '';
+            document.body.style.background = '#f0f8ff';
+
+            // 載入對應單字組
+            if (set === 'arsenio') {
+                availableWords = [...arsenioWords];
+            } else if (set === 'tools') {
+                availableWords = [...toolsWords];
+            } else {
+                availableWords = [...arsenioWords, ...toolsWords];
+            }
+
+            // 更新 tab 狀態
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            const tabMap = { arsenio: 'tabArsenio', tools: 'tabTools', all: 'tabAll' };
+            document.getElementById(tabMap[set]).classList.add('active');
+
+            refreshLists();
+        }
 
         function loadVoices() {
             const voices = speechSynthesis.getVoices();
