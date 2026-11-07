@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>English Learning Hub | Lilian • Barry • Anthony</title>
+    <style>
+        :root {
+            --theme-primary: #667eea;
+            --theme-secondary: #764ba2;
+        }
+
+        [data-user="Lilian"] {
+            --theme-primary: #667eea;
+            --theme-secondary: #764ba2;
+        }
+
+        [data-user="Barry"] {
+            --theme-primary: #0072ff;
+            --theme-secondary: #00c6ff;
+        }
+
+        [data-user="Anthony"] {
+            --theme-primary: #9c27b0;
+            --theme-secondary: #ec4899;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+            background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-secondary) 100%);
+            min-height: 100vh;
+            padding: 36px 18px;
+            margin: 0;
+            transition: background 0.4s ease;
+        }
+
+        .container {
+            max-width: 860px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 26px;
+            padding: 36px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.28);
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--theme-primary);
+            margin: 0 0 8px;
+            font-size: 34px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #64748b;
+            margin-bottom: 28px;
+            font-size: 16px;
+        }
+
+        /* 3 Users Profile Cards */
+        .profiles-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+            margin-bottom: 32px;
+        }
+
+        @media (max-width: 640px) {
+            .profiles-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .profile-card {
+            border: 3px solid #e2e8f0;
+            border-radius: 18px;
+            padding: 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.25s;
+            background: #f8fafc;
+        }
+
+        .profile-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .profile-card.active {
+            border-color: var(--theme-primary);
+            background: white;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            transform: translateY(-3px);
+        }
+
+        .profile-avatar {
+            font-size: 36px;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .profile-name {
+            font-size: 20px;
+            font-weight: 800;
+            color: #1e293b;
+        }
+
+        .profile-stats {
+            margin-top: 8px;
+            font-size: 13px;
+            color: #475569;
+            font-weight: 700;
+        }
+
+        /* Game List */
+        .section-label {
+            font-size: 18px;
+            font-weight: 800;
+            color: #334155;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .game-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .game-item {
+            background: #f8fafc;
+            border-radius: 16px;
+            margin-bottom: 16px;
+            border-left: 6px solid var(--theme-primary);
+            transition: all 0.25s;
+            overflow: hidden;
+        }
+
+        .game-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.1);
+        }
+
+        .game-link {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 22px 24px;
+            text-decoration: none;
+            color: #1e293b;
+            gap: 16px;
+        }
+
+        .game-title {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--theme-primary);
+            margin-bottom: 6px;
+        }
+
+        .game-desc {
+            font-size: 14px;
+            color: #64748b;
+            line-height: 1.5;
+        }
+
+        .play-badge {
+            background: var(--theme-primary);
+            color: white;
+            padding: 10px 18px;
+            border-radius: 12px;
+            font-weight: 800;
+            white-space: nowrap;
+            font-size: 15px;
+        }
+    </style>
+</head>
+
+<body data-user="Lilian">
+    <div class="container">
+        <h1>🎮 English Learning Hub</h1>
+        <div class="subtitle">Choose your profile to load your personal stars and review list!</div>
+
+        <div class="profiles-grid">
+            <div class="profile-card" id="card_Lilian" onclick="selectUser('Lilian')">
+                <span class="profile-avatar">📚</span>
+                <div class="profile-name">Lilian</div>
+                <div class="profile-stats" id="stats_Lilian">⭐ 0 Stars｜📌 Review: 6</div>
+            </div>
+            <div class="profile-card" id="card_Barry" onclick="selectUser('Barry')">
+                <span class="profile-avatar">🚀</span>
+                <div class="profile-name">Barry</div>
+                <div class="profile-stats" id="stats_Barry">⭐ 0 Stars｜📌 Review: 6</div>
+            </div>
+            <div class="profile-card" id="card_Anthony" onclick="selectUser('Anthony')">
+                <span class="profile-avatar">🦄</span>
+                <div class="profile-name">Anthony</div>
+                <div class="profile-stats" id="stats_Anthony">⭐ 0 Stars｜📌 Review: 6</div>
+            </div>
+        </div>
+
+        <div class="section-label">✨ G5 Interactive Games</div>
+        <ul class="game-list">
+            <li class="game-item">
+                <a href="G5_Irregular_Verbs_1.html?chart=1" id="g5VerbLink1" class="game-link">
+                    <div>
+                        <div class="game-title">📄 G5 Irregular Verb Chart (1) — #1–25 (be ~ eat)</div>
+                        <div class="game-desc">
+                            Master <code>Verb • Simple Past • Past Participle • V-ing</code> for #1–25.<br />
+                            Includes: 📖 Pattern Chart, 🚂 Verb Train, 🔍 Spelling Detective &amp; 👩‍🏫 Spot the Mistake!
+                        </div>
+                    </div>
+                    <span class="play-badge">Play Chart 1 →</span>
+                </a>
+            </li>
+            <li class="game-item">
+                <a href="G5_Irregular_Verbs_1.html?chart=2" id="g5VerbLink2" class="game-link">
+                    <div>
+                        <div class="game-title">📄 G5 Irregular Verb Chart (2) — #26–50 (fall ~ learn)</div>
+                        <div class="game-desc">
+                            Master <code>Verb • Simple Past • Past Participle • V-ing</code> for #26–50.<br />
+                            Includes: 📖 Pattern Chart, 🚂 Verb Train, 🔍 Spelling Detective &amp; 👩‍🏫 Spot the Mistake!
+                        </div>
+                    </div>
+                    <span class="play-badge">Play Chart 2 →</span>
+                </a>
+            </li>
+            <li class="game-item">
+                <a href="G5_Irregular_Verbs_1.html?chart=ALL" id="g5VerbLinkAll" class="game-link">
+                    <div>
+                        <div class="game-title">📚 G5 Irregular Verb Charts (1) &amp; (2) — All 50 Verbs (#1–50)</div>
+                        <div class="game-desc">
+                            Challenge all 50 verbs together (<code>be ~ learn</code>) across all 4 interactive game modes!
+                        </div>
+                    </div>
+                    <span class="play-badge">Play All 50 →</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <script>
+        const USERS = ['Lilian', 'Barry', 'Anthony'];
+        let activeUser = localStorage.getItem('english_g5_last_user') || 'Lilian';
+        if (!USERS.includes(activeUser)) activeUser = 'Lilian';
+
+        function refreshProfileCards() {
+            USERS.forEach(u => {
+                const raw = localStorage.getItem(`english_g5_verbs1_state_${u}`);
+                let stars = 0;
+                let trouble = 6;
+                if (raw) {
+                    try {
+                        const data = JSON.parse(raw);
+                        stars = data.stars || 0;
+                        trouble = (data.troubleIds || []).length;
+                    } catch (e) { }
+                }
+                document.getElementById(`stats_${u}`).textContent = `⭐ ${stars} Stars｜📌 Review: ${trouble}`;
+                document.getElementById(`card_${u}`).classList.toggle('active', u === activeUser);
+            });
+            document.body.setAttribute('data-user', activeUser);
+            document.getElementById('g5VerbLink1').href = `G5_Irregular_Verbs_1.html?chart=1&user=${activeUser}`;
+            document.getElementById('g5VerbLink2').href = `G5_Irregular_Verbs_1.html?chart=2&user=${activeUser}`;
+            document.getElementById('g5VerbLinkAll').href = `G5_Irregular_Verbs_1.html?chart=ALL&user=${activeUser}`;
+        }
+
+        function selectUser(u) {
+            activeUser = u;
+            localStorage.setItem('english_g5_last_user', u);
+            refreshProfileCards();
+        }
+
+        refreshProfileCards();
+    </script>
+</body>
+
+</html>
+

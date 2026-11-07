@@ -156,24 +156,6 @@
                         <span class="test-arrow">→</span>
                     </a>
                 </li>
-                <li class="test-item" style="border-left: 5px solid #0ea5e9;">
-                    <a href="5.1 M1 L2 Captain Arsenio Spelling List 1.html" class="test-link">
-                        <span class="test-date" style="color: #0ea5e9;">🚀 5.1 M1 L2 Captain Arsenio - Spelling List 1</span>
-                        <span class="test-arrow">→</span>
-                    </a>
-                </li>
-                <li class="test-item" style="border-left: 5px solid #0ea5e9;">
-                    <a href="5.1 M1 L2 Captain Arsenio Spelling List 2.html" class="test-link">
-                        <span class="test-date" style="color: #0ea5e9;">🚀 5.1 M1 L2 Captain Arsenio - Spelling List 2</span>
-                        <span class="test-arrow">→</span>
-                    </a>
-                </li>
-                <li class="test-item" style="border-left: 5px solid #0ea5e9;">
-                    <a href="5.1 M1 L2 Captain Arsenio Spelling List 3.html" class="test-link">
-                        <span class="test-date" style="color: #0ea5e9;">🚀 5.1 M1 L2 Captain Arsenio - Spelling List 3</span>
-                        <span class="test-arrow">→</span>
-                    </a>
-                </li>
             `;
 
             try {
@@ -194,7 +176,7 @@
                     .map(file => file.name.replace('.html', ''));
 
                 if (testFiles.length === 0) {
-                    testList.innerHTML = '<div class="no-tests">No tests available yet.</div>';
+                    testList.innerHTML = g4Link;
                     return;
                 }
 
@@ -212,7 +194,7 @@
 
             } catch (error) {
                 console.error('Error loading tests:', error);
-                const fallbackDates = ['2026-09-18', '2026-09-11', '2026-09-04'];
+                const fallbackDates = [];
                 testList.innerHTML = g4Link + fallbackDates.map(date => `
                     <li class="test-item">
                         <a href="${date}.html" class="test-link">
