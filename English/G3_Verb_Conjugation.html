@@ -1,0 +1,2285 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>G3 English Verb Conjugation (#1–84) | Interactive Verb Train</title>
+    <style>
+        :root {
+            --theme-primary: #10b981;
+            --theme-secondary: #059669;
+            --theme-light: #ecfdf5;
+            --theme-accent: #f59e0b;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --aaa-color: #10b981;
+            --aaa-bg: #ecfdf5;
+            --aba-color: #8b5cf6;
+            --aba-bg: #f5f3ff;
+            --abb-color: #f97316;
+            --abb-bg: #fff7ed;
+            --abc-color: #3b82f6;
+            --abc-bg: #eff6ff;
+        }
+
+        [data-user="Lilian"] {
+            --theme-primary: #ec4899;
+            --theme-secondary: #db2777;
+            --theme-light: #fdf2f8;
+            --theme-accent: #f59e0b;
+        }
+
+        [data-user="Barry"] {
+            --theme-primary: #0284c7;
+            --theme-secondary: #2563eb;
+            --theme-light: #f0f9ff;
+            --theme-accent: #10b981;
+        }
+
+        [data-user="Anthony"] {
+            --theme-primary: #8b5cf6;
+            --theme-secondary: #6d28d9;
+            --theme-light: #f5f3ff;
+            --theme-accent: #f97316;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', 'PingFang TC', 'Microsoft JhengHei', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-secondary) 100%);
+            min-height: 100vh;
+            color: var(--text-main);
+            padding: 16px;
+            transition: background 0.4s ease;
+            user-select: none;
+        }
+
+        .app-shell {
+            max-width: 1260px;
+            margin: 0 auto;
+        }
+
+        /* Top Bar: Back + Title + User Switcher */
+        .top-bar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 16px 24px;
+            border-radius: 22px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+            margin-bottom: 16px;
+        }
+
+        .brand-group {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .back-link {
+            text-decoration: none;
+            background: var(--theme-light);
+            color: var(--theme-primary);
+            font-weight: 800;
+            padding: 10px 18px;
+            border-radius: 14px;
+            font-size: 17px;
+            transition: transform 0.2s, background 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .back-link:hover {
+            transform: translateY(-2px);
+        }
+
+        .app-title h1 {
+            margin: 0;
+            font-size: 27px;
+            color: var(--text-main);
+            letter-spacing: -0.3px;
+        }
+
+        .app-title p {
+            margin: 4px 0 0;
+            font-size: 16px;
+            color: var(--text-muted);
+            font-weight: 700;
+        }
+
+        /* User Switcher Pills */
+        .user-switcher {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #f1f5f9;
+            padding: 6px;
+            border-radius: 16px;
+        }
+
+        .user-btn {
+            border: none;
+            background: transparent;
+            padding: 10px 18px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--text-muted);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.25s ease;
+        }
+
+        .user-btn.active {
+            background: white;
+            color: var(--theme-primary);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transform: scale(1.03);
+        }
+
+        /* User Stats Banner */
+        .stats-bar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            background: rgba(255, 255, 255, 0.94);
+            padding: 14px 22px;
+            border-radius: 18px;
+            margin-bottom: 16px;
+            font-size: 17px;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .stats-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .stat-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 7px 16px;
+            border-radius: 999px;
+            color: var(--text-main);
+            font-size: 17px;
+        }
+
+        .stat-pill strong {
+            color: var(--theme-primary);
+            font-size: 19px;
+        }
+
+        /* Mode Navigation Tabs */
+        .mode-tabs {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        @media (max-width: 760px) {
+            .mode-tabs {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .top-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .user-switcher {
+                justify-content: center;
+            }
+        }
+
+        .mode-tab {
+            border: 2px solid transparent;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 16px 14px;
+            border-radius: 20px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.25s ease;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .mode-tab:hover {
+            transform: translateY(-2px);
+            background: white;
+        }
+
+        .mode-tab.active {
+            background: white;
+            border-color: var(--theme-accent);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18);
+            transform: translateY(-3px);
+        }
+
+        .mode-tab .tab-icon {
+            font-size: 32px;
+        }
+
+        .mode-tab .tab-title {
+            font-size: 19px;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        .mode-tab .tab-desc {
+            font-size: 14px;
+            color: var(--text-muted);
+            font-weight: 700;
+        }
+
+        /* Main Stage Card */
+        .stage-card {
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 28px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+            min-height: 520px;
+        }
+
+        /* Filter & Control Toolbar */
+        .toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 18px;
+            padding-bottom: 16px;
+            border-bottom: 2px dashed #e2e8f0;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .chip-btn {
+            border: 2px solid #e2e8f0;
+            background: #f8fafc;
+            color: var(--text-main);
+            padding: 10px 18px;
+            border-radius: 14px;
+            font-size: 16px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .chip-btn:hover {
+            border-color: var(--theme-primary);
+        }
+
+        .chip-btn.active {
+            background: var(--theme-primary);
+            color: white;
+            border-color: var(--theme-primary);
+        }
+
+        .chip-btn.aaa.active { background: var(--aaa-color); border-color: var(--aaa-color); }
+        .chip-btn.aba.active { background: var(--aba-color); border-color: var(--aba-color); }
+        .chip-btn.abb.active { background: var(--abb-color); border-color: var(--abb-color); }
+        .chip-btn.abc.active { background: var(--abc-color); border-color: var(--abc-color); }
+
+        .chip-btn.mask-toggle.active {
+            background: #1e293b;
+            border-color: #1e293b;
+            color: #fbbf24;
+        }
+
+        /* Pattern Chart Table (Mode 1) */
+        .chart-table-wrap {
+            overflow-x: auto;
+        }
+
+        .verb-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 10px;
+        }
+
+        .verb-table th {
+            text-align: left;
+            padding: 12px 16px;
+            font-size: 16px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .verb-row {
+            background: #f8fafc;
+            transition: transform 0.15s, box-shadow 0.15s;
+        }
+
+        .verb-row:hover {
+            transform: scale(1.005);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+        }
+
+        .verb-row td {
+            padding: 16px 18px;
+            font-size: 24px;
+            font-weight: 800;
+            border-top: 2px solid transparent;
+            border-bottom: 2px solid transparent;
+        }
+
+        .verb-row td:first-child {
+            border-top-left-radius: 14px;
+            border-bottom-left-radius: 14px;
+            border-left: 6px solid #cbd5e1;
+        }
+
+        .verb-row td:last-child {
+            border-top-right-radius: 14px;
+            border-bottom-right-radius: 14px;
+        }
+
+        .verb-row.pattern-AAA td:first-child { border-left-color: var(--aaa-color); }
+        .verb-row.pattern-ABA td:first-child { border-left-color: var(--aba-color); }
+        .verb-row.pattern-ABB td:first-child { border-left-color: var(--abb-color); }
+        .verb-row.pattern-ABC td:first-child { border-left-color: var(--abc-color); }
+
+        .pattern-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 800;
+        }
+
+        .pattern-AAA .pattern-badge { background: var(--aaa-bg); color: var(--aaa-color); }
+        .pattern-ABA .pattern-badge { background: var(--aba-bg); color: var(--aba-color); }
+        .pattern-ABB .pattern-badge { background: var(--abb-bg); color: var(--abb-color); }
+        .pattern-ABC .pattern-badge { background: var(--abc-bg); color: var(--abc-color); }
+
+        /* Flip / Mask Cell for Self-Testing */
+        .maskable-cell {
+            cursor: pointer;
+            position: relative;
+            border-radius: 10px;
+            transition: all 0.2s;
+        }
+
+        .maskable-cell.masked {
+            background: #1e293b;
+            color: transparent !important;
+        }
+
+        .maskable-cell.masked * {
+            opacity: 0;
+        }
+
+        .maskable-cell.masked::after {
+            content: '👆 Tap to Reveal';
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fbbf24;
+            font-size: 16px;
+            font-weight: 800;
+        }
+
+        .vowel-hi {
+            color: #dc2626;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+
+        .zh-badge {
+            display: inline-block;
+            background: #f1f5f9;
+            color: #334155;
+            font-size: 19px;
+            font-weight: 800;
+            padding: 6px 14px;
+            border-radius: 10px;
+        }
+
+        .speak-btn {
+            border: none;
+            background: white;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.14);
+            font-size: 21px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.15s;
+        }
+
+        .speak-btn:hover {
+            transform: scale(1.12);
+        }
+
+        .pin-btn {
+            border: none;
+            background: transparent;
+            font-size: 24px;
+            cursor: pointer;
+            opacity: 0.35;
+            transition: opacity 0.2s, transform 0.2s;
+        }
+
+        .pin-btn.pinned {
+            opacity: 1;
+            transform: scale(1.15);
+        }
+
+        /* Mode 2: Verb Train (3 Cars: Verb -> Simple Past -> Past Participle) */
+        .quiz-header {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 22px;
+        }
+
+        .prompt-card {
+            background: linear-gradient(135deg, #f8fafc 0%, #eff6ff 100%);
+            border: 2px solid #bfdbfe;
+            border-radius: 22px;
+            padding: 22px 28px;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .prompt-verb-num {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--theme-primary);
+            text-transform: uppercase;
+        }
+
+        .prompt-verb-main {
+            font-size: 42px;
+            font-weight: 900;
+            color: var(--text-main);
+            margin: 8px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .train-track {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 26px;
+        }
+
+        @media (max-width: 680px) {
+            .train-track {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .train-car {
+            background: #f8fafc;
+            border: 3px dashed #cbd5e1;
+            border-radius: 20px;
+            padding: 22px 16px;
+            text-align: center;
+            position: relative;
+            transition: all 0.25s;
+            min-height: 132px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .train-car.locked {
+            background: #eff6ff;
+            border: 3px solid #93c5fd;
+        }
+
+        .train-car.active-target {
+            border: 3px solid var(--theme-accent);
+            background: #fffbeb;
+            box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.2);
+            animation: pulseBorder 1.5s infinite;
+        }
+
+        .train-car.filled {
+            background: #ecfdf5;
+            border: 3px solid #10b981;
+        }
+
+        @keyframes pulseBorder {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-3px); }
+        }
+
+        .car-label {
+            font-size: 16px;
+            font-weight: 800;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .car-value {
+            font-size: 32px;
+            font-weight: 900;
+            color: var(--text-main);
+        }
+
+        .choices-pool {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 14px;
+            margin: 22px 0;
+        }
+
+        .choice-card {
+            border: 2px solid #cbd5e1;
+            background: white;
+            padding: 18px 32px;
+            border-radius: 18px;
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--text-main);
+            cursor: pointer;
+            box-shadow: 0 6px 0 #cbd5e1, 0 8px 16px rgba(0, 0, 0, 0.08);
+            transition: transform 0.12s, box-shadow 0.12s, background 0.2s;
+        }
+
+        .choice-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--theme-primary);
+        }
+
+        .choice-card:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 #cbd5e1;
+        }
+
+        .choice-card.used {
+            opacity: 0.25;
+            pointer-events: none;
+            transform: scale(0.95);
+        }
+
+        .choice-card.wrong-shake {
+            animation: shake 0.4s ease;
+            background: #fef2f2;
+            border-color: #ef4444;
+            color: #dc2626;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-8px); }
+            75% { transform: translateX(8px); }
+        }
+
+        /* Mode 3: Spelling Detective */
+        .detective-word-box {
+            font-size: 52px;
+            font-weight: 900;
+            letter-spacing: 2px;
+            background: #1e293b;
+            color: white;
+            padding: 30px 44px;
+            border-radius: 24px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin: 18px 0 26px;
+            box-shadow: 0 12px 28px rgba(30, 41, 59, 0.28);
+        }
+
+        .missing-slot {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 88px;
+            padding: 4px 16px;
+            border-bottom: 5px solid #fbbf24;
+            color: #fbbf24;
+            background: rgba(251, 191, 36, 0.15);
+            border-radius: 12px;
+            margin: 0 4px;
+        }
+
+        /* Mode 4: Spot the Mistake */
+        .exam-sheet-card {
+            background: #fffef8;
+            border: 2px solid #e2e8f0;
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: inset 0 0 0 4px #f8fafc, 0 8px 24px rgba(0, 0, 0, 0.08);
+            max-width: 900px;
+            margin: 0 auto 24px;
+        }
+
+        .exam-header-label {
+            font-family: 'Times New Roman', serif;
+            font-size: 20px;
+            font-weight: 700;
+            text-align: center;
+            border-bottom: 2px solid #1e293b;
+            padding-bottom: 10px;
+            margin-bottom: 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .exam-row-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+        }
+
+        @media (max-width: 640px) {
+            .exam-row-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .exam-cell {
+            border: 2px solid #94a3b8;
+            border-radius: 16px;
+            padding: 22px 14px;
+            text-align: center;
+            cursor: pointer;
+            background: white;
+            transition: all 0.2s;
+        }
+
+        .exam-cell:hover {
+            border-color: var(--theme-primary);
+            transform: translateY(-2px);
+        }
+
+        .exam-cell .col-name {
+            font-size: 15px;
+            font-weight: 800;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .exam-cell .handwriting {
+            font-family: 'Comic Sans MS', 'Chalkboard SE', 'Marker Felt', cursive, sans-serif;
+            font-size: 32px;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        .exam-cell.flagged-error {
+            background: #fef2f2;
+            border-color: #ef4444;
+            box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.2);
+        }
+
+        .exam-cell.flagged-error .handwriting {
+            color: #dc2626;
+            text-decoration: line-through;
+        }
+
+        .exam-cell.corrected {
+            background: #ecfdf5;
+            border-color: #10b981;
+        }
+
+        .exam-cell.corrected .handwriting {
+            color: #059669;
+            text-decoration: none;
+        }
+
+        /* Feedback Toast / Next Button */
+        .feedback-banner {
+            margin-top: 20px;
+            padding: 20px 24px;
+            border-radius: 18px;
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            font-weight: 800;
+            font-size: 21px;
+        }
+
+        .feedback-banner.show {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .feedback-banner.success {
+            background: #ecfdf5;
+            border: 2px solid #10b981;
+            color: #065f46;
+        }
+
+        .next-btn {
+            border: none;
+            background: var(--theme-primary);
+            color: white;
+            padding: 14px 28px;
+            border-radius: 16px;
+            font-size: 20px;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transition: transform 0.15s;
+        }
+
+        .next-btn:hover {
+            transform: scale(1.04);
+        }
+
+        /* Speaking Visual Highlight (Karaoke effect) */
+        .speaking-glow {
+            outline: 4px solid #f59e0b !important;
+            background: #fef3c7 !important;
+            transform: scale(1.05) !important;
+            box-shadow: 0 8px 25px rgba(245, 158, 11, 0.4) !important;
+            transition: all 0.2s ease !important;
+            z-index: 5;
+        }
+
+        .replay-slow-btn {
+            border: 2px solid #059669;
+            background: white;
+            color: #065f46;
+            padding: 12px 20px;
+            border-radius: 14px;
+            font-size: 18px;
+            font-weight: 800;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.15s;
+        }
+
+        .replay-slow-btn:hover {
+            background: #ecfdf5;
+            transform: scale(1.03);
+        }
+
+        /* Celebration Confetti */
+        .confetti-piece {
+            position: fixed;
+            width: 10px;
+            height: 14px;
+            border-radius: 3px;
+            pointer-events: none;
+            z-index: 999;
+            animation: confettiFall 1.5s ease-out forwards;
+        }
+
+        @keyframes confettiFall {
+            0% {
+                transform: translate(0, 0) rotate(0deg) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--dx), var(--dy)) rotate(var(--rot)) scale(0.6);
+                opacity: 0;
+            }
+        }
+
+        /* Memory / Sync Modal */
+        .modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.6);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            padding: 16px;
+        }
+
+        .modal-backdrop.open {
+            display: flex;
+        }
+
+        .modal-card {
+            background: white;
+            border-radius: 22px;
+            max-width: 680px;
+            width: 100%;
+            padding: 24px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+
+        .mastery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(115px, 1fr));
+            gap: 8px;
+            margin: 14px 0;
+        }
+
+        .mastery-item {
+            padding: 8px 10px;
+            border-radius: 10px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            font-size: 13px;
+            font-weight: 700;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .mastery-item.mastered {
+            background: #ecfdf5;
+            border-color: #6ee7b7;
+            color: #065f46;
+        }
+
+        .mastery-item.trouble {
+            background: #fff7ed;
+            border-color: #fdba74;
+            color: #9a3412;
+        }
+    </style>
+</head>
+
+<body data-user="Barry">
+    <div class="app-shell">
+        <!-- Top Bar -->
+        <header class="top-bar">
+            <div class="brand-group">
+                <a href="index.html" class="back-link">← Back</a>
+                <div class="app-title">
+                    <h1 id="appMainTitle">🌱 G3 English Verb Conjugation</h1>
+                    <p id="appMainSubtitle">KET 84 Irregular Verbs (Verb • Simple Past • Past Participle) • Tap &amp; Learn</p>
+                </div>
+            </div>
+
+            <!-- 3 Users Switcher -->
+            <div class="user-switcher" aria-label="Select Player">
+                <button class="user-btn" data-u="Lilian" onclick="switchUser('Lilian')">
+                    <span>👧🏻</span> Lilian
+                </button>
+                <button class="user-btn active" data-u="Barry" onclick="switchUser('Barry')">
+                    <span>👦🏻</span> Barry
+                </button>
+                <button class="user-btn" data-u="Anthony" onclick="switchUser('Anthony')">
+                    <span>🧒🏻</span> Anthony
+                </button>
+            </div>
+        </header>
+
+        <!-- 10-Verb Set Selector Bar (Collapsible) -->
+        <div class="stats-bar" style="margin-bottom: 12px; background: rgba(255, 255, 255, 0.96); flex-direction: column; align-items: stretch; gap: 10px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;">
+                <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+                    <span style="font-weight:800;color:var(--text-main);">🎯 Current Set:</span>
+                    <span id="currentSetSummaryBadge" style="background:var(--theme-light);color:var(--theme-primary);padding:6px 14px;border-radius:999px;font-weight:900;font-size:17px;border:2px solid var(--theme-primary);">
+                        Set 1: #1–10 (be ~ eat)
+                    </span>
+                    <button class="chip-btn" id="toggleSetPickerBtn" onclick="toggleSetPickerPanel()" style="background:var(--theme-primary);color:white;border-color:var(--theme-primary);">
+                        🔽 Change Set
+                    </button>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                    <button class="chip-btn" id="zhToggleBtn" onclick="toggleZhMeaning()">🔤 Meaning: ON</button>
+                </div>
+            </div>
+
+            <!-- Collapsible Drawer for Selecting Sets -->
+            <div id="setPickerDrawer" style="display:none;border-top:2px dashed #e2e8f0;padding-top:12px;">
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
+                    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                        <span style="font-size:15px;color:var(--text-muted);font-weight:700;">Tap any 10-verb set to start (auto-hides after selection):</span>
+                        <button class="chip-btn" id="multiSetToggleBtn" onclick="toggleMultiSetMode()" title="Turn on to combine multiple 10-verb sets">☑️ Combine Sets: OFF</button>
+                        <button class="chip-btn" id="setBtn_ALL" onclick="selectAllSets()">📚 All 84 (#1–84)</button>
+                    </div>
+                    <button class="chip-btn" onclick="toggleSetPickerPanel(false)" style="background:#1e293b;color:#fbbf24;border-color:#1e293b;">
+                        🔼 Done / Hide Sets
+                    </button>
+                </div>
+                <div id="tenSetButtonsContainer" style="display:grid;grid-template-columns:repeat(auto-fill, minmax(220px, 1fr));gap:10px;"></div>
+            </div>
+        </div>
+
+        <!-- User Memory & Progress Bar -->
+        <div class="stats-bar">
+            <div class="stats-badges">
+                <span class="stat-pill">👤 Player: <strong id="statUserName">Barry</strong></span>
+                <span class="stat-pill">⭐ Stars: <strong id="statStars">0</strong></span>
+                <span class="stat-pill">🔥 Streak: <strong id="statStreak">0</strong></span>
+                <span class="stat-pill">📌 Review List: <strong id="statTrouble">0</strong> verbs</span>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                <button class="chip-btn" id="sfxToggleBtn" onclick="toggleSfx()">🔔 SFX: ON</button>
+                <button class="chip-btn" onclick="openPassportModal()">📚 Passport &amp; Save</button>
+            </div>
+        </div>
+
+        <!-- 4 Non-Typing Interactive Game Modes -->
+        <nav class="mode-tabs">
+            <div class="mode-tab active" data-mode="learn" onclick="setMode('learn')">
+                <span class="tab-icon">📖</span>
+                <span class="tab-title">1. Pattern Chart</span>
+                <span class="tab-desc">A+B+C / A+B+A / A+B+B / A+A+A</span>
+            </div>
+            <div class="mode-tab" data-mode="train" onclick="setMode('train')">
+                <span class="tab-icon">🚂</span>
+                <span class="tab-title">2. Verb Train</span>
+                <span class="tab-desc">Tap Cards to Build 3 Forms</span>
+            </div>
+            <div class="mode-tab" data-mode="detective" onclick="setMode('detective')">
+                <span class="tab-icon">🔍</span>
+                <span class="tab-title">3. Spelling Detective</span>
+                <span class="tab-desc">Tap the Missing Letters</span>
+            </div>
+            <div class="mode-tab" data-mode="grading" onclick="setMode('grading')">
+                <span class="tab-icon">👩‍🏫</span>
+                <span class="tab-title">4. Spot the Mistake</span>
+                <span class="tab-desc">Grade &amp; Fix the Row</span>
+            </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="stage-card" id="stageContainer"></main>
+    </div>
+
+    <!-- Learning Passport & Memory Modal -->
+    <div class="modal-backdrop" id="passportModal" onclick="if(event.target===this)closePassportModal()">
+        <div class="modal-card">
+            <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #e2e8f0;padding-bottom:12px;">
+                <h2 style="margin:0;color:var(--theme-primary);" id="passportTitle">📚 Lilian's G3 Verb Passport</h2>
+                <button class="chip-btn" onclick="closePassportModal()">✕ Close</button>
+            </div>
+            <p style="color:var(--text-muted);font-size:14px;margin:12px 0;">
+                Progress is saved automatically for each player (Lilian, Barry, Anthony). Tap any verb below to add or remove it from your <strong>📌 Review List</strong>.
+            </p>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;">
+                <button class="chip-btn" onclick="loadTrickyVerbs()">📋 Add Tricky KET Verbs</button>
+                <button class="chip-btn" onclick="exportProgressCode()">📤 Copy Save Code</button>
+                <button class="chip-btn" onclick="importProgressCode()">📥 Load Save Code</button>
+                <button class="chip-btn" style="color:#ef4444;" onclick="resetCurrentUserProgress()">🗑️ Reset Progress</button>
+            </div>
+            <div class="mastery-grid" id="passportGrid"></div>
+        </div>
+    </div>
+
+    <script>
+        // =========================================================================
+        // 1. Complete 84 Irregular Verbs Dataset (Exact match with G3 KET PDF)
+        //    #1–35: A+B+C | #36–38: A+B+A | #39–73: A+B+B | #74–84: A+A+A
+        // =========================================================================
+        const RAW_VERBS = [
+            // Page 1: #1–20 (A+B+C)
+            { id: 1, page: 1, base: 'be', past: 'was/were', pp: 'been', zh: '是', pattern: 'ABC', subGroup: '-n / -en Group', tip: 'Verb: be • Simple Past: was/were • Past Participle: been', traps: ['beed', 'was', 'were'], det: ['PP', 'b', 'een', '', ['een', 'en', 'one']] },
+            { id: 2, page: 1, base: 'begin', past: 'began', pp: 'begun', zh: '開始', pattern: 'ABC', subGroup: 'i → a → u Vowel Chant', tip: 'Vowel chant i → a → u: begin → began → begun!', traps: ['begined', 'begun', 'began'], det: ['PP', 'beg', 'u', 'n', ['u', 'a', 'i']], tricky: true },
+            { id: 3, page: 1, base: 'blow', past: 'blew', pp: 'blown', zh: '吹', pattern: 'ABC', subGroup: '-ew / -own Group', tip: '-ow changes to -ew / -own: blow → blew → blown', traps: ['blowed', 'blewn', 'blown'], det: ['PAST', 'bl', 'ew', '', ['ew', 'ow', 'awn']], tricky: true },
+            { id: 4, page: 1, base: 'break', past: 'broke', pp: 'broken', zh: '打破', pattern: 'ABC', subGroup: '-o- / -oken Group', tip: 'break → broke → broken', traps: ['breaked', 'broked', 'breaken'], det: ['PP', 'br', 'oken', '', ['oken', 'aken', 'oke']] },
+            { id: 5, page: 1, base: 'choose', past: 'chose', pp: 'chosen', zh: '選擇', pattern: 'ABC', subGroup: 'oo → o → osen Group', tip: 'Drop one o in Simple Past: choose → chose → chosen', traps: ['choosed', 'choosen', 'chose'], det: ['PAST', 'ch', 'ose', '', ['ose', 'oose', 'osen']], tricky: true },
+            { id: 6, page: 1, base: 'do', past: 'did', pp: 'done', zh: '做', pattern: 'ABC', subGroup: 'Special ABC', tip: 'do → did → done', traps: ['doed', 'dided', 'did'], det: ['PP', 'd', 'one', '', ['one', 'id', 'oen']] },
+            { id: 7, page: 1, base: 'draw', past: 'drew', pp: 'drawn', zh: '畫', pattern: 'ABC', subGroup: '-ew / -awn Group', tip: 'draw → drew → drawn', traps: ['drawed', 'drewn', 'drawn'], det: ['PP', 'dr', 'awn', '', ['awn', 'ewn', 'own']] },
+            { id: 8, page: 1, base: 'drink', past: 'drank', pp: 'drunk', zh: '喝', pattern: 'ABC', subGroup: 'i → a → u Vowel Chant', tip: 'Vowel chant i → a → u: drink → drank → drunk', traps: ['drinked', 'drunk', 'drank'], det: ['PP', 'dr', 'u', 'nk', ['u', 'a', 'i']] },
+            { id: 9, page: 1, base: 'drive', past: 'drove', pp: 'driven', zh: '開車', pattern: 'ABC', subGroup: 'i → o → i-en Group', tip: 'drive → drove → driven', traps: ['drived', 'droven', 'driven'], det: ['PAST', 'dr', 'ove', '', ['ove', 'ive', 'ave']] },
+            { id: 10, page: 1, base: 'eat', past: 'ate', pp: 'eaten', zh: '吃', pattern: 'ABC', subGroup: '-en Group', tip: 'Rearrange e-a-t to a-t-e: eat → ate → eaten', traps: ['eated', 'aten', 'eat'], det: ['PAST', '', 'ate', '', ['ate', 'eated', 'eat']] },
+            { id: 11, page: 1, base: 'fall', past: 'fell', pp: 'fallen', zh: '落下', pattern: 'ABC', subGroup: '-en Group', tip: 'fall (落下) → fell → fallen (Watch out: feel → felt → felt)', traps: ['falled', 'felt', 'fellen'], det: ['PAST', 'f', 'ell', '', ['ell', 'all', 'elt']], tricky: true },
+            { id: 12, page: 1, base: 'fly', past: 'flew', pp: 'flown', zh: '飛', pattern: 'ABC', subGroup: '-ew / -own Group', tip: 'fly → flew → flown', traps: ['flied', 'flowed', 'flewn'], det: ['PP', 'fl', 'own', '', ['own', 'ewn', 'ied']], tricky: true },
+            { id: 13, page: 1, base: 'forget', past: 'forgot', pp: 'forgot / forgotten', zh: '忘記', pattern: 'ABC', subGroup: '-o- / -otten Group', tip: 'forget → forgot → forgot / forgotten (double t in forgotten!)', traps: ['forgetted', 'forgetten', 'forgat'], det: ['PP', 'forg', 'otten', '', ['otten', 'oten', 'etten']], tricky: true },
+            { id: 14, page: 1, base: 'forgive', past: 'forgave', pp: 'forgiven', zh: '原諒', pattern: 'ABC', subGroup: 'give Family', tip: 'Just like give → gave → given: forgive → forgave → forgiven', traps: ['forgived', 'forgave', 'forgov'], det: ['PAST', 'forg', 'ave', '', ['ave', 'ive', 'ove']] },
+            { id: 15, page: 1, base: 'freeze', past: 'froze', pp: 'frozen', zh: '結冰', pattern: 'ABC', subGroup: '-o- / -ozen Group', tip: 'freeze → froze → frozen', traps: ['freezed', 'frozed', 'freezen'], det: ['PP', 'fr', 'ozen', '', ['ozen', 'eezen', 'oze']] },
+            { id: 16, page: 1, base: 'get', past: 'got', pp: 'got / gotten', zh: '獲得', pattern: 'ABC', subGroup: '-o- / -otten Group', tip: 'get → got → got / gotten', traps: ['getted', 'gaten', 'goten'], det: ['PAST', 'g', 'ot', '', ['ot', 'et', 'at']] },
+            { id: 17, page: 1, base: 'give', past: 'gave', pp: 'given', zh: '給', pattern: 'ABC', subGroup: 'give Family', tip: 'give → gave → given', traps: ['gived', 'gaven', 'gave'], det: ['PP', 'g', 'iven', '', ['iven', 'aven', 'ove']] },
+            { id: 18, page: 1, base: 'go', past: 'went', pp: 'gone', zh: '去', pattern: 'ABC', subGroup: 'Special ABC', tip: 'Super important: go → went → gone!', traps: ['goed', 'wented', 'went'], det: ['PAST', '', 'went', '', ['went', 'goed', 'gone']] },
+            { id: 19, page: 1, base: 'grow', past: 'grew', pp: 'grown', zh: '成長', pattern: 'ABC', subGroup: '-ew / -own Group', tip: 'Like blow & know: grow → grew → grown', traps: ['growed', 'grewn', 'grown'], det: ['PAST', 'gr', 'ew', '', ['ew', 'ow', 'awn']] },
+            { id: 20, page: 1, base: 'hide', past: 'hid', pp: 'hidden', zh: '藏', pattern: 'ABC', subGroup: 'Double Letter PP', tip: 'Like bite → bit → bitten: hide → hid → hidden (double d!)', traps: ['hided', 'hiden', 'hid'], det: ['PP', 'hi', 'dden', '', ['dden', 'den', 'ded']], tricky: true },
+
+            // Page 2: #21–35 (A+B+C), #36–38 (A+B+A), #39–42 (A+B+B)
+            { id: 21, page: 2, base: 'know', past: 'knew', pp: 'known', zh: '知道', pattern: 'ABC', subGroup: '-ew / -own Group', tip: 'know → knew → known', traps: ['knowed', 'knewn', 'known'], det: ['PP', 'kn', 'own', '', ['own', 'ewn', 'owed']], tricky: true },
+            { id: 22, page: 2, base: 'ride', past: 'rode', pp: 'ridden', zh: '騎車', pattern: 'ABC', subGroup: 'i → o → idden Group', tip: 'ride → rode → ridden (double d in ridden!)', traps: ['rided', 'roden', 'riden'], det: ['PP', 'ri', 'dden', '', ['dden', 'den', 'ded']], tricky: true },
+            { id: 23, page: 2, base: 'ring', past: 'rang', pp: 'rung', zh: '鈴響', pattern: 'ABC', subGroup: 'i → a → u Vowel Chant', tip: 'Vowel chant i → a → u: ring → rang → rung', traps: ['ringed', 'rung', 'rang'], det: ['PAST', 'r', 'a', 'ng', ['a', 'i', 'u']] },
+            { id: 24, page: 2, base: 'see', past: 'saw', pp: 'seen', zh: '看', pattern: 'ABC', subGroup: '-n / -en Group', tip: 'see → saw → seen', traps: ['seed', 'sawed', 'saw'], det: ['PAST', 's', 'aw', '', ['aw', 'ee', 'een']] },
+            { id: 25, page: 2, base: 'shake', past: 'shook', pp: 'shaken', zh: '搖動', pattern: 'ABC', subGroup: '-ook / -aken Group', tip: 'Like take → took → taken: shake → shook → shaken', traps: ['shaked', 'shooken', 'shook'], det: ['PAST', 'sh', 'ook', '', ['ook', 'ake', 'oke']] },
+            { id: 26, page: 2, base: 'sing', past: 'sang', pp: 'sung', zh: '唱歌', pattern: 'ABC', subGroup: 'i → a → u Vowel Chant', tip: 'Vowel chant i → a → u: sing → sang → sung', traps: ['singed', 'sung', 'sang'], det: ['PP', 's', 'u', 'ng', ['u', 'a', 'i']] },
+            { id: 27, page: 2, base: 'speak', past: 'spoke', pp: 'spoken', zh: '說話', pattern: 'ABC', subGroup: '-o- / -oken Group', tip: 'Like break → broke → broken: speak → spoke → spoken', traps: ['speaked', 'spoked', 'speaken'], det: ['PP', 'sp', 'oken', '', ['oken', 'eaken', 'oke']] },
+            { id: 28, page: 2, base: 'steal', past: 'stole', pp: 'stolen', zh: '偷竊', pattern: 'ABC', subGroup: '-o- / -olen Group', tip: 'steal → stole → stolen', traps: ['stealed', 'stoled', 'stealen'], det: ['PAST', 'st', 'ole', '', ['ole', 'eal', 'olen']] },
+            { id: 29, page: 2, base: 'swear', past: 'swore', pp: 'sworn', zh: '發誓', pattern: 'ABC', subGroup: '-ore / -orn Group', tip: 'Like wear → wore → worn: swear → swore → sworn', traps: ['sweared', 'swored', 'swearn'], det: ['PP', 'sw', 'orn', '', ['orn', 'earn', 'ore']] },
+            { id: 30, page: 2, base: 'swim', past: 'swam', pp: 'swum', zh: '游泳', pattern: 'ABC', subGroup: 'i → a → u Vowel Chant', tip: 'Vowel chant i → a → u: swim → swam → swum', traps: ['swimmed', 'swum', 'swam'], det: ['PP', 'sw', 'u', 'm', ['u', 'a', 'i']], tricky: true },
+            { id: 31, page: 2, base: 'take', past: 'took', pp: 'taken', zh: '拿', pattern: 'ABC', subGroup: '-ook / -aken Group', tip: 'take → took → taken', traps: ['taked', 'tooken', 'took'], det: ['PP', 't', 'aken', '', ['aken', 'ooken', 'ook']] },
+            { id: 32, page: 2, base: 'throw', past: 'threw', pp: 'thrown', zh: '丟出', pattern: 'ABC', subGroup: '-ew / -own Group', tip: 'Like blow & grow: throw → threw → thrown', traps: ['throwed', 'threwn', 'thrown'], det: ['PAST', 'thr', 'ew', '', ['ew', 'ow', 'own']] },
+            { id: 33, page: 2, base: 'wake', past: 'woke', pp: 'woken', zh: '醒', pattern: 'ABC', subGroup: '-o- / -oken Group', tip: 'wake → woke → woken', traps: ['waked', 'woked', 'waken'], det: ['PP', 'w', 'oken', '', ['oken', 'aken', 'oke']] },
+            { id: 34, page: 2, base: 'wear', past: 'wore', pp: 'worn', zh: '穿戴', pattern: 'ABC', subGroup: '-ore / -orn Group', tip: 'wear → wore → worn', traps: ['weared', 'wored', 'wearn'], det: ['PP', 'w', 'orn', '', ['orn', 'earn', 'ore']], tricky: true },
+            { id: 35, page: 2, base: 'write', past: 'wrote', pp: 'written', zh: '寫', pattern: 'ABC', subGroup: 'i → o → itten Group', tip: 'write → wrote → written (double t in written!)', traps: ['writed', 'wroten', 'writen'], det: ['PP', 'wr', 'itten', '', ['itten', 'iten', 'oten']], tricky: true },
+
+            // A+B+A (#36–38)
+            { id: 36, page: 2, base: 'become', past: 'became', pp: 'become', zh: '變成', pattern: 'ABA', subGroup: 'Boomerang A-B-A', tip: 'A-B-A Boomerang! Past Participle returns to become: become → became → become', traps: ['becomed', 'becamed', 'became'], det: ['PAST', 'bec', 'a', 'me', ['a', 'o', 'e']] },
+            { id: 37, page: 2, base: 'come', past: 'came', pp: 'come', zh: '來', pattern: 'ABA', subGroup: 'Boomerang A-B-A', tip: 'A-B-A Boomerang! come → came → come', traps: ['comed', 'camed', 'came'], det: ['PP', 'c', 'o', 'me', ['o', 'a', 'u']] },
+            { id: 38, page: 2, base: 'run', past: 'ran', pp: 'run', zh: '跑', pattern: 'ABA', subGroup: 'Boomerang A-B-A', tip: 'A-B-A Boomerang! Past Participle returns to run: run → ran → run', traps: ['runned', 'ranned', 'ran'], det: ['PP', 'r', 'u', 'n', ['u', 'a', 'o']], tricky: true },
+
+            // A+B+B (#39–42 on Page 2)
+            { id: 39, page: 2, base: 'bleed', past: 'bled', pp: 'bled', zh: '流血', pattern: 'ABB', subGroup: 'ee → e Group', tip: 'Drop one e: bleed → bled → bled', traps: ['bleeded', 'blead', 'blod'], det: ['PAST', 'bl', 'ed', '', ['ed', 'eed', 'ead']] },
+            { id: 40, page: 2, base: 'buy', past: 'bought', pp: 'bought', zh: '買', pattern: 'ABB', subGroup: '-ought / -aught Group', tip: 'No r in buy, so no r in bought: buy → bought → bought', traps: ['buyed', 'brought', 'baught'], det: ['PAST', 'b', 'ought', '', ['ought', 'aught', 'rought']] },
+            { id: 41, page: 2, base: 'bring', past: 'brought', pp: 'brought', zh: '帶來', pattern: 'ABB', subGroup: '-ought / -aught Group', tip: 'bring has r → brought: bring → brought → brought', traps: ['bringed', 'brang', 'bought'], det: ['PAST', 'br', 'ought', '', ['ought', 'aught', 'ang']] },
+            { id: 42, page: 2, base: 'catch', past: 'caught', pp: 'caught', zh: '接住', pattern: 'ABB', subGroup: '-ought / -aught Group', tip: 'catch has a → caught (-aught): catch → caught → caught', traps: ['catched', 'cought', 'cotch'], det: ['PAST', 'c', 'aught', '', ['aught', 'ought', 'atched']], tricky: true },
+
+            // Page 3: #43–65 (A+B+B)
+            { id: 43, page: 3, base: 'feed', past: 'fed', pp: 'fed', zh: '餵', pattern: 'ABB', subGroup: 'ee → e Group', tip: 'Drop one e: feed → fed → fed', traps: ['feeded', 'fede', 'fad'], det: ['PAST', 'f', 'ed', '', ['ed', 'eed', 'ad']] },
+            { id: 44, page: 3, base: 'fight', past: 'fought', pp: 'fought', zh: '打架', pattern: 'ABB', subGroup: '-ought / -aught Group', tip: 'fight → fought → fought (-ought)', traps: ['fighted', 'faught', 'fit'], det: ['PAST', 'f', 'ought', '', ['ought', 'aught', 'ight']] },
+            { id: 45, page: 3, base: 'find', past: 'found', pp: 'found', zh: '尋找', pattern: 'ABB', subGroup: 'i → ou Group', tip: 'find → found → found', traps: ['finded', 'fond', 'fand'], det: ['PAST', 'f', 'ound', '', ['ound', 'ind', 'ond']] },
+            { id: 46, page: 3, base: 'build', past: 'built', pp: 'built', zh: '建築', pattern: 'ABB', subGroup: 'd → t Group', tip: 'Change d to t: build → built → built', traps: ['builded', 'bild', 'builted'], det: ['PAST', 'buil', 't', '', ['t', 'd', 'ded']] },
+            { id: 47, page: 3, base: 'win', past: 'won', pp: 'won', zh: '贏', pattern: 'ABB', subGroup: 'Vowel Change ABB', tip: 'win → won → won', traps: ['winned', 'wan', 'win'], det: ['PAST', 'w', 'on', '', ['on', 'in', 'an']] },
+            { id: 48, page: 3, base: 'have', past: 'had', pp: 'had', zh: '有', pattern: 'ABB', subGroup: 'Short ABB', tip: 'have → had → had', traps: ['haved', 'has', 'haven'], det: ['PAST', 'ha', 'd', '', ['d', 've', 'ved']] },
+            { id: 49, page: 3, base: 'hang', past: 'hung', pp: 'hung', zh: '懸掛', pattern: 'ABB', subGroup: 'Vowel Change ABB', tip: 'hang → hung → hung', traps: ['hanged', 'hang', 'hong'], det: ['PAST', 'h', 'u', 'ng', ['u', 'a', 'o']] },
+            { id: 50, page: 3, base: 'hear', past: 'heard', pp: 'heard', zh: '聽見', pattern: 'ABB', subGroup: 'Add -d Group', tip: 'Add d (not ed!): hear → heard → heard', traps: ['heared', 'herd', 'heart'], det: ['PAST', 'hear', 'd', '', ['d', 'ed', 't']] },
+            { id: 51, page: 3, base: 'hold', past: 'held', pp: 'held', zh: '抓住', pattern: 'ABB', subGroup: 'Vowel Change ABB', tip: 'o changes to e: hold → held → held', traps: ['holded', 'hald', 'hold'], det: ['PAST', 'h', 'e', 'ld', ['e', 'o', 'a']] },
+            { id: 52, page: 3, base: 'keep', past: 'kept', pp: 'kept', zh: '保持', pattern: 'ABB', subGroup: 'ee → e + t Group', tip: 'Like sleep → slept: keep → kept → kept', traps: ['keeped', 'keped', 'keapt'], det: ['PAST', 'k', 'ept', '', ['ept', 'eept', 'eped']] },
+            { id: 53, page: 3, base: 'lead', past: 'led', pp: 'led', zh: '導致', pattern: 'ABB', subGroup: 'ea → e Group', tip: 'Drop a: lead → led → led', traps: ['leaded', 'lad', 'leed'], det: ['PAST', 'l', 'ed', '', ['ed', 'ead', 'ad']], tricky: true },
+            { id: 54, page: 3, base: 'leave', past: 'left', pp: 'left', zh: '離開', pattern: 'ABB', subGroup: '-ft Group', tip: 'leave → left → left', traps: ['leaved', 'lefted', 'live'], det: ['PAST', 'l', 'eft', '', ['eft', 'eaved', 'ave']] },
+            { id: 55, page: 3, base: 'lend', past: 'lent', pp: 'lent', zh: '借出', pattern: 'ABB', subGroup: 'd → t Group', tip: 'Change d to t (like send → sent): lend → lent → lent', traps: ['lended', 'land', 'lented'], det: ['PAST', 'len', 't', '', ['t', 'd', 'ded']] },
+            { id: 56, page: 3, base: 'lose', past: 'lost', pp: 'lost', zh: '遺失', pattern: 'ABB', subGroup: '-st Group', tip: 'lose → lost → lost', traps: ['losed', 'loost', 'loss'], det: ['PAST', 'lo', 'st', '', ['st', 'sed', 'se']] },
+            { id: 57, page: 3, base: 'make', past: 'made', pp: 'made', zh: '製作', pattern: 'ABB', subGroup: 'Short ABB', tip: 'Change k to d: make → made → made', traps: ['maked', 'maded', 'mak'], det: ['PAST', 'ma', 'de', '', ['de', 'ke', 'ked']] },
+            { id: 58, page: 3, base: 'mean', past: 'meant', pp: 'meant', zh: '表示…意思', pattern: 'ABB', subGroup: 'Add -t Group', tip: 'Add t: mean → meant → meant', traps: ['meaned', 'ment', 'meanted'], det: ['PAST', 'mean', 't', '', ['t', 'ed', 'd']] },
+            { id: 59, page: 3, base: 'meet', past: 'met', pp: 'met', zh: '遇見', pattern: 'ABB', subGroup: 'ee → e Group', tip: 'Drop one e: meet → met → met', traps: ['meeted', 'mat', 'mete'], det: ['PAST', 'm', 'et', '', ['et', 'eet', 'at']] },
+            { id: 60, page: 3, base: 'pay', past: 'paid', pp: 'paid', zh: '付帳', pattern: 'ABB', subGroup: 'ay → aid Group', tip: 'Like say → said: pay → paid → paid (not payed!)', traps: ['payed', 'paied', 'pad'], det: ['PAST', 'p', 'aid', '', ['aid', 'ayed', 'ad']], tricky: true },
+            { id: 61, page: 3, base: 'say', past: 'said', pp: 'said', zh: '說', pattern: 'ABB', subGroup: 'ay → aid Group', tip: 'Like pay → paid: say → said → said', traps: ['sayed', 'saied', 'sad'], det: ['PAST', 's', 'aid', '', ['aid', 'ayed', 'ad']] },
+            { id: 62, page: 3, base: 'sell', past: 'sold', pp: 'sold', zh: '賣', pattern: 'ABB', subGroup: 'ell → old Group', tip: 'Like tell → told: sell → sold → sold', traps: ['selled', 'sald', 'solled'], det: ['PAST', 's', 'old', '', ['old', 'elled', 'eld']] },
+            { id: 63, page: 3, base: 'send', past: 'sent', pp: 'sent', zh: '寄出', pattern: 'ABB', subGroup: 'd → t Group', tip: 'Change d to t: send → sent → sent', traps: ['sended', 'sant', 'sented'], det: ['PAST', 'sen', 't', '', ['t', 'd', 'ded']] },
+            { id: 64, page: 3, base: 'shoot', past: 'shot', pp: 'shot', zh: '發射', pattern: 'ABB', subGroup: 'oo → o Group', tip: 'Drop one o: shoot → shot → shot', traps: ['shooted', 'shat', 'shote'], det: ['PAST', 'sh', 'ot', '', ['ot', 'oot', 'at']] },
+            { id: 65, page: 3, base: 'sit', past: 'sat', pp: 'sat', zh: '坐', pattern: 'ABB', subGroup: 'Vowel Change ABB', tip: 'i changes to a: sit → sat → sat', traps: ['sitted', 'set', 'sot'], det: ['PAST', 's', 'a', 't', ['a', 'i', 'e']] },
+
+            // Page 4: #66–73 (A+B+B), #74–84 (A+A+A)
+            { id: 66, page: 4, base: 'shine', past: 'shone', pp: 'shone', zh: '發光', pattern: 'ABB', subGroup: 'i → o Group', tip: 'shine → shone → shone', traps: ['shined', 'shane', 'shonen'], det: ['PAST', 'sh', 'one', '', ['one', 'ine', 'ane']] },
+            { id: 67, page: 4, base: 'sleep', past: 'slept', pp: 'slept', zh: '睡覺', pattern: 'ABB', subGroup: 'ee → e + t Group', tip: 'Like keep → kept: sleep → slept → slept', traps: ['sleeped', 'sleped', 'slapt'], det: ['PAST', 'sl', 'ept', '', ['ept', 'eept', 'eped']] },
+            { id: 68, page: 4, base: 'spend', past: 'spent', pp: 'spent', zh: '花費', pattern: 'ABB', subGroup: 'd → t Group', tip: 'Change d to t: spend → spent → spent', traps: ['spended', 'spant', 'spented'], det: ['PAST', 'spen', 't', '', ['t', 'd', 'ded']] },
+            { id: 69, page: 4, base: 'stand', past: 'stood', pp: 'stood', zh: '站', pattern: 'ABB', subGroup: '-ood Group', tip: 'Like understand → understood: stand → stood → stood', traps: ['standed', 'stod', 'stund'], det: ['PAST', 'st', 'ood', '', ['ood', 'and', 'od']] },
+            { id: 70, page: 4, base: 'teach', past: 'taught', pp: 'taught', zh: '教', pattern: 'ABB', subGroup: '-ought / -aught Group', tip: 'teach has a → taught (-aught): teach → taught → taught', traps: ['teached', 'tought', 'teacht'], det: ['PAST', 't', 'aught', '', ['aught', 'ought', 'eached']], tricky: true },
+            { id: 71, page: 4, base: 'tell', past: 'told', pp: 'told', zh: '告訴', pattern: 'ABB', subGroup: 'ell → old Group', tip: 'Like sell → sold: tell → told → told', traps: ['telled', 'tald', 'tolled'], det: ['PAST', 't', 'old', '', ['old', 'elled', 'eld']] },
+            { id: 72, page: 4, base: 'think', past: 'thought', pp: 'thought', zh: '想', pattern: 'ABB', subGroup: '-ought / -aught Group', tip: 'think → thought → thought (-ought)', traps: ['thinked', 'thaught', 'thank'], det: ['PAST', 'th', 'ought', '', ['ought', 'aught', 'inked']] },
+            { id: 73, page: 4, base: 'understand', past: 'understood', pp: 'understood', zh: '懂；理解', pattern: 'ABB', subGroup: '-ood Group', tip: 'Just like stand → stood: understand → understood → understood', traps: ['understanded', 'understod', 'understanden'], det: ['PAST', 'underst', 'ood', '', ['ood', 'and', 'od']] },
+
+            // A+A+A (#74–84)
+            { id: 74, page: 4, base: 'beat', past: 'beat', pp: 'beat/beaten', zh: '打擊', pattern: 'AAA', subGroup: 'A-A-A Group', tip: 'beat → beat → beat/beaten', traps: ['beated', 'bet', 'bat'], det: ['PAST', 'b', 'eat', '', ['eat', 'eated', 'et']] },
+            { id: 75, page: 4, base: 'bet', past: 'bet', pp: 'bet', zh: '打賭', pattern: 'AAA', subGroup: 'A-A-A Group', tip: 'All 3 forms are identical: bet → bet → bet', traps: ['betted', 'bat', 'bit'], det: ['PAST', 'b', 'et', '', ['et', 'etted', 'at']] },
+            { id: 76, page: 4, base: 'cost', past: 'cost', pp: 'cost', zh: '花費', pattern: 'AAA', subGroup: 'A-A-A Group', tip: 'All 3 forms are identical: cost → cost → cost', traps: ['costed', 'cast', 'coast'], det: ['PAST', 'c', 'ost', '', ['ost', 'osted', 'ast']] },
+            { id: 77, page: 4, base: 'cut', past: 'cut', pp: 'cut', zh: '切；割', pattern: 'AAA', subGroup: 'A-A-A Group', tip: 'All 3 forms are identical: cut → cut → cut', traps: ['cutted', 'cat', 'cot'], det: ['PAST', 'c', 'ut', '', ['ut', 'utted', 'at']] },
+            { id: 78, page: 4, base: 'hit', past: 'hit', pp: 'hit', zh: '打', pattern: 'AAA', subGroup: 'A-A-A Group', tip: 'All 3 forms are identical: hit → hit → hit', traps: ['hitted', 'hat', 'hot'], det: ['PAST', 'h', 'it', '', ['it', 'itted', 'at']] },
+            { id: 79, page: 4, base: 'hurt', past: 'hurt', pp: 'hurt', zh: '傷害', pattern: 'AAA', subGroup: 'A-A-A Group', tip: 'All 3 forms are identical: hurt → hurt → hurt', traps: ['hurted', 'heart', 'hard'], det: ['PAST', 'h', 'urt', '', ['urt', 'urted', 'art']] },
+            { id: 80, page: 4, base: 'let', past: 'let', pp: 'let', zh: '允許；讓', pattern: 'AAA', subGroup: 'A-A-A Group', tip: 'All 3 forms are identical: let → let → let', traps: ['letted', 'lat', 'lot'], det: ['PAST', 'l', 'et', '', ['et', 'etted', 'at']] },
+            { id: 81, page: 4, base: 'put', past: 'put', pp: 'put', zh: '放', pattern: 'AAA', subGroup: 'A-A-A Group', tip: 'All 3 forms are identical: put → put → put', traps: ['putted', 'pat', 'pot'], det: ['PAST', 'p', 'ut', '', ['ut', 'utted', 'at']] },
+            { id: 82, page: 4, base: 'shut', past: 'shut', pp: 'shut', zh: '關上', pattern: 'AAA', subGroup: 'A-A-A Group', tip: 'All 3 forms are identical: shut → shut → shut', traps: ['shutted', 'shat', 'shot'], det: ['PAST', 'sh', 'ut', '', ['ut', 'utted', 'ot']] },
+            { id: 83, page: 4, base: 'quit', past: 'quit', pp: 'quit', zh: '退出', pattern: 'AAA', subGroup: 'A-A-A Group', tip: 'All 3 forms are identical: quit → quit → quit', traps: ['quited', 'quat', 'quite'], det: ['PAST', 'qu', 'it', '', ['it', 'ited', 'ite']] },
+            { id: 84, page: 4, base: 'read', past: 'read', pp: 'read', zh: '閱讀', pattern: 'AAA', subGroup: 'Same Spelling, Different Sound!', tip: 'Spelling is read → read → read, but pronunciation is /riːd/ → /red/ → /red/!', traps: ['readed', 'red', 'rad'], det: ['PAST', 'r', 'ead', '', ['ead', 'eaded', 'ed']], tricky: true, speechOverride: ['read', 'red', 'red'] }
+        ];
+
+        const VERBS = RAW_VERBS.map(v => ({
+            ...v,
+            detective: {
+                type: v.det[0],
+                prefix: v.det[1],
+                blank: v.det[2],
+                suffix: v.det[3],
+                choices: v.det[4],
+                label: v.det[0] === 'PAST' ? 'Simple Past' : 'Past Participle'
+            }
+        }));
+
+        // =========================================================================
+        // 2. Multi-User State & LocalStorage Persistence (Default: Barry for G3)
+        // =========================================================================
+        const USERS = ['Lilian', 'Barry', 'Anthony'];
+        let currentUser = localStorage.getItem('english_g3_last_user') || 'Barry';
+        if (!USERS.includes(currentUser)) currentUser = 'Barry';
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const paramUser = urlParams.get('user');
+        if (paramUser && USERS.includes(paramUser)) {
+            currentUser = paramUser;
+        }
+
+        // 9 sets of 10 verbs (#1–10, #11–20, ..., #81–84)
+        const VERB_SETS = [
+            { id: 1, start: 1, end: 10, label: 'Set 1: #1–10', rangeText: 'be ~ eat' },
+            { id: 2, start: 11, end: 20, label: 'Set 2: #11–20', rangeText: 'fall ~ hide' },
+            { id: 3, start: 21, end: 30, label: 'Set 3: #21–30', rangeText: 'know ~ swim' },
+            { id: 4, start: 31, end: 40, label: 'Set 4: #31–40', rangeText: 'take ~ buy' },
+            { id: 5, start: 41, end: 50, label: 'Set 5: #41–50', rangeText: 'bring ~ hear' },
+            { id: 6, start: 51, end: 60, label: 'Set 6: #51–60', rangeText: 'hold ~ pay' },
+            { id: 7, start: 61, end: 70, label: 'Set 7: #61–70', rangeText: 'say ~ teach' },
+            { id: 8, start: 71, end: 80, label: 'Set 8: #71–80', rangeText: 'tell ~ let' },
+            { id: 9, start: 81, end: 84, label: 'Set 9: #81–84', rangeText: 'put ~ read' }
+        ];
+
+        let selectedSets = [1]; // Default to Set 1 (#1–10) so kids can start with 10 right away!
+        try {
+            const savedSets = JSON.parse(localStorage.getItem('english_g3_selected_sets'));
+            if (Array.isArray(savedSets) && savedSets.length > 0) {
+                selectedSets = savedSets.filter(id => id >= 1 && id <= 9);
+                if (selectedSets.length === 0) selectedSets = [1];
+            }
+        } catch (e) { }
+
+        const paramSet = urlParams.get('set');
+        if (paramSet === 'ALL') {
+            selectedSets = VERB_SETS.map(s => s.id);
+        } else if (paramSet && !isNaN(Number(paramSet))) {
+            const sNum = Number(paramSet);
+            if (sNum >= 1 && sNum <= 9) selectedSets = [sNum];
+        }
+
+        let setPickerOpen = false; // Hidden after selection by default so stage has maximum space!
+        let multiSetMode = localStorage.getItem('english_g3_multi_set') === 'on';
+        let showZh = localStorage.getItem('english_g3_show_zh') !== 'off';
+        let currentMode = 'learn'; // 'learn' | 'train' | 'detective' | 'grading'
+        let learnFilter = 'ALL'; // 'ALL' | 'ABC' | 'ABA' | 'ABB' | 'AAA' | 'TROUBLE'
+        let maskCols = { past: false, pp: false };
+        let quizScope = 'ALL'; // 'ALL' | 'TROUBLE' | 'TRICKY'
+
+        // Quiz runtime state
+        let quizQueue = [];
+        let quizIndex = 0;
+        let trainSlotIndex = 0; // 0: past, 1: pp
+        let trainFilled = [null, null];
+
+        function getActiveVerbs() {
+            const activeRanges = VERB_SETS.filter(s => selectedSets.includes(s.id));
+            if (activeRanges.length === 0) return VERBS;
+            return VERBS.filter(v => activeRanges.some(r => v.id >= r.start && v.id <= r.end));
+        }
+
+        function toggleSetPickerPanel(forceState) {
+            if (typeof forceState === 'boolean') {
+                setPickerOpen = forceState;
+            } else {
+                setPickerOpen = !setPickerOpen;
+            }
+            updatePageRangeUI();
+        }
+
+        function toggleMultiSetMode() {
+            multiSetMode = !multiSetMode;
+            localStorage.setItem('english_g3_multi_set', multiSetMode ? 'on' : 'off');
+            updatePageRangeUI();
+        }
+
+        function clickVerbSet(setId) {
+            clearSpeechTimers();
+            if (multiSetMode) {
+                if (selectedSets.includes(setId)) {
+                    if (selectedSets.length > 1) {
+                        selectedSets = selectedSets.filter(id => id !== setId);
+                    }
+                } else {
+                    selectedSets.push(setId);
+                    selectedSets.sort((a, b) => a - b);
+                }
+            } else {
+                selectedSets = [setId];
+                // Auto-hide the set selector after choosing a 10-question set!
+                setPickerOpen = false;
+            }
+            localStorage.setItem('english_g3_selected_sets', JSON.stringify(selectedSets));
+            playSnapSound(0);
+            updatePageRangeUI();
+            if (currentMode !== 'learn') {
+                buildQuizQueue();
+            }
+            renderStage();
+        }
+
+        function selectAllSets() {
+            clearSpeechTimers();
+            selectedSets = VERB_SETS.map(s => s.id);
+            setPickerOpen = false;
+            localStorage.setItem('english_g3_selected_sets', JSON.stringify(selectedSets));
+            playSnapSound(1);
+            updatePageRangeUI();
+            if (currentMode !== 'learn') {
+                buildQuizQueue();
+            }
+            renderStage();
+        }
+
+        function updatePageRangeUI() {
+            const isAll = selectedSets.length === VERB_SETS.length;
+            const allBtn = document.getElementById('setBtn_ALL');
+            if (allBtn) allBtn.classList.toggle('active', isAll);
+
+            const drawer = document.getElementById('setPickerDrawer');
+            if (drawer) {
+                drawer.style.display = setPickerOpen ? 'block' : 'none';
+            }
+
+            const toggleBtn = document.getElementById('toggleSetPickerBtn');
+            if (toggleBtn) {
+                toggleBtn.innerHTML = setPickerOpen ? '🔼 Hide Sets' : '🔽 Change Set';
+            }
+
+            const summaryBadge = document.getElementById('currentSetSummaryBadge');
+            const activeVerbs = getActiveVerbs();
+            if (summaryBadge) {
+                if (isAll) {
+                    summaryBadge.textContent = '📚 All 84 Verbs (#1–84: be ~ read)';
+                } else if (selectedSets.length === 1) {
+                    const s = VERB_SETS.find(item => item.id === selectedSets[0]) || VERB_SETS[0];
+                    summaryBadge.textContent = `${s.label} (${s.rangeText})`;
+                } else {
+                    const labels = VERB_SETS.filter(s => selectedSets.includes(s.id)).map(s => `#${s.start}–${s.end}`).join(', ');
+                    summaryBadge.textContent = `${activeVerbs.length} Verbs (${labels})`;
+                }
+            }
+
+            const multiBtn = document.getElementById('multiSetToggleBtn');
+            if (multiBtn) {
+                multiBtn.textContent = multiSetMode ? '☑️ Combine Sets: ON' : '☑️ Combine Sets: OFF';
+                multiBtn.classList.toggle('active', multiSetMode);
+            }
+
+            const container = document.getElementById('tenSetButtonsContainer');
+            if (container) {
+                container.innerHTML = VERB_SETS.map(s => {
+                    const isSelected = selectedSets.includes(s.id);
+                    const verbsInSet = VERBS.filter(v => v.id >= s.start && v.id <= s.end);
+                    const masteredCount = verbsInSet.filter(v => ((userState && userState.mastery && userState.mastery[v.id]) || 0) >= 3).length;
+                    return `
+                        <button class="chip-btn ${isSelected ? 'active' : ''}" onclick="clickVerbSet(${s.id})" style="justify-content:space-between;padding:10px 14px;text-align:left;">
+                            <div>
+                                <div style="font-size:17px;font-weight:800;">${multiSetMode ? (isSelected ? '☑️ ' : '⬜ ') : ''}${s.label}</div>
+                                <div style="font-size:14px;opacity:0.88;font-weight:700;margin-top:2px;">${s.rangeText}</div>
+                            </div>
+                            <span style="font-size:14px;background:rgba(255,255,255,0.22);padding:4px 9px;border-radius:999px;font-weight:800;">
+                                ⭐ ${masteredCount}/${verbsInSet.length}
+                            </span>
+                        </button>
+                    `;
+                }).join('');
+            }
+
+            const subEl = document.getElementById('appMainSubtitle');
+            if (subEl) {
+                if (isAll) {
+                    subEl.textContent = 'All 84 KET Verbs (#1–84: be ~ read) • Tap & Learn';
+                } else {
+                    const labels = VERB_SETS.filter(s => selectedSets.includes(s.id)).map(s => `#${s.start}–${s.end}`).join(', ');
+                    subEl.textContent = `Testing ${activeVerbs.length} Verbs (${labels}) • Tap & Learn`;
+                }
+            }
+        }
+
+        function toggleZhMeaning() {
+            showZh = !showZh;
+            localStorage.setItem('english_g3_show_zh', showZh ? 'on' : 'off');
+            const btn = document.getElementById('zhToggleBtn');
+            if (btn) btn.textContent = showZh ? '🔤 Meaning: ON' : '🔤 Meaning: OFF';
+            renderStage();
+        }
+
+        function getStorageKey(user) {
+            return `english_g3_verbs_state_${user}`;
+        }
+
+        function loadUserState(user) {
+            const raw = localStorage.getItem(getStorageKey(user));
+            if (raw) {
+                try {
+                    return JSON.parse(raw);
+                } catch (e) { }
+            }
+            return {
+                stars: 0,
+                streak: 0,
+                bestStreak: 0,
+                troubleIds: [2, 5, 11, 12, 13, 20, 35, 38, 42, 60, 70, 84],
+                mastery: {}
+            };
+        }
+
+        let userState = loadUserState(currentUser);
+
+        function saveUserState() {
+            localStorage.setItem(getStorageKey(currentUser), JSON.stringify(userState));
+            localStorage.setItem('english_g3_last_user', currentUser);
+            updateTopStats();
+        }
+
+        function switchUser(user) {
+            currentUser = user;
+            document.body.setAttribute('data-user', user);
+            document.querySelectorAll('.user-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.u === user);
+            });
+            userState = loadUserState(user);
+            saveUserState();
+            renderStage();
+        }
+
+        function updateTopStats() {
+            document.getElementById('statUserName').textContent = currentUser;
+            document.getElementById('statStars').textContent = userState.stars || 0;
+            document.getElementById('statStreak').textContent = userState.streak || 0;
+            document.getElementById('statTrouble').textContent = (userState.troubleIds || []).length;
+            updatePageRangeUI();
+        }
+
+        function recordAnswer(verbId, isCorrect) {
+            if (!userState.mastery) userState.mastery = {};
+            const cur = userState.mastery[verbId] || 0;
+            if (isCorrect) {
+                userState.stars = (userState.stars || 0) + 1;
+                userState.streak = (userState.streak || 0) + 1;
+                if (userState.streak > (userState.bestStreak || 0)) {
+                    userState.bestStreak = userState.streak;
+                }
+                userState.mastery[verbId] = Math.min(3, cur + 1);
+                if (userState.mastery[verbId] >= 3) {
+                    userState.troubleIds = (userState.troubleIds || []).filter(id => id !== verbId);
+                }
+            } else {
+                userState.streak = 0;
+                userState.mastery[verbId] = Math.max(0, cur - 1);
+                if (!userState.troubleIds.includes(verbId)) {
+                    userState.troubleIds.push(verbId);
+                }
+            }
+            saveUserState();
+        }
+
+        function toggleTroubleVerb(verbId, ev) {
+            if (ev) ev.stopPropagation();
+            const idx = userState.troubleIds.indexOf(verbId);
+            if (idx >= 0) {
+                userState.troubleIds.splice(idx, 1);
+            } else {
+                userState.troubleIds.push(verbId);
+            }
+            saveUserState();
+            if (currentMode === 'learn') renderLearnMode();
+            if (document.getElementById('passportModal').classList.contains('open')) {
+                renderPassportGrid();
+            }
+        }
+
+        // =========================================================================
+        // 3. Web Audio API Sound Effects & Slow Rhythmic Speech Engine
+        // =========================================================================
+        let sfxEnabled = localStorage.getItem('english_g5_sfx') !== 'off';
+        let audioCtx = null;
+        let speechTimers = [];
+
+        function getAudioCtx() {
+            if (!audioCtx) {
+                const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+                if (AudioContextClass) audioCtx = new AudioContextClass();
+            }
+            if (audioCtx && audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            return audioCtx;
+        }
+
+        function toggleSfx() {
+            sfxEnabled = !sfxEnabled;
+            localStorage.setItem('english_g5_sfx', sfxEnabled ? 'on' : 'off');
+            const btn = document.getElementById('sfxToggleBtn');
+            if (btn) btn.textContent = sfxEnabled ? '🔔 SFX: ON' : '🔕 SFX: OFF';
+            if (sfxEnabled) playSnapSound(1);
+        }
+
+        function playSnapSound(stepIndex = 0) {
+            if (!sfxEnabled) return;
+            const ctx = getAudioCtx();
+            if (!ctx) return;
+
+            const freqs = [523.25, 659.25, 783.99, 1046.5];
+            const f = freqs[stepIndex % freqs.length];
+            const now = ctx.currentTime;
+
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(f, now);
+            osc.frequency.exponentialRampToValueAtTime(f * 1.02, now + 0.12);
+
+            gain.gain.setValueAtTime(0.28, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(now);
+            osc.stop(now + 0.23);
+        }
+
+        function playVictoryFanfare(withWhistle = false) {
+            if (!sfxEnabled) return;
+            const ctx = getAudioCtx();
+            if (!ctx) return;
+
+            const now = ctx.currentTime;
+            const notes = [
+                { f: 523.25, t: 0.0, d: 0.14 },
+                { f: 659.25, t: 0.11, d: 0.14 },
+                { f: 783.99, t: 0.22, d: 0.14 },
+                { f: 1046.50, t: 0.34, d: 0.42 }
+            ];
+
+            notes.forEach(n => {
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(n.f, now + n.t);
+                gain.gain.setValueAtTime(0.22, now + n.t);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + n.t + n.d);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start(now + n.t);
+                osc.stop(now + n.t + n.d + 0.02);
+            });
+
+            if (withWhistle) {
+                [0.45, 0.65].forEach(offset => {
+                    [587.33, 783.99].forEach(freq => {
+                        const osc = ctx.createOscillator();
+                        const gain = ctx.createGain();
+                        osc.type = 'triangle';
+                        osc.frequency.setValueAtTime(freq, now + offset);
+                        gain.gain.setValueAtTime(0.14, now + offset);
+                        gain.gain.exponentialRampToValueAtTime(0.001, now + offset + 0.15);
+                        osc.connect(gain);
+                        gain.connect(ctx.destination);
+                        osc.start(now + offset);
+                        osc.stop(now + offset + 0.16);
+                    });
+                });
+            }
+        }
+
+        function playWrongBoing() {
+            if (!sfxEnabled) return;
+            const ctx = getAudioCtx();
+            if (!ctx) return;
+
+            const now = ctx.currentTime;
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(300, now);
+            osc.frequency.exponentialRampToValueAtTime(150, now + 0.14);
+            osc.frequency.exponentialRampToValueAtTime(240, now + 0.28);
+
+            gain.gain.setValueAtTime(0.24, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.30);
+
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(now);
+            osc.stop(now + 0.31);
+        }
+
+        function spawnConfetti() {
+            const colors = ['#f59e0b', '#10b981', '#3b82f6', '#ec4899', '#8b5cf6', '#f97316'];
+            for (let i = 0; i < 32; i++) {
+                const el = document.createElement('div');
+                el.className = 'confetti-piece';
+                el.style.background = colors[i % colors.length];
+                el.style.left = (window.innerWidth * (0.25 + Math.random() * 0.5)) + 'px';
+                el.style.top = (window.innerHeight * 0.28) + 'px';
+                const dx = (Math.random() - 0.5) * 420;
+                const dy = 140 + Math.random() * 320;
+                const rot = (Math.random() - 0.5) * 720;
+                el.style.setProperty('--dx', `${dx}px`);
+                el.style.setProperty('--dy', `${dy}px`);
+                el.style.setProperty('--rot', `${rot}deg`);
+                document.body.appendChild(el);
+                setTimeout(() => el.remove(), 1550);
+            }
+        }
+
+        function clearSpeechTimers() {
+            speechTimers.forEach(t => clearTimeout(t));
+            speechTimers = [];
+            document.querySelectorAll('.speaking-glow').forEach(el => el.classList.remove('speaking-glow'));
+        }
+
+        function speakText(text, rate = 0.80) {
+            clearSpeechTimers();
+            if (!('speechSynthesis' in window)) return;
+            window.speechSynthesis.cancel();
+            const clean = text.replace(/\s*\/\s*/g, ', ');
+            const utter = new SpeechSynthesisUtterance(clean);
+            utter.lang = 'en-US';
+            utter.rate = rate;
+            window.speechSynthesis.speak(utter);
+        }
+
+        // Slow, step-by-step pronunciation of the 3 verb forms with visual highlight and clear pauses!
+        function speakVerbRow(v, highlightPrefix = null) {
+            clearSpeechTimers();
+            if (!('speechSynthesis' in window)) return;
+            window.speechSynthesis.cancel();
+
+            const spokenForms = v.speechOverride || [v.base, v.past, v.pp];
+            const steps = [
+                { text: spokenForms[0], elId: highlightPrefix ? `${highlightPrefix}_0` : null },
+                { text: spokenForms[1], elId: highlightPrefix ? `${highlightPrefix}_1` : null },
+                { text: spokenForms[2], elId: highlightPrefix ? `${highlightPrefix}_2` : null }
+            ];
+
+            let idx = 0;
+
+            function speakStep() {
+                if (idx >= steps.length) {
+                    document.querySelectorAll('.speaking-glow').forEach(el => el.classList.remove('speaking-glow'));
+                    return;
+                }
+                const item = steps[idx];
+                document.querySelectorAll('.speaking-glow').forEach(el => el.classList.remove('speaking-glow'));
+                if (item.elId) {
+                    const targetEl = document.getElementById(item.elId);
+                    if (targetEl) targetEl.classList.add('speaking-glow');
+                }
+
+                const clean = item.text.replace(/\s*\/\s*/g, ' or ');
+                const utter = new SpeechSynthesisUtterance(clean);
+                utter.lang = 'en-US';
+                utter.rate = 0.75;
+
+                let advanced = false;
+                const goNext = () => {
+                    if (advanced) return;
+                    advanced = true;
+                    idx++;
+                    const t = setTimeout(speakStep, 580);
+                    speechTimers.push(t);
+                };
+
+                utter.onend = goNext;
+                utter.onerror = goNext;
+                const fallback = setTimeout(goNext, 1850);
+                speechTimers.push(fallback);
+
+                window.speechSynthesis.speak(utter);
+            }
+
+            speakStep();
+        }
+
+        // =========================================================================
+        // 4. Mode Switching & Stage Rendering
+        // =========================================================================
+        function setMode(mode) {
+            clearSpeechTimers();
+            currentMode = mode;
+            document.querySelectorAll('.mode-tab').forEach(tab => {
+                tab.classList.toggle('active', tab.dataset.mode === mode);
+            });
+            if (mode !== 'learn') {
+                buildQuizQueue();
+            }
+            renderStage();
+        }
+
+        function buildQuizQueue() {
+            const basePool = getActiveVerbs();
+            let pool = [...basePool];
+            if (quizScope === 'TROUBLE') {
+                pool = basePool.filter(v => userState.troubleIds.includes(v.id));
+                if (pool.length === 0) pool = [...basePool];
+            } else if (quizScope === 'TRICKY') {
+                pool = basePool.filter(v => v.tricky);
+                if (pool.length === 0) pool = [...basePool];
+            }
+            for (let i = pool.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [pool[i], pool[j]] = [pool[j], pool[i]];
+            }
+            quizQueue = pool;
+            quizIndex = 0;
+            resetQuestionState();
+        }
+
+        function setQuizScope(scope) {
+            quizScope = scope;
+            buildQuizQueue();
+            renderStage();
+        }
+
+        function resetQuestionState() {
+            trainSlotIndex = 0;
+            trainFilled = [null, null];
+        }
+
+        function nextQuestion() {
+            quizIndex = (quizIndex + 1) % quizQueue.length;
+            resetQuestionState();
+            renderStage();
+        }
+
+        function renderStage() {
+            const sfxBtn = document.getElementById('sfxToggleBtn');
+            if (sfxBtn) sfxBtn.textContent = sfxEnabled ? '🔔 SFX: ON' : '🔕 SFX: OFF';
+            const zhBtn = document.getElementById('zhToggleBtn');
+            if (zhBtn) zhBtn.textContent = showZh ? '🔤 Meaning: ON' : '🔤 Meaning: OFF';
+
+            if (currentMode === 'learn') renderLearnMode();
+            else if (currentMode === 'train') renderTrainMode();
+            else if (currentMode === 'detective') renderDetectiveMode();
+            else if (currentMode === 'grading') renderGradingMode();
+        }
+
+        // =========================================================================
+        // MODE 1: Pattern Chart & Flip Cards (No Typing)
+        // =========================================================================
+        function highlightWord(word, v) {
+            if (v.subGroup === 'i → a → u Vowel Chant') {
+                return word.replace(/([iau])(?!.*[iau])/i, '<span class="vowel-hi">$1</span>');
+            }
+            return word;
+        }
+
+        function renderLearnMode() {
+            const stage = document.getElementById('stageContainer');
+            const activePool = getActiveVerbs();
+            let list = activePool;
+            if (learnFilter === 'AAA' || learnFilter === 'ABA' || learnFilter === 'ABB' || learnFilter === 'ABC') {
+                list = activePool.filter(v => v.pattern === learnFilter);
+            } else if (learnFilter === 'TROUBLE') {
+                list = activePool.filter(v => userState.troubleIds.includes(v.id));
+            }
+
+            const counts = {
+                ALL: activePool.length,
+                ABC: activePool.filter(v => v.pattern === 'ABC').length,
+                ABA: activePool.filter(v => v.pattern === 'ABA').length,
+                ABB: activePool.filter(v => v.pattern === 'ABB').length,
+                AAA: activePool.filter(v => v.pattern === 'AAA').length,
+                TROUBLE: activePool.filter(v => userState.troubleIds.includes(v.id)).length
+            };
+
+            const allMasked = maskCols.past && maskCols.pp;
+
+            stage.innerHTML = `
+                <div class="toolbar">
+                    <div class="filter-group">
+                        <button class="chip-btn ${learnFilter === 'ALL' ? 'active' : ''}" onclick="setLearnFilter('ALL')">All (${counts.ALL})</button>
+                        <button class="chip-btn abc ${learnFilter === 'ABC' ? 'active' : ''}" onclick="setLearnFilter('ABC')">🔵 A+B+C All Different (${counts.ABC})</button>
+                        <button class="chip-btn aba ${learnFilter === 'ABA' ? 'active' : ''}" onclick="setLearnFilter('ABA')">🟣 A+B+A Boomerang (${counts.ABA})</button>
+                        <button class="chip-btn abb ${learnFilter === 'ABB' ? 'active' : ''}" onclick="setLearnFilter('ABB')">🟠 A+B+B Past = P.P. (${counts.ABB})</button>
+                        <button class="chip-btn aaa ${learnFilter === 'AAA' ? 'active' : ''}" onclick="setLearnFilter('AAA')">🟢 A+A+A All Same (${counts.AAA})</button>
+                        <button class="chip-btn ${learnFilter === 'TROUBLE' ? 'active' : ''}" onclick="setLearnFilter('TROUBLE')">📌 Review List (${counts.TROUBLE})</button>
+                    </div>
+                    <div class="filter-group">
+                        <button class="chip-btn mask-toggle ${maskCols.past ? 'active' : ''}" onclick="toggleMaskCol('past')">🙈 Hide Simple Past</button>
+                        <button class="chip-btn mask-toggle ${maskCols.pp ? 'active' : ''}" onclick="toggleMaskCol('pp')">🙈 Hide Past Participle</button>
+                        <button class="chip-btn mask-toggle ${allMasked ? 'active' : ''}" onclick="toggleMaskAll()">${allMasked ? '👀 Show All' : '🙈 Hide Both'}</button>
+                    </div>
+                </div>
+
+                <div style="background:#f8fafc;border-radius:14px;padding:12px 18px;margin-bottom:16px;font-size:16px;color:var(--text-muted);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+                    <span>💡 <strong>Memory Tip:</strong> Tap 🔊 to hear the 3 forms read slowly step by step, or tap any hidden dark box to test yourself!</span>
+                    <span>⭐ 3 Stars = Mastered</span>
+                </div>
+
+                <div class="chart-table-wrap">
+                    <table class="verb-table">
+                        <thead>
+                            <tr>
+                                <th style="width:75px;">#</th>
+                                <th>Pattern</th>
+                                <th>Verb</th>
+                                <th>Simple Past</th>
+                                <th>Past Participle</th>
+                                ${showZh ? '<th>Translation</th>' : ''}
+                                <th style="width:110px;">Audio / Pin</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${list.length === 0 ? `
+                                <tr>
+                                    <td colspan="${showZh ? 7 : 6}" style="text-align:center;padding:36px;color:var(--text-muted);">
+                                        No verbs in this filter right now! Tap 📌 on any row to add verbs to your Review List.
+                                    </td>
+                                </tr>
+                            ` : list.map(v => {
+                                const isPinned = userState.troubleIds.includes(v.id);
+                                const stars = (userState.mastery && userState.mastery[v.id]) || 0;
+                                const starStr = '★'.repeat(stars) + '☆'.repeat(3 - stars);
+                                const spokenPast = v.speechOverride ? v.speechOverride[1] : v.past;
+                                const spokenPp = v.speechOverride ? v.speechOverride[2] : v.pp;
+                                return `
+                                    <tr class="verb-row pattern-${v.pattern}">
+                                        <td>
+                                            <div style="font-size:18px;color:var(--text-muted);">#${v.id}</div>
+                                            <div style="font-size:15px;color:#f59e0b;letter-spacing:1px;">${starStr}</div>
+                                        </td>
+                                        <td>
+                                            <span class="pattern-badge">${v.pattern}</span>
+                                            <div style="font-size:14px;color:var(--text-muted);margin-top:4px;">${v.subGroup}</div>
+                                        </td>
+                                        <td id="learn_row_${v.id}_0" onclick="speakText('${v.base}')" style="cursor:pointer;">
+                                            <span style="font-size:26px;">${v.base}</span>
+                                        </td>
+                                        <td id="learn_row_${v.id}_1" class="maskable-cell ${maskCols.past ? 'masked' : ''}" onclick="revealOrSpeak(this, '${spokenPast.replace(/'/g, "\\'")}')">
+                                            <span>${highlightWord(v.past, v)}</span>
+                                        </td>
+                                        <td id="learn_row_${v.id}_2" class="maskable-cell ${maskCols.pp ? 'masked' : ''}" onclick="revealOrSpeak(this, '${spokenPp.replace(/'/g, "\\'")}')">
+                                            <span>${highlightWord(v.pp, v)}</span>
+                                            ${v.id === 84 ? '<span style="font-size:14px;color:#dc2626;display:block;">🔊 /red/</span>' : ''}
+                                        </td>
+                                        ${showZh ? `<td><span class="zh-badge">${v.zh}</span></td>` : ''}
+                                        <td>
+                                            <div style="display:flex;align-items:center;gap:8px;">
+                                                <button class="speak-btn" title="Slow step-by-step audio" onclick="speakVerbRow(VERBS[${v.id - 1}], 'learn_row_${v.id}')">🔊</button>
+                                                <button class="pin-btn ${isPinned ? 'pinned' : ''}" title="Pin to Review List" onclick="toggleTroubleVerb(${v.id}, event)">📌</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                `;
+                            }).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
+
+        function setLearnFilter(f) {
+            learnFilter = f;
+            renderLearnMode();
+        }
+
+        function toggleMaskCol(col) {
+            maskCols[col] = !maskCols[col];
+            renderLearnMode();
+        }
+
+        function toggleMaskAll() {
+            const nextState = !(maskCols.past && maskCols.pp);
+            maskCols = { past: nextState, pp: nextState };
+            renderLearnMode();
+        }
+
+        function revealOrSpeak(cellEl, text) {
+            if (cellEl.classList.contains('masked')) {
+                cellEl.classList.remove('masked');
+                playSnapSound(0);
+            }
+            speakText(text);
+        }
+
+        // =========================================================================
+        // Common Quiz Scope Header (Used by Modes 2, 3, 4)
+        // =========================================================================
+        function renderQuizToolbar(modeTitle) {
+            const activePool = getActiveVerbs();
+            const troubleInPool = activePool.filter(v => userState.troubleIds.includes(v.id)).length;
+            const trickyInPool = activePool.filter(v => v.tricky).length;
+            return `
+                <div class="quiz-header">
+                    <div style="font-size:21px;font-weight:800;color:var(--theme-primary);">
+                        ${modeTitle} ｜ Question ${quizIndex + 1} / ${quizQueue.length}
+                    </div>
+                    <div class="filter-group">
+                        <button class="chip-btn ${quizScope === 'ALL' ? 'active' : ''}" onclick="setQuizScope('ALL')">All (${activePool.length})</button>
+                        <button class="chip-btn ${quizScope === 'TROUBLE' ? 'active' : ''}" onclick="setQuizScope('TROUBLE')">📌 Review List (${troubleInPool})</button>
+                        <button class="chip-btn ${quizScope === 'TRICKY' ? 'active' : ''}" onclick="setQuizScope('TRICKY')">🔥 Tricky Verbs (${trickyInPool})</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // =========================================================================
+        // MODE 2: Verb Train (Tap word cards in order: Simple Past -> Past Participle)
+        // =========================================================================
+        function renderTrainMode() {
+            const stage = document.getElementById('stageContainer');
+            if (quizQueue.length === 0) buildQuizQueue();
+            const v = quizQueue[quizIndex];
+
+            if (!v._trainOptions) {
+                const correctTargets = [v.past, v.pp];
+                const distractors = [...v.traps];
+                while (distractors.length < 4) {
+                    const randV = VERBS[Math.floor(Math.random() * VERBS.length)];
+                    if (randV.id !== v.id && !distractors.includes(randV.past)) {
+                        distractors.push(randV.past);
+                    }
+                }
+                const pickedDistractors = distractors.slice(0, 4);
+                const combined = [
+                    ...correctTargets.map((t, idx) => ({ text: t, id: `c_${idx}` })),
+                    ...pickedDistractors.map((t, idx) => ({ text: t, id: `d_${idx}` }))
+                ];
+                for (let i = combined.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [combined[i], combined[j]] = [combined[j], combined[i]];
+                }
+                v._trainOptions = combined;
+                v._trainUsedIds = [];
+            }
+
+            const isComplete = trainSlotIndex >= 2;
+            const slotLabels = ['2. Simple Past', '3. Past Participle'];
+
+            stage.innerHTML = `
+                ${renderQuizToolbar('🚂 Verb Train Builder')}
+
+                <div class="prompt-card">
+                    <div class="prompt-verb-num">Question #${v.id} • Pattern: <span class="pattern-badge">${v.pattern}</span> (${v.subGroup})</div>
+                    <div class="prompt-verb-main">
+                        <button class="speak-btn" onclick="speakVerbRow(VERBS[${v.id - 1}], 'train_car')">🔊</button>
+                        <span>#${v.id} ${v.base}</span>
+                        ${showZh ? `<span class="zh-badge">${v.zh}</span>` : ''}
+                    </div>
+                    <div style="font-size:17px;color:var(--text-muted);font-weight:700;">
+                        Tap the word cards below in order to connect Car 2 (Simple Past) and Car 3 (Past Participle)!
+                    </div>
+                </div>
+
+                <!-- 3-Car Train Track -->
+                <div class="train-track">
+                    <div class="train-car locked" id="train_car_0">
+                        <div class="car-label">1. Verb</div>
+                        <div class="car-value">${v.base}</div>
+                    </div>
+                    ${[0, 1].map(idx => {
+                        const val = trainFilled[idx];
+                        const stateClass = val ? 'filled' : (idx === trainSlotIndex ? 'active-target' : '');
+                        return `
+                            <div class="train-car ${stateClass}" id="train_car_${idx + 1}">
+                                <div class="car-label">${slotLabels[idx]}</div>
+                                <div class="car-value">${val ? val : '❓ Tap below'}</div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+
+                <!-- Word Cards Pool -->
+                <div class="choices-pool">
+                    ${v._trainOptions.map(opt => {
+                        const used = (v._trainUsedIds || []).includes(opt.id);
+                        return `
+                            <button class="choice-card ${used ? 'used' : ''}" id="opt_${opt.id}" onclick="pickTrainCard('${opt.id}', '${opt.text.replace(/'/g, "\\'")}')">
+                                ${opt.text}
+                            </button>
+                        `;
+                    }).join('')}
+                </div>
+
+                <div class="feedback-banner ${isComplete ? 'show success' : ''}" id="trainFeedback">
+                    <div>
+                        <div>🎉 Train Complete! <strong>${v.base} → ${v.past} → ${v.pp}</strong></div>
+                        <div style="font-size:17px;font-weight:700;margin-top:6px;">💡 ${v.tip}</div>
+                    </div>
+                    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+                        <button class="replay-slow-btn" onclick="speakVerbRow(VERBS[${v.id - 1}], 'train_car')">🔊 Listen Again</button>
+                        <button class="next-btn" onclick="clearTrainCacheAndNext()">Next Train →</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function pickTrainCard(optId, chosenText) {
+            if (trainSlotIndex >= 2) return;
+            const v = quizQueue[quizIndex];
+            const expected = [v.past, v.pp][trainSlotIndex];
+
+            if (chosenText === expected) {
+                trainFilled[trainSlotIndex] = chosenText;
+                v._trainUsedIds.push(optId);
+                playSnapSound(trainSlotIndex);
+                trainSlotIndex++;
+
+                if (trainSlotIndex >= 2) {
+                    recordAnswer(v.id, true);
+                    playVictoryFanfare(true);
+                    spawnConfetti();
+                    renderTrainMode();
+                    const t = setTimeout(() => speakVerbRow(v, 'train_car'), 750);
+                    speechTimers.push(t);
+                } else {
+                    const spoken = (v.speechOverride && trainSlotIndex === 1) ? v.speechOverride[1] : chosenText;
+                    speakText(spoken);
+                    renderTrainMode();
+                }
+            } else {
+                playWrongBoing();
+                recordAnswer(v.id, false);
+                const btn = document.getElementById(`opt_${optId}`);
+                if (btn) {
+                    btn.classList.remove('wrong-shake');
+                    void btn.offsetWidth;
+                    btn.classList.add('wrong-shake');
+                }
+            }
+        }
+
+        function clearTrainCacheAndNext() {
+            const v = quizQueue[quizIndex];
+            if (v) {
+                delete v._trainOptions;
+                delete v._trainUsedIds;
+            }
+            nextQuestion();
+        }
+
+        // =========================================================================
+        // MODE 3: Spelling Detective (Tap the missing vowel / letter block)
+        // =========================================================================
+        function renderDetectiveMode() {
+            const stage = document.getElementById('stageContainer');
+            if (quizQueue.length === 0) buildQuizQueue();
+            const v = quizQueue[quizIndex];
+            const d = v.detective;
+            const solved = v._detectiveSolved === true;
+
+            const fullTargetWord = d.prefix + d.blank + d.suffix;
+
+            stage.innerHTML = `
+                ${renderQuizToolbar('🔍 Spelling Detective')}
+
+                <div style="text-align:center;">
+                    <div class="prompt-card" style="max-width:740px;margin:0 auto 18px;">
+                        <div class="prompt-verb-num">Verb #${v.id} • ${v.subGroup}</div>
+                        <div style="font-size:26px;font-weight:800;margin-top:8px;">
+                            Base Verb: <strong style="color:var(--theme-primary);font-size:34px;">${v.base}</strong>
+                            ${showZh ? `<span class="zh-badge" style="margin-left:8px;">${v.zh}</span>` : ''}
+                            <span style="margin:0 10px;">➔</span>
+                            Find its <strong style="color:#d97706;text-decoration:underline;">${d.label}</strong>
+                        </div>
+                    </div>
+
+                    <div class="detective-word-box">
+                        <span>${d.prefix}</span>
+                        <span class="missing-slot">${solved ? d.blank : '?'}</span>
+                        <span>${d.suffix}</span>
+                    </div>
+
+                    <div style="font-size:18px;color:var(--text-muted);font-weight:700;margin-bottom:16px;">
+                        Tap the correct letter block to complete the word:
+                    </div>
+
+                    <div class="choices-pool">
+                        ${d.choices.map((ch, idx) => `
+                            <button class="choice-card ${solved && ch !== d.blank ? 'used' : ''}" id="det_choice_${idx}" onclick="pickDetectiveChoice('${ch}', ${idx})" style="font-size:34px;padding:18px 38px;">
+                                ${ch}
+                            </button>
+                        `).join('')}
+                    </div>
+
+                    <div class="feedback-banner ${solved ? 'show success' : ''}">
+                        <div>
+                            <div>🎯 Spot on! The ${d.label} of <strong>${v.base}</strong> is <strong>${fullTargetWord}</strong>!</div>
+                            <div style="font-size:17px;font-weight:700;margin-top:6px;">💡 ${v.tip}</div>
+                        </div>
+                        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+                            <button class="replay-slow-btn" onclick="speakVerbRow(VERBS[${v.id - 1}])">🔊 Listen to All 3 Forms</button>
+                            <button class="next-btn" onclick="v._detectiveSolved=false;nextQuestion()">Next Case →</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function pickDetectiveChoice(chosen, idx) {
+            const v = quizQueue[quizIndex];
+            if (v._detectiveSolved) return;
+            const d = v.detective;
+
+            if (chosen === d.blank) {
+                v._detectiveSolved = true;
+                recordAnswer(v.id, true);
+                playVictoryFanfare(false);
+                spawnConfetti();
+                renderDetectiveMode();
+                const t = setTimeout(() => speakVerbRow(v), 700);
+                speechTimers.push(t);
+            } else {
+                playWrongBoing();
+                recordAnswer(v.id, false);
+                const btn = document.getElementById(`det_choice_${idx}`);
+                if (btn) {
+                    btn.classList.remove('wrong-shake');
+                    void btn.offsetWidth;
+                    btn.classList.add('wrong-shake');
+                }
+            }
+        }
+
+        // =========================================================================
+        // MODE 4: Spot the Mistake (Grade & Fix the 3-Column Row)
+        // =========================================================================
+        function renderGradingMode() {
+            const stage = document.getElementById('stageContainer');
+            if (quizQueue.length === 0) buildQuizQueue();
+            const v = quizQueue[quizIndex];
+
+            if (!v._gradingScenario) {
+                const cols = ['past', 'pp'];
+                const errCol = cols[Math.floor(Math.random() * cols.length)];
+                const wrongVal = v.traps[0];
+                const correctVal = v[errCol];
+
+                const rowValues = {
+                    base: v.base,
+                    past: errCol === 'past' ? wrongVal : v.past,
+                    pp: errCol === 'pp' ? wrongVal : v.pp
+                };
+
+                const otherWrong = v.traps.filter(t => t !== wrongVal && t !== correctVal);
+                const fixOptions = [correctVal, ...otherWrong.slice(0, 2)];
+                while (fixOptions.length < 3) {
+                    fixOptions.push(v.base + 'ed');
+                }
+                for (let i = fixOptions.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [fixOptions[i], fixOptions[j]] = [fixOptions[j], fixOptions[i]];
+                }
+
+                v._gradingScenario = {
+                    errCol,
+                    wrongVal,
+                    correctVal,
+                    rowValues,
+                    fixOptions,
+                    step: 'FIND'
+                };
+            }
+
+            const sc = v._gradingScenario;
+
+            const colMeta = [
+                { key: 'base', label: 'Verb', idx: 0 },
+                { key: 'past', label: 'Simple Past', idx: 1 },
+                { key: 'pp', label: 'Past Participle', idx: 2 }
+            ];
+
+            stage.innerHTML = `
+                ${renderQuizToolbar('👩‍🏫 Spot the Mistake')}
+                <div style="text-align:center;">
+                    <p style="font-size:22px;font-weight:800;color:var(--text-main);margin-bottom:16px;">
+                        ${sc.step === 'FIND'
+                            ? `🧐 Check Row <strong>#${v.id} (${v.base}${showZh ? ' ' + v.zh : ''})</strong>. Which box has a mistake? Tap it!`
+                            : sc.step === 'FIX'
+                                ? `✏️ Found it! "<span style="color:#ef4444;text-decoration:line-through;">${sc.wrongVal}</span>" is incorrect. Tap the right form below:`
+                                : `💯 Fixed! Follow the glowing boxes and read along!`
+                        }
+                    </p>
+
+                    <div class="exam-sheet-card">
+                        <div class="exam-header-label">
+                            <span>English Verb Conjugation (Page ${v.page}) — Row #${v.id}</span>
+                            <span>Teacher: ${currentUser}</span>
+                        </div>
+                        <div class="exam-row-grid">
+                            ${colMeta.map(cm => {
+                                const isErr = cm.key === sc.errCol;
+                                let cls = 'exam-cell';
+                                let displayVal = sc.rowValues[cm.key];
+                                if (sc.step === 'FIX' && isErr) cls += ' flagged-error';
+                                if (sc.step === 'DONE' && isErr) {
+                                    cls += ' corrected';
+                                    displayVal = `${sc.correctVal} ✓`;
+                                }
+                                return `
+                                    <div class="${cls}" id="exam_cell_${cm.idx}" data-col="${cm.key}" onclick="clickExamCell('${cm.key}', ${cm.idx})">
+                                        <span class="col-name">${cm.label}</span>
+                                        <span class="handwriting">${displayVal}</span>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+
+                    ${sc.step === 'FIX' ? `
+                        <div class="choices-pool">
+                            ${sc.fixOptions.map((opt, idx) => `
+                                <button class="choice-card" id="fix_btn_${idx}" onclick="pickGradingFix('${opt.replace(/'/g, "\\'")}', ${idx})">
+                                    ✅ Change to ${opt}
+                                </button>
+                            `).join('')}
+                        </div>
+                    ` : ''}
+
+                    <div class="feedback-banner ${sc.step === 'DONE' ? 'show success' : ''}">
+                        <div>
+                            <div>🎉 Well done! <strong>${v.base} → ${v.past} → ${v.pp}</strong></div>
+                            <div style="font-size:17px;font-weight:700;margin-top:6px;">💡 ${v.tip}</div>
+                        </div>
+                        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+                            <button class="replay-slow-btn" onclick="speakVerbRow(VERBS[${v.id - 1}], 'exam_cell')">🔊 Listen Again</button>
+                            <button class="next-btn" onclick="v._gradingScenario=null;nextQuestion()">Next Question →</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function clickExamCell(colKey, cellIdx) {
+            const v = quizQueue[quizIndex];
+            const sc = v._gradingScenario;
+            if (!sc || sc.step !== 'FIND') return;
+
+            if (colKey === sc.errCol) {
+                playSnapSound(1);
+                sc.step = 'FIX';
+                renderGradingMode();
+            } else {
+                playWrongBoing();
+                recordAnswer(v.id, false);
+                const cell = document.getElementById(`exam_cell_${cellIdx}`);
+                if (cell) {
+                    cell.classList.remove('wrong-shake');
+                    void cell.offsetWidth;
+                    cell.classList.add('wrong-shake');
+                }
+            }
+        }
+
+        function pickGradingFix(chosen, idx) {
+            const v = quizQueue[quizIndex];
+            const sc = v._gradingScenario;
+            if (!sc || sc.step !== 'FIX') return;
+
+            if (chosen === sc.correctVal) {
+                sc.step = 'DONE';
+                recordAnswer(v.id, true);
+                playVictoryFanfare(false);
+                spawnConfetti();
+                renderGradingMode();
+                const t = setTimeout(() => speakVerbRow(v, 'exam_cell'), 750);
+                speechTimers.push(t);
+            } else {
+                playWrongBoing();
+                recordAnswer(v.id, false);
+                const btn = document.getElementById(`fix_btn_${idx}`);
+                if (btn) {
+                    btn.classList.remove('wrong-shake');
+                    void btn.offsetWidth;
+                    btn.classList.add('wrong-shake');
+                }
+            }
+        }
+
+        // =========================================================================
+        // 5. Learning Passport Modal & Import/Export Memory
+        // =========================================================================
+        function openPassportModal() {
+            document.getElementById('passportTitle').textContent = `📚 ${currentUser}'s G3 Verb Passport`;
+            renderPassportGrid();
+            document.getElementById('passportModal').classList.add('open');
+        }
+
+        function closePassportModal() {
+            document.getElementById('passportModal').classList.remove('open');
+        }
+
+        function renderPassportGrid() {
+            const grid = document.getElementById('passportGrid');
+            grid.innerHTML = VERBS.map(v => {
+                const isTrouble = userState.troubleIds.includes(v.id);
+                const stars = userState.mastery?.[v.id] || 0;
+                const cls = isTrouble ? 'trouble' : (stars >= 3 ? 'mastered' : '');
+                return `
+                    <div class="mastery-item ${cls}" style="cursor:pointer;" onclick="toggleTroubleVerb(${v.id})">
+                        <div style="font-size:14px;color:#64748b;">#${v.id} ${isTrouble ? '📌' : ''}</div>
+                        <div style="font-size:20px;margin:2px 0;">${v.base}</div>
+                        <div style="font-size:14px;color:#64748b;">${v.zh}</div>
+                        <div style="font-size:14px;color:#f59e0b;">${'★'.repeat(stars)}${'☆'.repeat(3 - stars)}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function loadTrickyVerbs() {
+            VERBS.filter(v => v.tricky).forEach(v => {
+                if (!userState.troubleIds.includes(v.id)) userState.troubleIds.push(v.id);
+            });
+            saveUserState();
+            renderPassportGrid();
+            renderStage();
+        }
+
+        function exportProgressCode() {
+            const payload = btoa(encodeURIComponent(JSON.stringify({ u: currentUser, s: userState })));
+            navigator.clipboard.writeText(payload).then(() => {
+                alert(`Copied ${currentUser}'s G3 save code! Paste it on another device to sync progress.`);
+            }).catch(() => {
+                prompt('Copy this save code:', payload);
+            });
+        }
+
+        function importProgressCode() {
+            const code = prompt(`Paste ${currentUser}'s G3 save code here:`);
+            if (!code) return;
+            try {
+                const data = JSON.parse(decodeURIComponent(atob(code.trim())));
+                if (data && data.s) {
+                    userState = data.s;
+                    saveUserState();
+                    renderPassportGrid();
+                    renderStage();
+                    alert('Progress loaded successfully!');
+                }
+            } catch (e) {
+                alert('Invalid save code.');
+            }
+        }
+
+        function resetCurrentUserProgress() {
+            if (!confirm(`Reset all G3 stars and progress for ${currentUser}?`)) return;
+            localStorage.removeItem(getStorageKey(currentUser));
+            userState = loadUserState(currentUser);
+            saveUserState();
+            renderPassportGrid();
+            renderStage();
+        }
+
+        // Initialize app
+        updatePageRangeUI();
+        switchUser(currentUser);
+    </script>
+</body>
+
+</html>
+

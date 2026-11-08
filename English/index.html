@@ -40,26 +40,27 @@
         }
 
         .container {
-            max-width: 860px;
+            max-width: 980px;
             margin: 0 auto;
             background: white;
             border-radius: 26px;
-            padding: 36px;
+            padding: 40px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.28);
         }
 
         h1 {
             text-align: center;
             color: var(--theme-primary);
-            margin: 0 0 8px;
-            font-size: 34px;
+            margin: 0 0 10px;
+            font-size: 40px;
         }
 
         .subtitle {
             text-align: center;
             color: #64748b;
-            margin-bottom: 28px;
-            font-size: 16px;
+            margin-bottom: 30px;
+            font-size: 20px;
+            font-weight: 600;
         }
 
         /* 3 Users Profile Cards */
@@ -98,30 +99,30 @@
         }
 
         .profile-avatar {
-            font-size: 36px;
+            font-size: 44px;
             display: block;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
         }
 
         .profile-name {
-            font-size: 20px;
+            font-size: 24px;
             font-weight: 800;
             color: #1e293b;
         }
 
         .profile-stats {
             margin-top: 8px;
-            font-size: 13px;
+            font-size: 16px;
             color: #475569;
             font-weight: 700;
         }
 
         /* Game List */
         .section-label {
-            font-size: 18px;
+            font-size: 22px;
             font-weight: 800;
             color: #334155;
-            margin-bottom: 14px;
+            margin-bottom: 16px;
             display: flex;
             align-items: center;
             gap: 8px;
@@ -158,26 +159,26 @@
         }
 
         .game-title {
-            font-size: 20px;
+            font-size: 23px;
             font-weight: 800;
             color: var(--theme-primary);
-            margin-bottom: 6px;
+            margin-bottom: 8px;
         }
 
         .game-desc {
-            font-size: 14px;
+            font-size: 17px;
             color: #64748b;
-            line-height: 1.5;
+            line-height: 1.6;
         }
 
         .play-badge {
             background: var(--theme-primary);
             color: white;
-            padding: 10px 18px;
-            border-radius: 12px;
+            padding: 12px 22px;
+            border-radius: 14px;
             font-weight: 800;
             white-space: nowrap;
-            font-size: 15px;
+            font-size: 18px;
         }
     </style>
 </head>
@@ -204,6 +205,22 @@
                 <div class="profile-stats" id="stats_Anthony">⭐ 0 Stars｜📌 Review: 6</div>
             </div>
         </div>
+
+        <div class="section-label">🌱 G3 Interactive Games (KET Verb Conjugation)</div>
+        <ul class="game-list" style="margin-bottom: 28px;">
+            <li class="game-item">
+                <a href="G3_Verb_Conjugation.html" id="g3VerbLinkAll" class="game-link">
+                    <div>
+                        <div class="game-title">🌱 G3 English Verb Conjugation — 10-Verb Sets (#1–84)</div>
+                        <div class="game-desc">
+                            Master <code>Verb • Simple Past • Past Participle</code> in bite-sized <strong>10-Verb Sets</strong> (<code>Set 1: #1–10</code> ~ <code>Set 9: #81–84</code>).<br />
+                            Freely choose any single 10-verb set or combine multiple sets across all 4 interactive modes!
+                        </div>
+                    </div>
+                    <span class="play-badge">Play G3 →</span>
+                </a>
+            </li>
+        </ul>
 
         <div class="section-label">✨ G5 Interactive Games</div>
         <ul class="game-list">
@@ -252,20 +269,33 @@
 
         function refreshProfileCards() {
             USERS.forEach(u => {
-                const raw = localStorage.getItem(`english_g5_verbs1_state_${u}`);
+                const rawG5 = localStorage.getItem(`english_g5_verbs1_state_${u}`);
+                const rawG3 = localStorage.getItem(`english_g3_verbs_state_${u}`);
                 let stars = 0;
-                let trouble = 6;
-                if (raw) {
+                let trouble = 0;
+                if (rawG5) {
                     try {
-                        const data = JSON.parse(raw);
-                        stars = data.stars || 0;
-                        trouble = (data.troubleIds || []).length;
+                        const data = JSON.parse(rawG5);
+                        stars += data.stars || 0;
+                        trouble += (data.troubleIds || []).length;
                     } catch (e) { }
+                } else {
+                    trouble += 6;
+                }
+                if (rawG3) {
+                    try {
+                        const data = JSON.parse(rawG3);
+                        stars += data.stars || 0;
+                        trouble += (data.troubleIds || []).length;
+                    } catch (e) { }
+                } else {
+                    trouble += 12;
                 }
                 document.getElementById(`stats_${u}`).textContent = `⭐ ${stars} Stars｜📌 Review: ${trouble}`;
                 document.getElementById(`card_${u}`).classList.toggle('active', u === activeUser);
             });
             document.body.setAttribute('data-user', activeUser);
+            document.getElementById('g3VerbLinkAll').href = `G3_Verb_Conjugation.html`;
             document.getElementById('g5VerbLink1').href = `G5_Irregular_Verbs_1.html?chart=1&user=${activeUser}`;
             document.getElementById('g5VerbLink2').href = `G5_Irregular_Verbs_1.html?chart=2&user=${activeUser}`;
             document.getElementById('g5VerbLinkAll').href = `G5_Irregular_Verbs_1.html?chart=ALL&user=${activeUser}`;
