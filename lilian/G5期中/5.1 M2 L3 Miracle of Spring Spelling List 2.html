@@ -1,0 +1,1966 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>單字小考 - 5.1 M2 L3 Miracle of Spring Spelling List 2</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #f0f8ff;
+            padding: 20px;
+            text-align: center;
+            color: #333;
+        }
+
+        .back-nav {
+            margin-bottom: 12px;
+            text-align: left;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .back-link {
+            text-decoration: none;
+            color: #4a90e2;
+            font-weight: bold;
+            font-size: 16px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+            transition: 0.2s;
+        }
+
+        .back-link:hover {
+            background: #e0f0ff;
+            transform: translateX(-2px);
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 20px;
+        }
+
+        .list-box {
+            width: 270px;
+            background: white;
+            border: 2px solid #4a90e2;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: left;
+            min-height: 250px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .list-box h2 {
+            text-align: center;
+            font-size: 20px;
+            color: #4a90e2;
+            margin-top: 0;
+            border-bottom: 2px dashed #e0f0ff;
+            padding-bottom: 8px;
+        }
+
+        li {
+            font-size: 18px;
+            margin: 8px 0;
+            cursor: pointer;
+            transition: 0.2s;
+            padding: 4px 8px;
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+        }
+
+        li:hover {
+            background: #e0f0ff;
+        }
+
+        .pos-badge {
+            font-size: 14px;
+            color: #6c757d;
+            font-weight: normal;
+            margin-left: 6px;
+        }
+
+        .selected-word-tag {
+            background: #4a90e2;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .selected-word-tag:hover {
+            background: #357abd;
+        }
+
+        .tested {
+            color: #27ae60;
+            font-size: 28px;
+        }
+
+        .tested .pos-badge {
+            color: #27ae60;
+            opacity: 0.8;
+            font-size: 18px;
+        }
+
+        button {
+            padding: 16px 28px;
+            font-size: 22px;
+            margin: 12px;
+            border-radius: 14px;
+            border: none;
+            cursor: pointer;
+            background: #ff9f43;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(255, 159, 67, 0.3);
+            transition: 0.2s;
+        }
+
+        button:hover {
+            background: #ff7f00;
+            transform: translateY(-1px);
+        }
+
+        button:active {
+            transform: translateY(1px);
+        }
+
+        #currentWordDisplay {
+            font-size: 44px;
+            font-weight: bold;
+            margin-top: 20px;
+            min-height: 120px;
+            line-height: 1.4;
+        }
+
+        .word-box {
+            margin-top: 30px;
+            font-size: 28px;
+            font-weight: bold;
+            min-height: 40px;
+        }
+
+        .learn-controls {
+            margin-top: 20px;
+            padding: 20px;
+            background: linear-gradient(135deg, #e8f5e9, #f1f8e9);
+            border-radius: 16px;
+            border: 2px solid #66bb6a;
+            box-shadow: 0 4px 12px rgba(102, 187, 106, 0.15);
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .learn-controls h3 {
+            color: #2e7d32;
+            margin-top: 0;
+            font-size: 22px;
+        }
+
+        .loop-selector {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin: 10px 0;
+            font-size: 18px;
+        }
+
+        .loop-selector select {
+            padding: 8px 12px;
+            font-size: 18px;
+            border-radius: 10px;
+            border: 2px solid #66bb6a;
+            background: white;
+        }
+
+        #learnProgress {
+            margin-top: 12px;
+            font-size: 20px;
+            color: #2e7d32;
+            font-weight: bold;
+            min-height: 30px;
+        }
+
+        #learnWordDisplay {
+            margin-top: 10px;
+            font-size: 36px;
+            font-weight: bold;
+            color: #1b5e20;
+            min-height: 100px;
+            line-height: 1.4;
+        }
+
+        #learnStepDisplay {
+            margin-top: 6px;
+            font-size: 18px;
+            color: #555;
+            min-height: 25px;
+        }
+
+        .word-set-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin: 16px 0 4px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 10px 22px;
+            font-size: 17px;
+            font-weight: bold;
+            border-radius: 30px;
+            border: 2px solid #4a90e2;
+            cursor: pointer;
+            background: white;
+            color: #4a90e2;
+            transition: 0.2s;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+        }
+
+        .tab-btn:hover {
+            background: #e0f0ff;
+            transform: translateY(-1px);
+        }
+
+        .tab-btn.active {
+            background: #4a90e2;
+            color: white;
+            box-shadow: 0 4px 12px rgba(74, 144, 226, 0.35);
+        }
+
+        .tab-label {
+            text-align: center;
+            font-size: 15px;
+            color: #777;
+            margin-bottom: 4px;
+        }
+    
+        /* ============= 學生切換與錯題本樣式 ============= */
+        .student-bar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+        }
+
+        .student-label {
+            font-size: 16px;
+            font-weight: bold;
+            color: #4a5568;
+        }
+
+        .student-pills {
+            display: inline-flex;
+            gap: 8px;
+            background: #e2e8f0;
+            padding: 4px;
+            border-radius: 20px;
+        }
+
+        .student-pill {
+            margin: 0 !important;
+            padding: 6px 16px !important;
+            font-size: 15px !important;
+            border-radius: 16px !important;
+            border: none;
+            cursor: pointer;
+            background: transparent;
+            color: #4a5568;
+            font-weight: bold;
+            box-shadow: none !important;
+            transition: 0.2s;
+        }
+
+        .student-pill:hover {
+            background: rgba(255, 255, 255, 0.6);
+            transform: none !important;
+        }
+
+        .student-pill.active {
+            background: #4a90e2 !important;
+            color: white !important;
+            box-shadow: 0 2px 8px rgba(74, 144, 226, 0.4) !important;
+        }
+
+        .wrong-book-btn {
+            margin: 0 !important;
+            padding: 8px 18px !important;
+            font-size: 15px !important;
+            background: #ff5252 !important;
+            border-radius: 20px !important;
+            box-shadow: 0 2px 8px rgba(255, 82, 82, 0.3) !important;
+        }
+
+        .wrong-book-btn:hover {
+            background: #e04040 !important;
+        }
+
+        .review-exam-btn {
+            background: #e67e22 !important;
+            box-shadow: 0 4px 10px rgba(230, 126, 34, 0.3) !important;
+        }
+
+        .review-exam-btn:hover {
+            background: #d35400 !important;
+        }
+
+        .mistake-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            font-size: 12px;
+            padding: 2px 7px;
+            border-radius: 10px;
+            background: #ffebee;
+            color: #c62828;
+            border: 1px solid #ffcdd2;
+            font-weight: bold;
+            margin-left: 6px;
+            vertical-align: middle;
+        }
+
+        .mark-wrong-quick-btn {
+            border: none;
+            background: #ffebee;
+            color: #d32f2f;
+            border-radius: 8px;
+            font-size: 12px;
+            padding: 2px 8px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-left: 6px;
+            transition: 0.2s;
+            box-shadow: none !important;
+            margin-top: 0 !important;
+            margin-bottom: 0 !important;
+        }
+
+        .mark-wrong-quick-btn:hover {
+            background: #ffcdd2;
+            transform: none !important;
+        }
+
+        /* Modal Overlay & Card */
+        .spelling-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.55);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            padding: 20px;
+            backdrop-filter: blur(4px);
+        }
+
+        .spelling-modal-card {
+            background: white;
+            border-radius: 20px;
+            max-width: 720px;
+            width: 100%;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            text-align: left;
+            animation: modalFadeIn 0.25s ease-out;
+            overflow: hidden;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(20px) scale(0.97); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .modal-header {
+            padding: 18px 24px;
+            border-bottom: 2px solid #edf2f7;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #f8fafc;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 22px;
+            color: #2d3748;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .modal-close-btn {
+            background: none !important;
+            border: none;
+            font-size: 28px;
+            color: #a0aec0;
+            cursor: pointer;
+            padding: 0 !important;
+            margin: 0 !important;
+            box-shadow: none !important;
+            line-height: 1;
+        }
+
+        .modal-close-btn:hover {
+            color: #4a5568;
+            background: none !important;
+            transform: none !important;
+        }
+
+        .modal-subtitle {
+            padding: 12px 24px;
+            background: #ebf8ff;
+            color: #2b6cb0;
+            font-size: 15px;
+            border-bottom: 1px solid #bee3f8;
+            line-height: 1.5;
+        }
+
+        .modal-body {
+            padding: 16px 24px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .exam-review-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 14px;
+            border-radius: 12px;
+            background: #f8fafc;
+            border: 2px solid #edf2f7;
+            margin-bottom: 10px;
+            transition: 0.2s;
+        }
+
+        .exam-review-item:hover {
+            border-color: #cbd5e0;
+        }
+
+        .exam-review-item.is-wrong {
+            background: #fff5f5;
+            border-color: #feb2b2;
+        }
+
+        .exam-item-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+        }
+
+        .exam-checkbox {
+            width: 22px;
+            height: 22px;
+            cursor: pointer;
+            accent-color: #e53e3e;
+        }
+
+        .exam-item-word {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2d3748;
+        }
+
+        .exam-item-sub {
+            font-size: 14px;
+            color: #718096;
+            margin-top: 2px;
+        }
+
+        .audio-play-btn {
+            border: none;
+            background: #edf2f7;
+            color: #4a5568;
+            padding: 6px 12px !important;
+            margin: 0 !important;
+            border-radius: 8px !important;
+            font-size: 14px !important;
+            cursor: pointer;
+            box-shadow: none !important;
+        }
+
+        .audio-play-btn:hover {
+            background: #e2e8f0 !important;
+            transform: none !important;
+        }
+
+        .modal-footer {
+            padding: 16px 24px;
+            border-top: 2px solid #edf2f7;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #f8fafc;
+            flex-wrap: wrap;
+        }
+
+        .btn-modal-sec {
+            background: #edf2f7 !important;
+            color: #4a5568 !important;
+            box-shadow: none !important;
+            padding: 10px 18px !important;
+            font-size: 15px !important;
+            border-radius: 10px !important;
+            margin: 0 !important;
+        }
+
+        .btn-modal-sec:hover {
+            background: #e2e8f0 !important;
+        }
+
+        .btn-modal-retest {
+            background: #e53e3e !important;
+            color: white !important;
+            box-shadow: 0 4px 12px rgba(229, 62, 62, 0.3) !important;
+            padding: 10px 22px !important;
+            font-size: 16px !important;
+            border-radius: 10px !important;
+            margin: 0 !important;
+            font-weight: bold;
+        }
+
+        .btn-modal-retest:hover {
+            background: #c53030 !important;
+        }
+
+        .btn-modal-allright {
+            background: #38a169 !important;
+            color: white !important;
+            box-shadow: 0 4px 12px rgba(56, 161, 105, 0.3) !important;
+            padding: 10px 20px !important;
+            font-size: 16px !important;
+            border-radius: 10px !important;
+            margin: 0 !important;
+            font-weight: bold;
+        }
+
+        .btn-modal-allright:hover {
+            background: #2f855a !important;
+        }
+    
+    </style>
+</head>
+
+<body>
+    
+    <div class="student-bar">
+        <span class="student-label">👤 測驗學生：</span>
+        <div class="student-pills">
+            <button class="student-pill active" id="btnStudent_Lilian" onclick="setStudent('Lilian')">👧 Lilian</button>
+            <button class="student-pill" id="btnStudent_Barry" onclick="setStudent('Barry')">👦 Barry</button>
+            <button class="student-pill" id="btnStudent_Anthony" onclick="setStudent('Anthony')">👦 Anthony</button>
+        </div>
+        <button class="wrong-book-btn" onclick="openMistakeNotebook()">📖 錯題本 (<span id="totalMistakeBadge">0</span> 字)</button>
+    </div>
+    
+    <div class="back-nav">
+        <a href="../index.html" onclick="if(window.history.length>1){window.history.back();return false;}" class="back-link">← 回單字測驗列表</a>
+    </div>
+
+    <h1>單字小考 - 5.1 M2 L3 Miracle of Spring Spelling List 2</h1>
+
+    <div class="tab-label">選擇考試範圍：</div>
+    <div class="word-set-tabs">
+        <button class="tab-btn active" id="tabMiracle" onclick="switchWordSet('miracle')">🌸 The Miracle of Spring Week 2 單字（15字）</button>
+        <button class="tab-btn" id="tabClassroom" onclick="switchWordSet('classroom')">🏫 生活教室單字 Week 10（10字）</button>
+        <button class="tab-btn" id="tabAll" onclick="switchWordSet('all')">🔀 全部混合（25字）</button>
+    </div>
+
+    <p style="font-size: 18px; color: #555;">Press the button to hear a word. It will be spoken once.</p>
+    <div id="currentWordDisplay"></div>
+
+    <div id="selectedWordsDisplay" style="margin: 20px 0; min-height: 30px;">
+        <div style="font-size: 18px; color: #555; margin-bottom: 10px;">Selected Words:</div>
+        <div id="selectedWordsList" style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;"></div>
+    </div>
+
+    <button onclick="nextWord()">Next Word</button>
+    <button onclick="replayWord()">Replay Current Word</button>
+    <button onclick="showPhonics()" style="background: #2ecc71; box-shadow: 0 4px 10px rgba(46, 204, 113, 0.3);">Show Phonics</button>
+    
+    <button onclick="openExamReviewModal()" id="reviewExamBtn" class="review-exam-btn" style="display: inline-block;">📋 批改考卷 / 勾選錯題</button>
+        <button onclick="startAutoQuiz()" id="autoQuizBtn" style="background: #9b59b6; box-shadow: 0 4px 10px rgba(155, 89, 182, 0.3);">🎯 自動測驗模式</button>
+    <button onclick="stopAutoQuiz()" id="stopQuizBtn" style="background: #e74c3c; display: none; box-shadow: 0 4px 10px rgba(231, 76, 60, 0.3);">⏹ 停止測驗</button>
+
+    <div id="autoQuizStatus" style="margin-top: 15px; font-size: 24px; color: #9b59b6; font-weight: bold;"></div>
+
+    <div class="learn-controls">
+        <h3>📖 自動學習模式</h3>
+        <p style="font-size: 16px; color: #555;">按下播放，孩子只要坐著聽：唸單字 → 逐字拼讀 → 音節拆解 → 完整唸一次 → 停頓跟讀</p>
+        <div class="loop-selector">
+            <label for="loopCount">循環次數：</label>
+            <select id="loopCount">
+                <option value="1">1 輪</option>
+                <option value="2" selected>2 輪</option>
+                <option value="3">3 輪</option>
+                <option value="4">4 輪</option>
+                <option value="5">5 輪</option>
+            </select>
+        </div>
+        <div>
+            <button onclick="startAutoLearn()" id="autoLearnBtn" style="background: #43a047; box-shadow: 0 4px 10px rgba(67, 160, 71, 0.3);">▶️ 開始學習</button>
+            <button onclick="stopAutoLearn()" id="stopLearnBtn" style="background: #e74c3c; display: none; box-shadow: 0 4px 10px rgba(231, 76, 60, 0.3);">⏹ 停止學習</button>
+        </div>
+        <div id="learnProgress"></div>
+        <div id="learnWordDisplay"></div>
+        <div id="learnStepDisplay"></div>
+    </div>
+
+    <div style="margin-top: 20px;">
+        <label for="voiceSelector" style="font-size: 18px; margin-right: 10px;">選擇發音：</label>
+        <select id="voiceSelector" onchange="changeVoice()" style="padding: 8px; font-size: 16px; border-radius: 8px; border: 1px solid #ccc;">
+        </select>
+    </div>
+
+    <div class="container">
+        <div class="list-box">
+            <h2>Words To Study</h2>
+            <ul id="leftList" style="padding-left: 15px; margin: 0;"></ul>
+        </div>
+
+        <div class="list-box">
+            <h2>Words Tested</h2>
+            <ol id="rightList" style="padding-left: 25px; margin: 0;"></ol>
+        </div>
+    </div>
+
+    <div class="word-box" id="statusBox"></div>
+
+    <script>
+        // ============= 單字資料庫 =============
+        const miracleWords = [
+        {
+                "word": "destroy",
+                "posType": "verb",
+                "breakdown": "de - stroy",
+                "ipa": "/dɪˈstrɔɪ/",
+                "phonicsSounds": [
+                        "dih",
+                        "stroy"
+                ],
+                "pos": "v. 動詞",
+                "translation": "破壞；毀滅",
+                "definition": "to damage and ruin something",
+                "sentence": "The hurricane could destroy entire neighborhoods in just a few hours."
+        },
+        {
+                "word": "saucer",
+                "posType": "noun",
+                "breakdown": "sau - cer",
+                "ipa": "/ˈsɔːsər/",
+                "phonicsSounds": [
+                        "saw",
+                        "ser"
+                ],
+                "pos": "n. 名詞",
+                "translation": "茶托；小碟子",
+                "definition": "a small, shallow dish on which a cup is set when not in use",
+                "sentence": "She placed the tea cup on the saucer after finishing her drink."
+        },
+        {
+                "word": "pounce",
+                "posType": "verb",
+                "breakdown": "pounce",
+                "ipa": "/paʊns/",
+                "phonicsSounds": [
+                        "powns"
+                ],
+                "pos": "v. 動詞",
+                "translation": "撲向；突襲",
+                "definition": "to jump on to catch or attack it",
+                "sentence": "The cat pounced on the toy mouse with great excitement."
+        },
+        {
+                "word": "poison",
+                "posType": "noun",
+                "breakdown": "poi - son",
+                "ipa": "/ˈpɔɪzən/",
+                "phonicsSounds": [
+                        "poy",
+                        "zun"
+                ],
+                "pos": "n. 名詞",
+                "translation": "毒藥；毒物",
+                "definition": "a substance that can cause illness or death",
+                "sentence": "The colorful frog’s skin is actually covered with poison … so don’t touch it!"
+        },
+        {
+                "word": "loyal",
+                "posType": "adjective",
+                "breakdown": "loy - al",
+                "ipa": "/ˈlɔɪəl/",
+                "phonicsSounds": [
+                        "loy",
+                        "ul"
+                ],
+                "pos": "adj. 形容詞",
+                "translation": "忠誠的；忠實的",
+                "definition": "always supporting someone or something, being trustworthy",
+                "sentence": "His dog has been his loyal friend throughout all the ups and downs."
+        },
+        {
+                "word": "auction",
+                "posType": "noun",
+                "breakdown": "auc - tion",
+                "ipa": "/ˈɔːkʃən/",
+                "phonicsSounds": [
+                        "awk",
+                        "shun"
+                ],
+                "pos": "n. 名詞",
+                "translation": "拍賣",
+                "definition": "a public sale where things are sold to the highest bidder",
+                "sentence": "They sold their antiques at an auction to raise money for charity."
+        },
+        {
+                "word": "royal",
+                "posType": "adjective",
+                "breakdown": "roy - al",
+                "ipa": "/ˈrɔɪəl/",
+                "phonicsSounds": [
+                        "roy",
+                        "ul"
+                ],
+                "pos": "adj. 形容詞",
+                "translation": "皇家的；王室的",
+                "definition": "related to a king or queen, or the members of their family",
+                "sentence": "The royal family attended the state dinner at the palace after the parade."
+        },
+        {
+                "word": "coward",
+                "posType": "noun",
+                "breakdown": "cow - ard",
+                "ipa": "/ˈkaʊərd/",
+                "phonicsSounds": [
+                        "kow",
+                        "erd"
+                ],
+                "pos": "n. 名詞",
+                "translation": "懦夫；膽小鬼",
+                "definition": "a person who lacks courage in facing danger, difficulty, or pain",
+                "sentence": "The man was called a coward for running away from difficult challenges and problems."
+        },
+        {
+                "word": "awkward",
+                "posType": "adjective",
+                "breakdown": "awk - ward",
+                "ipa": "/ˈɔːkwərd/",
+                "phonicsSounds": [
+                        "awk",
+                        "werd"
+                ],
+                "pos": "adj. 形容詞",
+                "translation": "尷尬的；笨拙的",
+                "definition": "causing or feeling embarrassment",
+                "sentence": "The woman felt awkward when she tried to greet the really shy British guy."
+        },
+        {
+                "word": "encounter",
+                "posType": "verb",
+                "breakdown": "en - coun - ter",
+                "ipa": "/ɪnˈkaʊntər/",
+                "phonicsSounds": [
+                        "en",
+                        "kown",
+                        "ter"
+                ],
+                "pos": "v. 動詞",
+                "translation": "遭遇；邂逅；不期而遇",
+                "definition": "to come across or meet, especially unexpectedly",
+                "sentence": "They encountered a terrifying bear while hiking high up in the mountains."
+        },
+        {
+                "word": "execute",
+                "posType": "verb",
+                "breakdown": "ex - e - cute",
+                "ipa": "/ˈɛksɪkjuːt/",
+                "phonicsSounds": [
+                        "ek",
+                        "sih",
+                        "kyoot"
+                ],
+                "pos": "v. 動詞",
+                "translation": "執行；實行",
+                "definition": "to accomplish a plan, order, or course of action",
+                "sentence": "The team will execute their strategy to win the championship game."
+        },
+        {
+                "word": "boil",
+                "posType": "verb",
+                "breakdown": "boil",
+                "ipa": "/bɔɪl/",
+                "phonicsSounds": [
+                        "boyl"
+                ],
+                "pos": "v. 動詞",
+                "translation": "沸騰；煮沸",
+                "definition": "to heat a liquid until bubbles rise and break on the surface",
+                "sentence": "The woman boiled some water to make boiled eggs for breakfast."
+        },
+        {
+                "word": "avoidable",
+                "posType": "adjective",
+                "breakdown": "a - void - a - ble",
+                "ipa": "/əˈvɔɪdəbəl/",
+                "phonicsSounds": [
+                        "uh",
+                        "voy",
+                        "duh",
+                        "bul"
+                ],
+                "pos": "adj. 形容詞",
+                "translation": "可避免的",
+                "definition": "something that can be prevented or stopped from happening",
+                "sentence": "Wearing your seatbelt in the car makes seriously dangerous car accidents more avoidable."
+        },
+        {
+                "word": "employ",
+                "posType": "verb",
+                "breakdown": "em - ploy",
+                "ipa": "/ɪmˈplɔɪ/",
+                "phonicsSounds": [
+                        "em",
+                        "ploy"
+                ],
+                "pos": "v. 動詞",
+                "translation": "雇用；聘用",
+                "definition": "to pay someone to do a job",
+                "sentence": "The company plans to employ new workers next month to handle the extra orders."
+        },
+        {
+                "word": "autograph",
+                "posType": "noun",
+                "breakdown": "au - to - graph",
+                "ipa": "/ˈɔːtəɡræf/",
+                "phonicsSounds": [
+                        "aw",
+                        "toh",
+                        "graf"
+                ],
+                "pos": "n. 名詞",
+                "translation": "親筆簽名",
+                "definition": "a person's signature, especially that of a famous person",
+                "sentence": "The fan asked the actor for an autograph after the show."
+        }
+];
+
+        const classroomWords = [
+        {
+                "word": "class schedule",
+                "posType": "noun",
+                "breakdown": "class sched - ule",
+                "ipa": "/klæs ˈskɛdʒuːl/",
+                "phonicsSounds": [
+                        "klas",
+                        "skeh",
+                        "jool"
+                ],
+                "pos": "n. 名詞",
+                "translation": "課表",
+                "definition": "a timetable that shows the days and times when classes meet",
+                "sentence": "I checked my class schedule to see which classroom we should go to next."
+        },
+        {
+                "word": "announcement speaker",
+                "posType": "noun",
+                "breakdown": "an - nounce - ment speak - er",
+                "ipa": "/əˈnaʊnsmənt ˈspiːkər/",
+                "phonicsSounds": [
+                        "uh",
+                        "nowns",
+                        "munt",
+                        "spee",
+                        "ker"
+                ],
+                "pos": "n. 名詞",
+                "translation": "廣播裝置",
+                "definition": "a loudspeaker used to broadcast notices and messages across the school",
+                "sentence": "The principal made an important morning notice through the announcement speaker."
+        },
+        {
+                "word": "platform",
+                "posType": "noun",
+                "breakdown": "plat - form",
+                "ipa": "/ˈplætfɔːrm/",
+                "phonicsSounds": [
+                        "plat",
+                        "form"
+                ],
+                "pos": "n. 名詞",
+                "translation": "講台",
+                "definition": "a raised floor or stage in the front of a classroom for the teacher to speak from",
+                "sentence": "The teacher stood on the platform so all students could clearly see the lesson."
+        },
+        {
+                "word": "shoe rack",
+                "posType": "noun",
+                "breakdown": "shoe rack",
+                "ipa": "/ʃuː ræk/",
+                "phonicsSounds": [
+                        "shoo",
+                        "rak"
+                ],
+                "pos": "n. 名詞",
+                "translation": "鞋櫃",
+                "definition": "a storage unit or shelf where shoes are placed neatly",
+                "sentence": "Please take off your outdoor shoes and place them neatly on the shoe rack."
+        },
+        {
+                "word": "cabinet",
+                "posType": "noun",
+                "breakdown": "cab - i - net",
+                "ipa": "/ˈkæbɪnɪt/",
+                "phonicsSounds": [
+                        "kab",
+                        "ih",
+                        "nit"
+                ],
+                "pos": "n. 名詞",
+                "translation": "置物櫃",
+                "definition": "a piece of furniture with shelves or drawers used for storing supplies",
+                "sentence": "We store all our extra art supplies and textbooks in the classroom cabinet."
+        },
+        {
+                "word": "globe",
+                "posType": "noun",
+                "breakdown": "globe",
+                "ipa": "/ɡloʊb/",
+                "phonicsSounds": [
+                        "glohb"
+                ],
+                "pos": "n. 名詞",
+                "translation": "地球儀",
+                "definition": "a spherical model of the Earth showing continents and oceans",
+                "sentence": "We spun the globe on the desk to find the location of Taiwan."
+        },
+        {
+                "word": "fluorescent lights",
+                "posType": "noun",
+                "breakdown": "fluo - res - cent lights",
+                "ipa": "/ˌflʊəˈrɛsənt laɪts/",
+                "phonicsSounds": [
+                        "flor",
+                        "eh",
+                        "sunt",
+                        "lyts"
+                ],
+                "pos": "n. 名詞",
+                "translation": "日光燈",
+                "definition": "tubular electric lamps that provide bright illumination in classrooms",
+                "sentence": "The teacher turned on the fluorescent lights because it was raining outside."
+        },
+        {
+                "word": "projector screen",
+                "posType": "noun",
+                "breakdown": "pro - jec - tor screen",
+                "ipa": "/prəˈdʒɛktər skriːn/",
+                "phonicsSounds": [
+                        "pruh",
+                        "jek",
+                        "ter",
+                        "skreen"
+                ],
+                "pos": "n. 名詞",
+                "translation": "螢幕",
+                "definition": "a flat white surface onto which a projector displays slides or videos",
+                "sentence": "The teacher pulled down the projector screen to show us a science video."
+        },
+        {
+                "word": "projector",
+                "posType": "noun",
+                "breakdown": "pro - jec - tor",
+                "ipa": "/prəˈdʒɛktər/",
+                "phonicsSounds": [
+                        "pruh",
+                        "jek",
+                        "ter"
+                ],
+                "pos": "n. 名詞",
+                "translation": "投影機",
+                "definition": "an optical device that projects images onto a large screen",
+                "sentence": "The computer was connected to the projector so we could view the presentation."
+        },
+        {
+                "word": "remote control",
+                "posType": "noun",
+                "breakdown": "re - mote con - trol",
+                "ipa": "/rɪˈmoʊt kənˈtroʊl/",
+                "phonicsSounds": [
+                        "rih",
+                        "moht",
+                        "kun",
+                        "trohl"
+                ],
+                "pos": "n. 名詞",
+                "translation": "遙控器",
+                "definition": "a handheld device used to operate electronic equipment from a distance",
+                "sentence": "The teacher used the remote control to turn on the air conditioner."
+        }
+];
+
+        let currentWordObj = null;
+        let selectedWords = [];
+        let testedWords = [];
+        let availableWords = [...miracleWords];
+        let currentWordSet = 'miracle';
+        let usVoice = null;
+
+        // 切換單字範圍
+        function switchWordSet(set) {
+            if (isModeRunning()) {
+                stopAutoQuiz();
+                stopAutoLearn();
+            }
+            currentWordSet = set;
+            selectedWords = [];
+            testedWords = [];
+            currentWordObj = null;
+            document.getElementById("currentWordDisplay").innerHTML = "";
+            document.getElementById("statusBox").innerText = "";
+            document.getElementById("autoQuizStatus").innerText = "";
+            document.getElementById("learnProgress").innerText = "";
+            document.getElementById("learnWordDisplay").innerText = "";
+            document.getElementById("learnStepDisplay").innerText = "";
+            document.body.style.background = "#f0f8ff";
+
+            // 載入對應單字組
+            if (set === 'miracle') {
+                availableWords = [...miracleWords];
+            } else if (set === 'classroom') {
+                availableWords = [...classroomWords];
+            } else {
+                availableWords = [...miracleWords, ...classroomWords];
+            }
+
+            // 更新 tab 狀態
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            const tabMap = { miracle: 'tabMiracle', classroom: 'tabClassroom', all: 'tabAll' };
+            if (tabMap[set] && document.getElementById(tabMap[set])) {
+                document.getElementById(tabMap[set]).classList.add('active');
+            }
+
+            refreshLists();
+        }
+
+        function loadVoices() {
+            const voices = speechSynthesis.getVoices();
+            const enUSVoices = voices.filter(v => v.lang === "en-US");
+
+            const selector = document.getElementById("voiceSelector");
+            selector.innerHTML = "";
+
+            enUSVoices.forEach((voice, index) => {
+                const option = document.createElement("option");
+                option.value = index;
+                option.textContent = voice.name + (voice.lang !== "en-US" ? " (" + voice.lang + ")" : "");
+                selector.appendChild(option);
+            });
+
+            let defaultVoice = enUSVoices.find(v => v.name === "Google US English");
+            if (!defaultVoice) defaultVoice = enUSVoices.find(v => v.name.includes("Google") && (v.lang === "en-US" || v.name.includes("US")));
+            if (!defaultVoice) defaultVoice = enUSVoices.find(v => v.name.includes("Google"));
+            if (!defaultVoice) defaultVoice = enUSVoices.find(v => v.name === "Samantha");
+            if (!defaultVoice) defaultVoice = enUSVoices.find(v => v.name === "Aaron");
+            if (!defaultVoice) defaultVoice = enUSVoices.find(v => v.name === "Alex");
+            if (!defaultVoice) defaultVoice = enUSVoices.find(v => v.name === "Flo");
+            if (!defaultVoice) defaultVoice = enUSVoices[0];
+
+            usVoice = defaultVoice;
+
+            const defaultIndex = enUSVoices.indexOf(defaultVoice);
+            if (defaultIndex !== -1) {
+                selector.selectedIndex = defaultIndex;
+            }
+
+            window.availableVoices = enUSVoices;
+        }
+
+        function changeVoice() {
+            const selector = document.getElementById("voiceSelector");
+            const selectedIndex = selector.value;
+            usVoice = window.availableVoices[selectedIndex];
+        }
+
+        speechSynthesis.onvoiceschanged = loadVoices;
+        loadVoices();
+
+        function toggleWordSelection(word) {
+            const wordObj = availableWords.find(w => w.word === word);
+            if (!wordObj) return;
+
+            selectedWords.push(wordObj);
+
+            const index = availableWords.findIndex(w => w.word === word);
+            if (index !== -1) {
+                availableWords.splice(index, 1);
+            }
+
+            refreshLists();
+        }
+
+        function removeFromSelected(word) {
+            const index = selectedWords.findIndex(w => w.word === word);
+            if (index !== -1) {
+                const wordObj = selectedWords[index];
+                selectedWords.splice(index, 1);
+                availableWords.push(wordObj);
+                refreshLists();
+            }
+        }
+
+        function refreshLists() {
+            const map = getStudentMistakesMap(currentStudent);
+
+            document.getElementById("leftList").innerHTML = availableWords
+                .map(w => {
+                    const count = map[w.word] || 0;
+                    const badge = count > 0 ? `<span class="mistake-badge">⚠️ ${count}</span>` : '';
+                    return `<li onclick="toggleWordSelection('${w.word}')"><span>${w.word}${badge}</span><span class="pos-badge">(${w.posType})</span></li>`;
+                })
+                .join("");
+
+            document.getElementById("rightList").innerHTML = testedWords
+                .map(w => {
+                    const count = map[w.word] || 0;
+                    const badge = count > 0 ? `<span class="mistake-badge">❌ 錯 ${count} 次</span>` : '';
+                    return `<li class='tested' style="display:flex; justify-content:space-between; align-items:center; font-size:22px;">
+                        <span onclick="speakOnce('${w.word}')" style="cursor:pointer;">${w.word} <span class="pos-badge" style="font-size:15px;">(${w.posType})</span>${badge}</span>
+                        <button class="mark-wrong-quick-btn" onclick="quickToggleMistake('${w.word}')">❌ 標為錯題</button>
+                    </li>`;
+                })
+                .join("");
+
+            document.getElementById("selectedWordsList").innerHTML = selectedWords
+                .map(w => `<span class="selected-word-tag" onclick="removeFromSelected('${w.word}')">${w.word} (${w.posType}) ×</span>`)
+                .join("");
+
+            updateStudentUI();
+        }
+
+        function speakOnce(word) {
+            speechSynthesis.cancel();
+            speechSynthesis.resume();
+            const utter = new SpeechSynthesisUtterance(word);
+            utter.lang = "en-US";
+            utter.rate = 0.75;
+            utter.pitch = 1.0;
+            if (usVoice) {
+                utter.voice = usVoice;
+            }
+            utter.onerror = (e) => {
+                console.warn("Speech synthesis error, falling back:", e);
+                if (utter.voice) {
+                    const fallback = new SpeechSynthesisUtterance(word);
+                    fallback.lang = "en-US";
+                    fallback.rate = 0.75;
+                    const gVoice = window.availableVoices ? window.availableVoices.find(v => v.name.includes("Google")) : null;
+                    if (gVoice && gVoice !== utter.voice) fallback.voice = gVoice;
+                    speechSynthesis.speak(fallback);
+                }
+            };
+            speechSynthesis.speak(utter);
+        }
+
+        function nextWord() {
+            const wordsToTest = selectedWords.length > 0 ? selectedWords : availableWords;
+
+            if (wordsToTest.length === 0) {
+                document.getElementById("statusBox").innerText = "All words tested! Great job! 🎉";
+                document.body.style.background = "#d6ffd6";
+                playSuccessChime();
+                setTimeout(() => {
+                    openExamReviewModal();
+                }, 800);
+                return;
+            }
+
+            const index = Math.floor(Math.random() * wordsToTest.length);
+            currentWordObj = wordsToTest[index];
+
+            const availableIndex = availableWords.findIndex(w => w.word === currentWordObj.word);
+            if (availableIndex !== -1) {
+                availableWords.splice(availableIndex, 1);
+            }
+            const selectedIndex = selectedWords.findIndex(w => w.word === currentWordObj.word);
+            if (selectedIndex !== -1) {
+                selectedWords.splice(selectedIndex, 1);
+            }
+
+            testedWords.push(currentWordObj);
+            refreshLists();
+
+            document.getElementById("currentWordDisplay").innerHTML =
+                `${currentWordObj.word} <span style="font-size:26px; color:#666; font-weight:normal;">(${currentWordObj.posType})</span><br>` +
+                `<span style="font-size:24px; color:#555;">${currentWordObj.breakdown} &nbsp; ${currentWordObj.ipa}</span><br>` +
+                `<span style="font-size:20px; color:#2c3e50; font-weight:normal;">[${currentWordObj.pos}] ${currentWordObj.translation}</span><br>` +
+                `<span style="font-size:16px; color:#666; font-style:italic; font-weight:normal; display:inline-block; margin-top:6px; max-width:680px;">💡 ${currentWordObj.definition}</span><br>` +
+                `<span style="font-size:16px; color:#2980b9; font-weight:normal; display:inline-block; margin-top:4px; max-width:680px;">📝 ${currentWordObj.sentence}</span>`;
+            document.getElementById("statusBox").innerText = "Playing word...";
+
+            speakOnce(currentWordObj.word);
+        }
+
+        function showPhonics() {
+            if (!currentWordObj) {
+                document.getElementById("statusBox").innerText = "No word selected yet!";
+                return;
+            }
+
+            document.getElementById("statusBox").innerText = "Playing phonics breakdown...";
+
+            const parts = currentWordObj.phonicsSounds || currentWordObj.breakdown.split(" - ");
+
+            let delay = 0;
+
+            parts.forEach(part => {
+                setTimeout(() => speakOnce(part), delay);
+                delay += 1000;
+            });
+
+            setTimeout(() => speakOnce(currentWordObj.word), delay);
+        }
+
+        function replayWord() {
+            if (!currentWordObj) {
+                document.getElementById("statusBox").innerText = "No word selected yet!";
+                return;
+            }
+            document.getElementById("statusBox").innerText = "Replaying word...";
+            speakOnce(currentWordObj.word);
+        }
+
+        // ============= 共用語音引擎 =============
+        let activeMode = null;
+        let modeTimeouts = [];
+
+        function isModeRunning() {
+            return activeMode !== null;
+        }
+
+        function speakWithPromise(word, rate = 0.75) {
+            return new Promise(resolve => {
+                if (!isModeRunning()) { resolve(); return; }
+
+                const utter = new SpeechSynthesisUtterance(word);
+                utter.lang = "en-US";
+                utter.rate = rate;
+                utter.pitch = 1.0;
+                if (usVoice) utter.voice = usVoice;
+
+                let resolved = false;
+                const safeResolve = () => {
+                    if (!resolved) {
+                        resolved = true;
+                        resolve();
+                    }
+                };
+
+                utter.onend = safeResolve;
+                utter.onerror = safeResolve;
+
+                const wordsCount = word.split(/\s+/).length;
+                const baseMs = Math.max(800, wordsCount * 600);
+                const fallbackMs = Math.ceil(baseMs / rate) + 500;
+                const fallbackId = setTimeout(safeResolve, fallbackMs);
+                modeTimeouts.push(fallbackId);
+
+                speechSynthesis.speak(utter);
+
+                const keepAliveId = setInterval(() => {
+                    if (resolved || !isModeRunning()) {
+                        clearInterval(keepAliveId);
+                        return;
+                    }
+                    if (speechSynthesis.paused) {
+                        speechSynthesis.resume();
+                    }
+                }, 3000);
+                modeTimeouts.push(keepAliveId);
+            });
+        }
+
+        function waitMs(ms) {
+            return new Promise(resolve => {
+                const timeoutId = setTimeout(resolve, ms);
+                modeTimeouts.push(timeoutId);
+            });
+        }
+
+        // ============= 自動測驗模式 =============
+        let isAutoQuizRunning = false;
+        let autoQuizWordsQueue = [];
+
+        function speakEnglish(word, rate = 0.75) {
+            return speakWithPromise(word, rate);
+        }
+
+        function wait(ms) {
+            return waitMs(ms);
+        }
+
+        async function autoQuizWord(wordObj, index) {
+            if (!isAutoQuizRunning) return;
+
+            document.getElementById("autoQuizStatus").innerText =
+                `第 ${index + 1} 個，共 ${autoQuizWordsQueue.length} 個`;
+            document.getElementById("currentWordDisplay").innerHTML =
+                `Word number ${index + 1}`;
+
+            await speakEnglish(`Word number ${index + 1}`, 0.9);
+            if (!isAutoQuizRunning) return;
+            await wait(300);
+
+            for (let cycle = 0; cycle < 2; cycle++) {
+                if (!isAutoQuizRunning) return;
+                const rate = cycle === 0 ? 0.3 : 1.0;
+
+                await speakEnglish(wordObj.word, rate);
+                if (!isAutoQuizRunning) return;
+                await wait(400);
+
+                const parts = wordObj.phonicsSounds || wordObj.breakdown.split(" - ");
+                for (const part of parts) {
+                    if (!isAutoQuizRunning) return;
+                    await speakEnglish(part, rate);
+                    await wait(300);
+                }
+                if (!isAutoQuizRunning) return;
+                await wait(300);
+
+                await speakEnglish(wordObj.word, rate);
+                if (!isAutoQuizRunning) return;
+                await wait(500);
+            }
+
+            const availableIndex = availableWords.findIndex(w => w.word === wordObj.word);
+            if (availableIndex !== -1) availableWords.splice(availableIndex, 1);
+            const selectedIndex = selectedWords.findIndex(w => w.word === wordObj.word);
+            if (selectedIndex !== -1) selectedWords.splice(selectedIndex, 1);
+            testedWords.push(wordObj);
+            refreshLists();
+            currentWordObj = wordObj;
+            document.getElementById("currentWordDisplay").innerHTML =
+                `${wordObj.word} <span style="font-size:26px; color:#666; font-weight:normal;">(${wordObj.posType})</span><br>` +
+                `<span style="font-size:24px; color:#555;">${wordObj.breakdown} &nbsp; ${wordObj.ipa}</span><br>` +
+                `<span style="font-size:20px; color:#2c3e50; font-weight:normal;">[${wordObj.pos}] ${wordObj.translation}</span><br>` +
+                `<span style="font-size:16px; color:#666; font-style:italic; font-weight:normal; display:inline-block; margin-top:6px; max-width:680px;">💡 ${wordObj.definition}</span><br>` +
+                `<span style="font-size:16px; color:#2980b9; font-weight:normal; display:inline-block; margin-top:4px; max-width:680px;">📝 ${wordObj.sentence}</span>`;
+        }
+
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        async function runAutoQuiz() {
+            const wordsToQuiz = selectedWords.length > 0 ? [...selectedWords] : [...availableWords];
+            autoQuizWordsQueue = shuffleArray(wordsToQuiz);
+
+            if (autoQuizWordsQueue.length === 0) {
+                document.getElementById("autoQuizStatus").innerText = "沒有單字可以考試！";
+                stopAutoQuiz();
+                return;
+            }
+
+            document.getElementById("autoQuizStatus").innerText =
+                `開始自動測驗，共 ${autoQuizWordsQueue.length} 個單字`;
+            await wait(1000);
+
+            for (let i = 0; i < autoQuizWordsQueue.length; i++) {
+                if (!isAutoQuizRunning) break;
+                await autoQuizWord(autoQuizWordsQueue[i], i);
+                if (!isAutoQuizRunning) break;
+                if (i < autoQuizWordsQueue.length - 1) await wait(1000);
+            }
+
+            if (isAutoQuizRunning) {
+                document.getElementById("autoQuizStatus").innerText = "🎉 所有單字都考完了！太棒了！";
+                document.getElementById("statusBox").innerText = "All words tested! Great job! 🎉";
+                document.body.style.background = "#d6ffd6";
+                stopAutoQuiz();
+                playSuccessChime();
+                setTimeout(() => {
+                    openExamReviewModal();
+                }, 900);
+            }
+        }
+
+        function startAutoQuiz() {
+            if (isModeRunning()) stopCurrentMode();
+            isAutoQuizRunning = true;
+            activeMode = 'quiz';
+            document.getElementById("autoQuizBtn").style.display = "none";
+            document.getElementById("stopQuizBtn").style.display = "inline-block";
+
+            primeSpeech();
+
+            setTimeout(() => {
+                if (isAutoQuizRunning) runAutoQuiz();
+            }, 300);
+        }
+
+        function stopAutoQuiz() {
+            isAutoQuizRunning = false;
+            stopCurrentMode();
+            document.getElementById("autoQuizBtn").style.display = "inline-block";
+            document.getElementById("stopQuizBtn").style.display = "none";
+            if (document.getElementById("autoQuizStatus").innerText.indexOf("🎉") === -1) {
+                document.getElementById("autoQuizStatus").innerText = "測驗已停止";
+            }
+        }
+
+        // ============= 共用工具 =============
+        function primeSpeech() {
+            speechSynthesis.resume();
+            const primer = new SpeechSynthesisUtterance(" ");
+            primer.lang = "en-US";
+            primer.volume = 0.01;
+            primer.rate = 2;
+            if (usVoice) primer.voice = usVoice;
+            speechSynthesis.speak(primer);
+        }
+
+        function stopCurrentMode() {
+            activeMode = null;
+            speechSynthesis.cancel();
+            modeTimeouts.forEach(id => {
+                clearTimeout(id);
+                clearInterval(id);
+            });
+            modeTimeouts = [];
+        }
+
+        // ============= 自動學習模式 =============
+        let isAutoLearnRunning = false;
+
+        async function learnWord(wordObj, wordIndex, totalWords, round, totalRounds) {
+            if (!isAutoLearnRunning) return;
+
+            const progress = document.getElementById("learnProgress");
+            const wordDisplay = document.getElementById("learnWordDisplay");
+            const stepDisplay = document.getElementById("learnStepDisplay");
+
+            progress.innerText = `第 ${round} / ${totalRounds} 輪 — 第 ${wordIndex + 1} / ${totalWords} 個單字`;
+            wordDisplay.innerHTML = `${wordObj.word} <span style="font-size:24px; color:#2e7d32; font-weight:normal;">(${wordObj.posType})</span>`;
+
+            stepDisplay.innerText = "🔊 唸單字（慢速）";
+            await speakWithPromise(wordObj.word, 0.4);
+            if (!isAutoLearnRunning) return;
+            await waitMs(500);
+
+            const letters = wordObj.word.toUpperCase().split("");
+            stepDisplay.innerText = "🔤 拼讀字母：" + letters.join(" - ");
+            const spellingText = letters.join(", ");
+            await speakWithPromise(spellingText, 1.0);
+            if (!isAutoLearnRunning) return;
+            await waitMs(300);
+
+            const parts = wordObj.phonicsSounds || wordObj.breakdown.split(" - ");
+            stepDisplay.innerText = "📝 音節拆解：" + wordObj.breakdown;
+            for (const part of parts) {
+                if (!isAutoLearnRunning) return;
+                await speakWithPromise(part, 0.6);
+                await waitMs(400);
+            }
+            if (!isAutoLearnRunning) return;
+            await waitMs(300);
+
+            stepDisplay.innerText = "🔊 完整唸一次";
+            await speakWithPromise(wordObj.word, 0.85);
+            if (!isAutoLearnRunning) return;
+
+            stepDisplay.innerText = "⏸️ 跟讀時間...";
+            wordDisplay.innerHTML =
+                `${wordObj.word} <span style="font-size:24px; color:#2e7d32; font-weight:normal;">(${wordObj.posType})</span><br>` +
+                `<span style="font-size:20px; color:#666;">${wordObj.breakdown} &nbsp; ${wordObj.ipa}</span><br>` +
+                `<span style="font-size:18px; color:#2e7d32; font-weight:normal;">[${wordObj.pos}] ${wordObj.translation}</span><br>` +
+                `<span style="font-size:15px; color:#555; font-style:italic; font-weight:normal; display:inline-block; margin-top:4px;">💡 ${wordObj.definition}</span><br>` +
+                `<span style="font-size:15px; color:#1b5e20; font-weight:normal; display:inline-block; margin-top:2px;">📝 ${wordObj.sentence}</span>`;
+            await waitMs(3000);
+        }
+
+        async function runAutoLearn() {
+            const wordsToLearn = selectedWords.length > 0 ? [...selectedWords] : [...availableWords];
+            const totalRounds = parseInt(document.getElementById("loopCount").value) || 2;
+
+            if (wordsToLearn.length === 0) {
+                document.getElementById("learnProgress").innerText = "沒有單字可以學習！";
+                stopAutoLearn();
+                return;
+            }
+
+            const totalWords = wordsToLearn.length;
+
+            for (let round = 1; round <= totalRounds; round++) {
+                if (!isAutoLearnRunning) break;
+
+                document.getElementById("learnProgress").innerText =
+                    `🔄 第 ${round} / ${totalRounds} 輪開始！`;
+                await waitMs(1000);
+
+                for (let i = 0; i < wordsToLearn.length; i++) {
+                    if (!isAutoLearnRunning) break;
+                    await learnWord(wordsToLearn[i], i, totalWords, round, totalRounds);
+                    if (!isAutoLearnRunning) break;
+                    if (i < wordsToLearn.length - 1) await waitMs(800);
+                }
+
+                if (isAutoLearnRunning && round < totalRounds) {
+                    document.getElementById("learnProgress").innerText =
+                        `✅ 第 ${round} 輪完成！準備下一輪...`;
+                    document.getElementById("learnStepDisplay").innerText = "";
+                    await waitMs(2000);
+                }
+            }
+
+            if (isAutoLearnRunning) {
+                document.getElementById("learnProgress").innerText =
+                    `🎉 全部 ${totalRounds} 輪學習完成！太棒了！`;
+                document.getElementById("learnWordDisplay").innerText = "";
+                document.getElementById("learnStepDisplay").innerText = "";
+                stopAutoLearn();
+            }
+        }
+
+        function startAutoLearn() {
+            if (isModeRunning()) stopCurrentMode();
+            isAutoLearnRunning = true;
+            activeMode = 'learn';
+            document.getElementById("autoLearnBtn").style.display = "none";
+            document.getElementById("stopLearnBtn").style.display = "inline-block";
+
+            primeSpeech();
+
+            setTimeout(() => {
+                if (isAutoLearnRunning) runAutoLearn();
+            }, 300);
+        }
+
+        function stopAutoLearn() {
+            isAutoLearnRunning = false;
+            stopCurrentMode();
+            document.getElementById("autoLearnBtn").style.display = "inline-block";
+            document.getElementById("stopLearnBtn").style.display = "none";
+            if (document.getElementById("learnProgress").innerText.indexOf("🎉") === -1) {
+                document.getElementById("learnProgress").innerText = "學習已停止";
+            }
+        }
+
+        
+        // ============= 學生狀態與本機記憶體 (LocalStorage) =============
+        const STUDENTS = ['Lilian', 'Barry', 'Anthony'];
+        let currentStudent = localStorage.getItem('spelling_current_student') || 'Lilian';
+        if (!STUDENTS.includes(currentStudent)) currentStudent = 'Lilian';
+
+        // 讀取該學生的錯題本字典 { "word": count }
+        function getStudentMistakesMap(student) {
+            const key = `spelling_mistakes_${student}`;
+            try {
+                const data = localStorage.getItem(key);
+                return data ? JSON.parse(data) : {};
+            } catch (e) {
+                return {};
+            }
+        }
+
+        // 儲存該學生的錯題本字典
+        function saveStudentMistakesMap(student, map) {
+            const key = `spelling_mistakes_${student}`;
+            localStorage.setItem(key, JSON.stringify(map));
+            updateStudentUI();
+        }
+
+        // 記錄某個單字錯誤 (+1)
+        function incrementWordMistake(word, student = currentStudent) {
+            const map = getStudentMistakesMap(student);
+            map[word] = (map[word] || 0) + 1;
+            saveStudentMistakesMap(student, map);
+        }
+
+        // 取得單字錯誤次數
+        function getWordMistakeCount(word, student = currentStudent) {
+            const map = getStudentMistakesMap(student);
+            return map[word] || 0;
+        }
+
+        // 切換學生
+        function setStudent(student) {
+            if (!STUDENTS.includes(student)) return;
+            currentStudent = student;
+            localStorage.setItem('spelling_current_student', student);
+            updateStudentUI();
+            refreshLists();
+            playAudioTone(520, 'sine', 0.1);
+        }
+
+        // 更新學生 UI 與標籤
+        function updateStudentUI() {
+            STUDENTS.forEach(s => {
+                const btn = document.getElementById(`btnStudent_${s}`);
+                if (btn) btn.classList.toggle('active', s === currentStudent);
+            });
+
+            // 更新錯題總數 Badge
+            const map = getStudentMistakesMap(currentStudent);
+            const allLessonWords = getAllPossibleWords();
+            const mistakeWordsInLesson = allLessonWords.filter(w => (map[w.word] || 0) > 0);
+            const badgeEl = document.getElementById('totalMistakeBadge');
+            if (badgeEl) badgeEl.textContent = mistakeWordsInLesson.length;
+
+            const modalStudent = document.getElementById('modalStudentName');
+            if (modalStudent) modalStudent.textContent = currentStudent;
+
+            const notebookStudent = document.getElementById('notebookStudentName');
+            if (notebookStudent) notebookStudent.textContent = currentStudent;
+        }
+
+        // 取得本課全部單字池
+        function getAllPossibleWords() {
+            const set = new Map();
+            if (typeof miracleWords !== 'undefined') miracleWords.forEach(w => set.set(w.word, w));
+            if (typeof classroomWords !== 'undefined') classroomWords.forEach(w => set.set(w.word, w));
+            if (typeof arsenioWords !== 'undefined') arsenioWords.forEach(w => set.set(w.word, w));
+            if (typeof kitchenWords !== 'undefined') kitchenWords.forEach(w => set.set(w.word, w));
+            if (typeof bedroomWords !== 'undefined') bedroomWords.forEach(w => set.set(w.word, w));
+            if (typeof toolsWords !== 'undefined') toolsWords.forEach(w => set.set(w.word, w));
+            return Array.from(set.values());
+        }
+
+        // ============= Web Audio 提示音 =============
+        let audioCtx = null;
+        function playAudioTone(freq, type = 'sine', duration = 0.15) {
+            try {
+                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration);
+            } catch (e) { }
+        }
+
+        function playSuccessChime() {
+            playAudioTone(523.25, 'triangle', 0.12);
+            setTimeout(() => playAudioTone(659.25, 'triangle', 0.12), 100);
+            setTimeout(() => playAudioTone(783.99, 'triangle', 0.25), 200);
+        }
+
+        // ============= 考卷核對與錯題勾選 Modal =============
+        let checkedMistakeWords = new Set();
+
+        function openExamReviewModal() {
+            if (testedWords.length === 0) {
+                alert("目前還沒有測驗過任何單字，請先開始測驗！");
+                return;
+            }
+
+            checkedMistakeWords.clear();
+            const modal = document.getElementById('examReviewModal');
+            const listEl = document.getElementById('modalWordList');
+            const map = getStudentMistakesMap(currentStudent);
+
+            listEl.innerHTML = testedWords.map((w, idx) => {
+                const count = map[w.word] || 0;
+                const badgeHtml = count > 0 ? `<span class="mistake-badge">⚠️ 歷史錯過 ${count} 次</span>` : '';
+                return `
+                    <div class="exam-review-item" id="reviewItem_${idx}">
+                        <div class="exam-item-left">
+                            <input type="checkbox" class="exam-checkbox" id="chk_${idx}" onchange="toggleMistakeCheckbox(${idx}, '${w.word}')">
+                            <div>
+                                <div class="exam-item-word">
+                                    #${idx + 1}. ${w.word}
+                                    <span style="font-size:15px; color:#718096; font-weight:normal;">(${w.posType})</span>
+                                    ${badgeHtml}
+                                </div>
+                                <div class="exam-item-sub">[${w.pos}] ${w.translation} • ${w.breakdown} ${w.ipa}</div>
+                            </div>
+                        </div>
+                        <button class="audio-play-btn" onclick="speakOnce('${w.word}')">🔊 唸一次</button>
+                    </div>
+                `;
+            }).join('');
+
+            updateCheckedWrongCount();
+            modal.style.display = 'flex';
+        }
+
+        function closeExamModal() {
+            document.getElementById('examReviewModal').style.display = 'none';
+        }
+
+        function toggleMistakeCheckbox(idx, word) {
+            const chk = document.getElementById(`chk_${idx}`);
+            const item = document.getElementById(`reviewItem_${idx}`);
+            if (chk.checked) {
+                checkedMistakeWords.add(word);
+                item.classList.add('is-wrong');
+                playAudioTone(380, 'sawtooth', 0.08);
+            } else {
+                checkedMistakeWords.delete(word);
+                item.classList.remove('is-wrong');
+            }
+            updateCheckedWrongCount();
+        }
+
+        function setAllCheckboxes(checked) {
+            testedWords.forEach((w, idx) => {
+                const chk = document.getElementById(`chk_${idx}`);
+                const item = document.getElementById(`reviewItem_${idx}`);
+                if (chk) chk.checked = checked;
+                if (item) item.classList.toggle('is-wrong', checked);
+                if (checked) checkedMistakeWords.add(w.word);
+            });
+            if (!checked) checkedMistakeWords.clear();
+            updateCheckedWrongCount();
+        }
+
+        function updateCheckedWrongCount() {
+            const countEl = document.getElementById('checkedWrongCount');
+            if (countEl) countEl.textContent = checkedMistakeWords.size;
+            const retestBtn = document.getElementById('retestWrongBtn');
+            if (retestBtn) {
+                retestBtn.style.opacity = checkedMistakeWords.size > 0 ? '1' : '0.6';
+            }
+        }
+
+        // 確定重考勾選錯題
+        function retestCheckedWrongWords() {
+            if (checkedMistakeWords.size === 0) {
+                alert("您尚未勾選任何錯題！若全部正確請點擊「全部正確！」");
+                return;
+            }
+
+            // 1. 記錄錯誤次數至 LocalStorage
+            checkedMistakeWords.forEach(word => {
+                incrementWordMistake(word, currentStudent);
+            });
+
+            // 2. 取出勾選的錯題物件
+            const allWords = getAllPossibleWords();
+            const wrongWordObjs = allWords.filter(w => checkedMistakeWords.has(w.word));
+
+            closeExamModal();
+
+            // 3. 重設測驗狀態：只測驗這些錯題
+            availableWords = [...wrongWordObjs];
+            selectedWords = [];
+            testedWords = [];
+            currentWordObj = null;
+
+            document.getElementById("currentWordDisplay").innerHTML = "";
+            document.getElementById("statusBox").innerText = `🎯 已載入 ${wrongWordObjs.length} 題錯題，準備重考！`;
+            document.body.style.background = "#fff8e7";
+
+            refreshLists();
+            playAudioTone(587.33, 'triangle', 0.2);
+
+            // 自動觸發第一題發音或提示
+            setTimeout(() => {
+                nextWord();
+            }, 600);
+        }
+
+        // 確認全部正確
+        function confirmAllCorrect() {
+            closeExamModal();
+            playSuccessChime();
+            document.getElementById("statusBox").innerText = `🌟 太棒了！${currentStudent} 此次測驗全部答對！🎉`;
+            document.body.style.background = "#d6ffd6";
+        }
+
+        // 單獨在 Words Tested 列表快速標為錯題
+        function quickToggleMistake(word) {
+            incrementWordMistake(word, currentStudent);
+            playAudioTone(400, 'sawtooth', 0.1);
+            refreshLists();
+        }
+
+        // ============= 歷史錯題本 Modal =============
+        function openMistakeNotebook() {
+            const modal = document.getElementById('mistakeNotebookModal');
+            const listEl = document.getElementById('notebookWordList');
+            const map = getStudentMistakesMap(currentStudent);
+            const allWords = getAllPossibleWords();
+
+            // 篩選出有錯過的題目並按錯誤次數降冪排列
+            const mistakeWords = allWords
+                .filter(w => (map[w.word] || 0) > 0)
+                .sort((a, b) => (map[b.word] || 0) - (map[a.word] || 0));
+
+            const totalEl = document.getElementById('notebookTotalCount');
+            if (totalEl) totalEl.textContent = mistakeWords.length;
+
+            if (mistakeWords.length === 0) {
+                listEl.innerHTML = `
+                    <div style="text-align:center; padding: 40px; color:#718096; font-size:18px;">
+                        🎉 太厲害了！${currentStudent} 目前沒有任何錯題紀錄！
+                    </div>
+                `;
+            } else {
+                listEl.innerHTML = mistakeWords.map((w, idx) => {
+                    const count = map[w.word];
+                    return `
+                        <div class="exam-review-item is-wrong">
+                            <div class="exam-item-left">
+                                <span style="font-size:16px; font-weight:bold; color:#e53e3e; min-width:26px;">#${idx + 1}</span>
+                                <div>
+                                    <div class="exam-item-word">
+                                        ${w.word}
+                                        <span style="font-size:14px; color:#718096; font-weight:normal;">(${w.posType})</span>
+                                        <span class="mistake-badge">❌ 累積錯過 ${count} 次</span>
+                                    </div>
+                                    <div class="exam-item-sub">[${w.pos}] ${w.translation} • 💡 ${w.definition}</div>
+                                </div>
+                            </div>
+                            <div style="display:flex; gap:6px;">
+                                <button class="audio-play-btn" onclick="speakOnce('${w.word}')">🔊</button>
+                                <button class="mark-wrong-quick-btn" onclick="removeSingleWordMistake('${w.word}')">✅ 移除</button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            modal.style.display = 'flex';
+        }
+
+        function closeMistakeNotebook() {
+            document.getElementById('mistakeNotebookModal').style.display = 'none';
+        }
+
+        // 移除單一單字錯誤紀錄
+        function removeSingleWordMistake(word) {
+            const map = getStudentMistakesMap(currentStudent);
+            delete map[word];
+            saveStudentMistakesMap(currentStudent, map);
+            openMistakeNotebook();
+            refreshLists();
+        }
+
+        // 清空該學生全部錯題
+        function clearCurrentStudentMistakes() {
+            if (confirm(`確定要清空 ${currentStudent} 的所有錯題紀錄嗎？`)) {
+                saveStudentMistakesMap(currentStudent, {});
+                openMistakeNotebook();
+                refreshLists();
+            }
+        }
+
+        // 重考錯題本裡的所有單字
+        function retestAllNotebookMistakes() {
+            const map = getStudentMistakesMap(currentStudent);
+            const allWords = getAllPossibleWords();
+            const mistakeWords = allWords.filter(w => (map[w.word] || 0) > 0);
+
+            if (mistakeWords.length === 0) {
+                alert("目前沒有錯題可以測驗！");
+                return;
+            }
+
+            closeMistakeNotebook();
+
+            availableWords = [...mistakeWords];
+            selectedWords = [];
+            testedWords = [];
+            currentWordObj = null;
+
+            document.getElementById("currentWordDisplay").innerHTML = "";
+            document.getElementById("statusBox").innerText = `🎯 已載入 ${mistakeWords.length} 題歷史錯題，準備測驗！`;
+            document.body.style.background = "#fff8e7";
+
+            refreshLists();
+            playAudioTone(587.33, 'triangle', 0.2);
+
+            setTimeout(() => {
+                nextWord();
+            }, 600);
+        }
+    
+
+        updateStudentUI();
+        refreshLists();
+    </script>
+
+    <!-- ============= 考卷批改與錯題勾選 Modal ============= -->
+    <div id="examReviewModal" class="spelling-modal-overlay" style="display: none;">
+        <div class="spelling-modal-card">
+            <div class="modal-header">
+                <h2>📝 考卷核對與錯題標記</h2>
+                <button class="modal-close-btn" onclick="closeExamModal()">×</button>
+            </div>
+            <div class="modal-subtitle">
+                當前學生：<strong id="modalStudentName" style="color:#2b6cb0; font-size:16px;">Lilian</strong>｜請勾選寫錯的題目（可複選），系統會自動累加本機錯題次數，並可直接重考：
+            </div>
+            <div class="modal-body" id="modalWordList">
+                <!-- 動態注入已考單字列表 -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn-modal-sec" onclick="setAllCheckboxes(true)">全選錯題</button>
+                <button class="btn-modal-sec" onclick="setAllCheckboxes(false)">取消全選</button>
+                <div style="flex:1;"></div>
+                <button class="btn-modal-allright" onclick="confirmAllCorrect()">✅ 全部正確！</button>
+                <button class="btn-modal-retest" id="retestWrongBtn" onclick="retestCheckedWrongWords()">🔄 記錄並重考勾選錯題 (<span id="checkedWrongCount">0</span> 題)</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============= 歷史錯題本 Modal ============= -->
+    <div id="mistakeNotebookModal" class="spelling-modal-overlay" style="display: none;">
+        <div class="spelling-modal-card">
+            <div class="modal-header">
+                <h2>📖 <span id="notebookStudentName">Lilian</span> 的歷史錯題本</h2>
+                <button class="modal-close-btn" onclick="closeMistakeNotebook()">×</button>
+            </div>
+            <div class="modal-subtitle">
+                以下列出本單元中曾經寫錯的單字與累積錯誤次數，點擊可直接重練所有錯題：
+            </div>
+            <div class="modal-body" id="notebookWordList">
+                <!-- 動態注入歷史錯題 -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn-modal-sec" onclick="clearCurrentStudentMistakes()">🗑️ 清空此學生錯題紀錄</button>
+                <div style="flex:1;"></div>
+                <button class="btn-modal-sec" onclick="closeMistakeNotebook()">關閉</button>
+                <button class="btn-modal-retest" id="retestAllMistakesBtn" onclick="retestAllNotebookMistakes()">🎯 測驗所有錯題 (<span id="notebookTotalCount">0</span> 題)</button>
+            </div>
+        </div>
+    </div>
+    
+</body>
+
+</html>
