@@ -15,10 +15,10 @@
         }
 
         .container {
-            max-width: 800px;
+            max-width: 860px;
             margin: 0 auto;
             background: white;
-            border-radius: 20px;
+            border-radius: 24px;
             padding: 40px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
         }
@@ -26,84 +26,100 @@
         h1 {
             text-align: center;
             color: #667eea;
-            margin-bottom: 10px;
-            font-size: 36px;
+            margin-bottom: 8px;
+            font-size: 38px;
+            font-weight: 800;
         }
 
         .subtitle {
             text-align: center;
-            color: #888;
-            margin-bottom: 40px;
+            color: #718096;
+            margin-bottom: 32px;
             font-size: 18px;
+            font-weight: 500;
+        }
+
+        .category-title {
+            font-size: 21px;
+            font-weight: 800;
+            color: #2d3748;
+            margin: 30px 0 14px 4px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .category-title:first-of-type {
+            margin-top: 10px;
+        }
+
+        .badge-count {
+            font-size: 13px;
+            background: #edf2f7;
+            color: #4a5568;
+            padding: 3px 10px;
+            border-radius: 999px;
+            font-weight: 700;
         }
 
         .test-list {
             list-style: none;
             padding: 0;
+            margin: 0 0 20px 0;
         }
 
         .test-item {
-            background: #f8f9fa;
-            margin-bottom: 15px;
-            border-radius: 12px;
-            transition: all 0.3s;
+            background: #f8fafc;
+            margin-bottom: 14px;
+            border-radius: 14px;
+            transition: all 0.25s ease;
             overflow: hidden;
+            border: 1px solid #e2e8f0;
         }
 
         .test-item:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 20px rgba(102, 126, 234, 0.2);
+            border-color: #cbd5e0;
         }
 
         .test-link {
-            display: block;
-            padding: 20px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 24px;
             text-decoration: none;
-            color: #333;
-            font-size: 18px;
-            font-weight: 500;
+            color: #1e293b;
+            font-size: 17px;
+            font-weight: 600;
         }
 
         .test-date {
-            color: #667eea;
-            font-weight: bold;
-            margin-right: 15px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            line-height: 1.4;
+        }
+
+        .test-tag {
+            font-size: 13px;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-weight: 600;
+            background: #edf2f7;
+            color: #4a5568;
         }
 
         .test-arrow {
-            float: right;
             color: #667eea;
             font-size: 20px;
+            font-weight: bold;
+            transition: transform 0.2s;
         }
 
-        .no-tests {
-            text-align: center;
-            color: #999;
-            padding: 40px;
-            font-size: 18px;
-        }
-
-        .add-button {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 60px;
-            height: 60px;
-            background: #667eea;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 30px;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-            transition: all 0.3s;
-        }
-
-        .add-button:hover {
-            transform: scale(1.1);
-            background: #764ba2;
+        .test-item:hover .test-arrow {
+            transform: translateX(4px);
         }
     </style>
 </head>
@@ -111,15 +127,196 @@
 <body>
     <div class="container">
         <h1>📚 Lilian's Vocabulary Tests</h1>
-        <div class="subtitle">Select a test date to begin</div>
-        <ul class="test-list" id="testList"></ul>
+        <div class="subtitle">單字小考與練習清單 • 選擇單元開始複習</div>
+
+        <!-- 1. G5 The Miracle of Spring -->
+        <div class="category-title">
+            🌸 G5 Reading — The Miracle of Spring
+            <span class="badge-count">最新進度 • 3 回</span>
+        </div>
+        <ul class="test-list">
+            <li class="test-item" style="border-left: 6px solid #ec4899;">
+                <a href="5.1 M2 L3 Miracle of Spring Spelling List 1.html" class="test-link">
+                    <span class="test-date" style="color: #ec4899;">
+                        🌸 5.1 M2 L3 Miracle of Spring — Spelling List 1
+                        <span class="test-tag">Week 1 • 15字</span>
+                    </span>
+                    <span class="test-arrow">→</span>
+                </a>
+            </li>
+            <li class="test-item" style="border-left: 6px solid #ec4899;">
+                <a href="5.1 M2 L3 Miracle of Spring Spelling List 2.html" class="test-link">
+                    <span class="test-date" style="color: #ec4899;">
+                        🌸 5.1 M2 L3 Miracle of Spring — Spelling List 2
+                        <span class="test-tag">Week 2 • 15字 ＋ Week 10 教室生活單字 10字</span>
+                    </span>
+                    <span class="test-arrow">→</span>
+                </a>
+            </li>
+            <li class="test-item" style="border-left: 6px solid #ec4899;">
+                <a href="5.1 M2 L3 Miracle of Spring Spelling List 3.html" class="test-link">
+                    <span class="test-date" style="color: #ec4899;">
+                        🌸 5.1 M2 L3 Miracle of Spring — Spelling List 3
+                        <span class="test-tag">Week 3 • 15字 ＋ Week 11 配件生活單字 10字</span>
+                    </span>
+                    <span class="test-arrow">→</span>
+                </a>
+            </li>
+        </ul>
+
+        <!-- 2. G5 Captain Arsenio -->
+        <div class="category-title">
+            🚀 G5 Reading — Captain Arsenio
+            <span class="badge-count">期中考範圍 • 3 回</span>
+        </div>
+        <ul class="test-list">
+            <li class="test-item" style="border-left: 6px solid #0ea5e9;">
+                <a href="G5期中/5.1 M1 L2 Captain Arsenio Spelling List 1.html" class="test-link">
+                    <span class="test-date" style="color: #0ea5e9;">
+                        🚀 5.1 M1 L2 Captain Arsenio — Spelling List 1
+                        <span class="test-tag">Week 1 • 15字 ＋ 廚房生活單字 10字</span>
+                    </span>
+                    <span class="test-arrow">→</span>
+                </a>
+            </li>
+            <li class="test-item" style="border-left: 6px solid #0ea5e9;">
+                <a href="G5期中/5.1 M1 L2 Captain Arsenio Spelling List 2.html" class="test-link">
+                    <span class="test-date" style="color: #0ea5e9;">
+                        🚀 5.1 M1 L2 Captain Arsenio — Spelling List 2
+                        <span class="test-tag">Week 2 • 15字 ＋ 臥室生活單字 10字</span>
+                    </span>
+                    <span class="test-arrow">→</span>
+                </a>
+            </li>
+            <li class="test-item" style="border-left: 6px solid #0ea5e9;">
+                <a href="G5期中/5.1 M1 L2 Captain Arsenio Spelling List 3.html" class="test-link">
+                    <span class="test-date" style="color: #0ea5e9;">
+                        🚀 5.1 M1 L2 Captain Arsenio — Spelling List 3
+                        <span class="test-tag">Week 3 • 15字 ＋ 工具生活單字 10字</span>
+                    </span>
+                    <span class="test-arrow">→</span>
+                </a>
+            </li>
+        </ul>
+
+        <!-- 3. G5 早期週考記錄 -->
+        <div class="category-title">
+            📅 G5 週考單字小考記錄
+            <span class="badge-count">存檔</span>
+        </div>
+        <ul class="test-list">
+            <li class="test-item" style="border-left: 6px solid #8b5cf6;">
+                <a href="G5期中/2026-09-18.html" class="test-link">
+                    <span class="test-date" style="color: #8b5cf6;">
+                        📝 2026-09-18 單字小考
+                    </span>
+                    <span class="test-arrow">→</span>
+                </a>
+            </li>
+            <li class="test-item" style="border-left: 6px solid #8b5cf6;">
+                <a href="G5期中/2026-09-11.html" class="test-link">
+                    <span class="test-date" style="color: #8b5cf6;">
+                        📝 2026-09-11 單字小考
+                    </span>
+                    <span class="test-arrow">→</span>
+                </a>
+            </li>
+            <li class="test-item" style="border-left: 6px solid #8b5cf6;">
+                <a href="G5期中/2026-09-04.html" class="test-link">
+                    <span class="test-date" style="color: #8b5cf6;">
+                        📝 2026-09-04 單字小考
+                    </span>
+                    <span class="test-arrow">→</span>
+                </a>
+            </li>
+        </ul>
+
+        <!-- 4. English Learning Hub (不規則動詞) -->
+        <div class="category-title">
+            🎮 English 不規則動詞學習中心
+            <span class="badge-count">多位學生記錄</span>
+        </div>
+        <ul class="test-list">
+            <li class="test-item" style="border-left: 6px solid #10b981;">
+                <a href="../English/index.html" class="test-link">
+                    <span class="test-date" style="color: #10b981;">
+                        🎮 English Learning Hub 首頁
+                        <span class="test-tag">Lilian • Barry • Anthony 個人星星與錯題紀錄</span>
+                    </span>
+                    <span class="test-arrow">→</span>
+                </a>
+            </li>
+            <li class="test-item" style="border-left: 6px solid #10b981;">
+                <a href="../English/G5_Irregular_Verbs_1.html" class="test-link">
+                    <span class="test-date" style="color: #10b981;">
+                        📄 G5 不規則動詞變化表 (1) &amp; (2)
+                        <span class="test-tag">全 50 字 • 動詞火車 • 拼字偵探 • 小老師改考卷</span>
+                    </span>
+                    <span class="test-arrow">→</span>
+                </a>
+            </li>
+            <li class="test-item" style="border-left: 6px solid #10b981;">
+                <a href="../English/G3_Verb_Conjugation.html" class="test-link">
+                    <span class="test-date" style="color: #10b981;">
+                        🌱 G3 不規則動詞變化三態火車組裝
+                        <span class="test-tag">全 84 字 • 10題一組自由選擇</span>
+                    </span>
+                    <span class="test-arrow">→</span>
+                </a>
+            </li>
+        </ul>
+
+        <!-- 5. G4 四年級專區 -->
+        <div class="category-title">
+            📂 G4 四年級複習專區
+            <span class="badge-count">歷年累積</span>
+        </div>
+        <ul class="test-list">
+            <li class="test-item" style="border-left: 6px solid #ff9f43;">
+                <a href="G4_Spelling_Bee/index.html" class="test-link">
+                    <span class="test-date" style="color: #ff9f43;">📂 G4 Spelling Bee</span>
+                    <span class="test-arrow">→</span>
+                </a>
+            </li>
+            <li class="test-item" style="border-left: 6px solid #2ecc71;">
+                <a href="G4_Spelling_Bee_for_word/index.html" class="test-link">
+                    <span class="test-date" style="color: #2ecc71;">📖 G4 Spelling Bee (By Word)</span>
+                    <span class="test-arrow">→</span>
+                </a>
+            </li>
+            <li class="test-item" style="border-left: 6px solid #3b82f6;">
+                <a href="G4%20sem2/2026-06-18.html" class="test-link">
+                    <span class="test-date" style="color: #3b82f6;">📝 G4 Sem 2 (2026-06-18 單字小考)</span>
+                    <span class="test-arrow">→</span>
+                </a>
+            </li>
+            <li class="test-item" style="border-left: 6px solid #a855f7;">
+                <a href="g4%20sem%201/" class="test-link">
+                    <span class="test-date" style="color: #a855f7;">📁 G4 Sem 1 資料夾</span>
+                    <span class="test-arrow">→</span>
+                </a>
+            </li>
+            <li class="test-item" style="border-left: 6px solid #e74c3c;">
+                <a href="review-of-incorrect-words.html" class="test-link">
+                    <span class="test-date" style="color: #e74c3c;">📝 錯誤單字複習</span>
+                    <span class="test-arrow">→</span>
+                </a>
+            </li>
+        </ul>
+
+        <!-- 動態偵測其他日期小考（若未來有新增） -->
+        <div id="dynamicSection" style="display: none;">
+            <div class="category-title">
+                🗓️ 其他日期小考
+            </div>
+            <ul class="test-list" id="dynamicTestList"></ul>
+        </div>
     </div>
 
     <script>
-        // GitHub 倉庫資訊（請根據您的倉庫修改）
-        const GITHUB_USER = 'ChenWeiLiu';  // 您的 GitHub 使用者名稱
-        const GITHUB_REPO = 'ChenWeiLiu.github.io';  // 您的倉庫名稱
-        const FOLDER_PATH = 'lilian';  // 當前資料夾路徑
+        const GITHUB_USER = 'ChenWeiLiu';
+        const GITHUB_REPO = 'ChenWeiLiu.github.io';
+        const FOLDER_PATH = 'lilian';
 
         function formatDate(dateStr) {
             const date = new Date(dateStr);
@@ -127,122 +324,37 @@
             return date.toLocaleDateString('zh-TW', options);
         }
 
-        async function loadTestsFromGitHub() {
-            const testList = document.getElementById('testList');
-            testList.innerHTML = '<div class="no-tests">Loading tests...</div>';
-
-            const g4Link = `
-                <li class="test-item" style="border-left: 5px solid #ec4899;">
-                    <a href="5.1 M2 L3 Miracle of Spring Spelling List 1.html" class="test-link">
-                        <span class="test-date" style="color: #ec4899;">🌸 5.1 M2 L3 Miracle of Spring - Spelling List 1</span>
-                        <span class="test-arrow">→</span>
-                    </a>
-                </li>
-                <li class="test-item" style="border-left: 5px solid #ec4899;">
-                    <a href="5.1 M2 L3 Miracle of Spring Spelling List 2.html" class="test-link">
-                        <span class="test-date" style="color: #ec4899;">🌸 5.1 M2 L3 Miracle of Spring - Spelling List 2</span>
-                        <span class="test-arrow">→</span>
-                    </a>
-                </li>
-                <li class="test-item" style="border-left: 5px solid #ec4899;">
-                    <a href="5.1 M2 L3 Miracle of Spring Spelling List 3.html" class="test-link">
-                        <span class="test-date" style="color: #ec4899;">🌸 5.1 M2 L3 Miracle of Spring - Spelling List 3</span>
-                        <span class="test-arrow">→</span>
-                    </a>
-                </li>
-                <li class="test-item" style="border-left: 5px solid #0ea5e9;">
-                    <a href="G5期中/5.1 M1 L2 Captain Arsenio Spelling List 1.html" class="test-link">
-                        <span class="test-date" style="color: #0ea5e9;">🚀 5.1 M1 L2 Captain Arsenio - Spelling List 1</span>
-                        <span class="test-arrow">→</span>
-                    </a>
-                </li>
-                <li class="test-item" style="border-left: 5px solid #0ea5e9;">
-                    <a href="G5期中/5.1 M1 L2 Captain Arsenio Spelling List 2.html" class="test-link">
-                        <span class="test-date" style="color: #0ea5e9;">🚀 5.1 M1 L2 Captain Arsenio - Spelling List 2</span>
-                        <span class="test-arrow">→</span>
-                    </a>
-                </li>
-                <li class="test-item" style="border-left: 5px solid #0ea5e9;">
-                    <a href="G5期中/5.1 M1 L2 Captain Arsenio Spelling List 3.html" class="test-link">
-                        <span class="test-date" style="color: #0ea5e9;">🚀 5.1 M1 L2 Captain Arsenio - Spelling List 3</span>
-                        <span class="test-arrow">→</span>
-                    </a>
-                </li>
-                <li class="test-item" style="border-left: 5px solid #ff9f43;">
-                    <a href="G4_Spelling_Bee/index.html" class="test-link">
-                        <span class="test-date" style="color: #ff9f43;">📂 G4 Spelling Bee</span>
-                        <span class="test-arrow">→</span>
-                    </a>
-                </li>
-                <li class="test-item" style="border-left: 5px solid #2ecc71;">
-                    <a href="G4_Spelling_Bee_for_word/index.html" class="test-link">
-                        <span class="test-date" style="color: #2ecc71;">📖 G4 Spelling Bee (By Word)</span>
-                        <span class="test-arrow">→</span>
-                    </a>
-                </li>
-                <li class="test-item" style="border-left: 5px solid #a855f7;">
-                    <a href="g4%20sem%201/" class="test-link">
-                        <span class="test-date" style="color: #a855f7;">📁 G4 Sem 1</span>
-                        <span class="test-arrow">→</span>
-                    </a>
-                </li>
-                <li class="test-item" style="border-left: 5px solid #e74c3c;">
-                    <a href="review-of-incorrect-words.html" class="test-link">
-                        <span class="test-date" style="color: #e74c3c;">📝 錯誤單字複習</span>
-                        <span class="test-arrow">→</span>
-                    </a>
-                </li>
-            `;
-
+        async function checkAdditionalTests() {
             try {
-                // 使用 GitHub API 獲取資料夾內容
                 const apiUrl = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${FOLDER_PATH}`;
                 const response = await fetch(apiUrl);
-
-                if (!response.ok) {
-                    throw new Error('Failed to fetch from GitHub API');
-                }
+                if (!response.ok) return;
 
                 const files = await response.json();
-
-                // 過濾出 HTML 檔案，排除 index.html，並且檔名符合日期格式
                 const datePattern = /^\d{4}-\d{2}-\d{2}\.html$/;
                 const testFiles = files
                     .filter(file => file.type === 'file' && datePattern.test(file.name))
                     .map(file => file.name.replace('.html', ''));
 
-                if (testFiles.length === 0) {
-                    testList.innerHTML = g4Link;
-                    return;
+                if (testFiles.length > 0) {
+                    const sortedDates = testFiles.sort((a, b) => new Date(b) - new Date(a));
+                    const dynamicList = document.getElementById('dynamicTestList');
+                    dynamicList.innerHTML = sortedDates.map(date => `
+                        <li class="test-item" style="border-left: 6px solid #6366f1;">
+                            <a href="${date}.html" class="test-link">
+                                <span class="test-date" style="color:#6366f1;">📅 ${formatDate(date)}</span>
+                                <span class="test-arrow">→</span>
+                            </a>
+                        </li>
+                    `).join('');
+                    document.getElementById('dynamicSection').style.display = 'block';
                 }
-
-                // 按日期排序（最新的在前）
-                const sortedDates = testFiles.sort((a, b) => new Date(b) - new Date(a));
-
-                testList.innerHTML = g4Link + sortedDates.map(date => `
-                    <li class="test-item">
-                        <a href="${date}.html" class="test-link">
-                            <span class="test-date">${formatDate(date)}</span>
-                            <span class="test-arrow">→</span>
-                        </a>
-                    </li>
-                `).join('');
-
-            } catch (error) {
-                console.error('Error loading tests:', error);
-                const fallbackDates = [];
-                testList.innerHTML = g4Link + fallbackDates.map(date => `
-                    <li class="test-item">
-                        <a href="${date}.html" class="test-link">
-                            <span class="test-date">${formatDate(date)}</span>
-                            <span class="test-arrow">→</span>
-                        </a>
-                    </li>
-                `).join('');
+            } catch (e) {
+                // 靜態連結已完整展示，無須處理錯誤
             }
         }
 
-        loadTestsFromGitHub();
+        checkAdditionalTests();
     </script>
 </body>
 
