@@ -584,9 +584,11 @@
 
     <h1>單字小考 - 5.1 M3 L4 Eruption Spelling List 3</h1>
 
-    <div class="tab-label">單字範圍：</div>
+    <div class="tab-label">選擇考試範圍：</div>
     <div class="word-set-tabs">
-        <button class="tab-btn active" id="tabMiracle" onclick="switchWordSet('eruption')">🌋 5.1 M3 L4 Eruption Week 3 單字（15字）</button>
+        <button class="tab-btn active" id="tabEruption" onclick="switchWordSet('eruption')">🌋 5.1 M3 L4 Eruption Week 3 單字（15字）</button>
+        <button class="tab-btn" id="tabMail" onclick="switchWordSet('mail')">📮 生活郵務寄件 Week 14（10字）</button>
+        <button class="tab-btn" id="tabAll" onclick="switchWordSet('all')">🔀 全部混合（25字）</button>
     </div>
 
     <p style="font-size: 18px; color: #555;">Press the button to hear a word. It will be spoken once.</p>
@@ -885,11 +887,167 @@
 ];
         const miracleWords = eruptionWords;
 
+const mailWords = [
+        {
+                "word": "return address",
+                "posType": "noun",
+                "breakdown": "re - turn ad - dress",
+                "ipa": "/rɪˈtɜːrn əˈdrɛs/",
+                "phonicsSounds": [
+                        "rih",
+                        "turn",
+                        "uh",
+                        "dres"
+                ],
+                "pos": "n. 名詞",
+                "translation": "寄信人地址",
+                "definition": "the address of the sender written on an envelope or package",
+                "sentence": "Write your return address in the top left corner of the envelope."
+        },
+        {
+                "word": "address of the recipient",
+                "posType": "noun",
+                "breakdown": "ad - dress of the re - cip - i - ent",
+                "ipa": "/əˈdrɛs ʌv ðə rɪˈsɪpiənt/",
+                "phonicsSounds": [
+                        "uh",
+                        "dres",
+                        "uv",
+                        "thuh",
+                        "rih",
+                        "sip",
+                        "ee",
+                        "unt"
+                ],
+                "pos": "n. 名詞",
+                "translation": "收件人地址",
+                "definition": "the location where the letter or package is to be delivered",
+                "sentence": "Make sure the address of the recipient is written clearly and correctly."
+        },
+        {
+                "word": "zip code/postal code",
+                "posType": "noun",
+                "breakdown": "zip code / pos - tal code",
+                "ipa": "/ˈzɪp koʊd / ˈpoʊstəl koʊd/",
+                "phonicsSounds": [
+                        "zip",
+                        "kohd",
+                        "poh",
+                        "stul",
+                        "kohd"
+                ],
+                "pos": "n. 名詞",
+                "translation": "郵遞區號、區域號碼",
+                "definition": "a postal code consisting of a series of letters or digits used to sort mail",
+                "sentence": "Don't forget to include the zip code to ensure fast delivery."
+        },
+        {
+                "word": "postcard",
+                "posType": "noun",
+                "breakdown": "post - card",
+                "ipa": "/ˈpoʊstkɑːrd/",
+                "phonicsSounds": [
+                        "pohst",
+                        "kard"
+                ],
+                "pos": "n. 名詞",
+                "translation": "明信片",
+                "definition": "a card for sending a message by mail without an envelope, often having a picture on one side",
+                "sentence": "She sent a colorful postcard to her grandparents while on vacation."
+        },
+        {
+                "word": "postmark",
+                "posType": "noun",
+                "breakdown": "post - mark",
+                "ipa": "/ˈpoʊstmɑːrk/",
+                "phonicsSounds": [
+                        "pohst",
+                        "mark"
+                ],
+                "pos": "n. 名詞",
+                "translation": "郵戳",
+                "definition": "an official stamp printed on letters showing the date and place of mailing",
+                "sentence": "The letter bore a postmark dated November 15th."
+        },
+        {
+                "word": "envelope",
+                "posType": "noun",
+                "breakdown": "en - ve - lope",
+                "ipa": "/ˈɛnvəloʊp/",
+                "phonicsSounds": [
+                        "en",
+                        "vuh",
+                        "lohp"
+                ],
+                "pos": "n. 名詞",
+                "translation": "信封",
+                "definition": "a flat paper container used for enclosing a letter or document",
+                "sentence": "He slipped the birthday card into a crisp white envelope."
+        },
+        {
+                "word": "stamp",
+                "posType": "noun",
+                "breakdown": "stamp",
+                "ipa": "/stæmp/",
+                "phonicsSounds": [
+                        "stamp"
+                ],
+                "pos": "n. 名詞",
+                "translation": "郵票",
+                "definition": "a small adhesive piece of paper stuck to mail to show payment for postage",
+                "sentence": "She stuck a commemorative stamp in the upper right corner of the envelope."
+        },
+        {
+                "word": "parcel",
+                "posType": "noun",
+                "breakdown": "par - cel",
+                "ipa": "/ˈpɑːrsəl/",
+                "phonicsSounds": [
+                        "par",
+                        "sul"
+                ],
+                "pos": "n. 名詞",
+                "translation": "包裹",
+                "definition": "a package wrapped in paper and tied, ready to be sent by mail",
+                "sentence": "The mail carrier delivered a heavy parcel to our front doorstep."
+        },
+        {
+                "word": "courier",
+                "posType": "noun",
+                "breakdown": "cou - ri - er",
+                "ipa": "/ˈkʊriər/",
+                "phonicsSounds": [
+                        "koor",
+                        "ee",
+                        "er"
+                ],
+                "pos": "n. 名詞",
+                "translation": "快遞員",
+                "definition": "a person or company employed to deliver messages, packages, or mail quickly",
+                "sentence": "The courier arrived promptly on a motorbike to pick up the urgent documents."
+        },
+        {
+                "word": "express mail",
+                "posType": "noun",
+                "breakdown": "ex - press mail",
+                "ipa": "/ɪkˈsprɛs meɪl/",
+                "phonicsSounds": [
+                        "ek",
+                        "spres",
+                        "mayl"
+                ],
+                "pos": "n. 名詞",
+                "translation": "快捷信件、特快郵件",
+                "definition": "an accelerated postal delivery service for which the customer pays a higher fee",
+                "sentence": "He sent the passport application via express mail so it would arrive tomorrow."
+        }
+];
+
         let currentWordObj = null;
         let selectedWords = [];
         let testedWords = [];
-        let availableWords = [...miracleWords];
-        let currentWordSet = 'miracle';
+        let availableWords = [...eruptionWords];
+        let currentWordSet = 'eruption';
         let usVoice = null;
 
         // 切換單字範圍
@@ -904,14 +1062,27 @@
             currentWordObj = null;
             document.getElementById("currentWordDisplay").innerHTML = "";
             document.getElementById("statusBox").innerText = "";
+            document.getElementById("autoQuizStatus").innerText = "";
+            document.getElementById("learnProgress").innerText = "";
+            document.getElementById("learnWordDisplay").innerText = "";
+            document.getElementById("learnStepDisplay").innerText = "";
             document.body.style.background = "#f0f8ff";
 
-            availableWords = [...miracleWords];
+            // 載入對應單字組
+            if (set === 'eruption') {
+                availableWords = [...eruptionWords];
+            } else if (set === 'mail') {
+                availableWords = [...mailWords];
+            } else {
+                availableWords = [...eruptionWords, ...mailWords];
+            }
 
             // 更新 tab 狀態
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            const tabBtn = document.getElementById('tabMiracle');
-            if (tabBtn) tabBtn.classList.add('active');
+            const tabMap = { eruption: 'tabEruption', mail: 'tabMail', all: 'tabAll' };
+            if (tabMap[set] && document.getElementById(tabMap[set])) {
+                document.getElementById(tabMap[set]).classList.add('active');
+            }
 
             refreshLists();
         }
@@ -1495,6 +1666,8 @@
         // 取得本課全部單字池
         function getAllPossibleWords() {
             const set = new Map();
+            if (typeof eruptionWords !== 'undefined') eruptionWords.forEach(w => set.set(w.word, w));
+            if (typeof mailWords !== 'undefined') mailWords.forEach(w => set.set(w.word, w));
             if (typeof miracleWords !== 'undefined') miracleWords.forEach(w => set.set(w.word, w));
             if (typeof classroomWords !== 'undefined') classroomWords.forEach(w => set.set(w.word, w));
             if (typeof arsenioWords !== 'undefined') arsenioWords.forEach(w => set.set(w.word, w));
