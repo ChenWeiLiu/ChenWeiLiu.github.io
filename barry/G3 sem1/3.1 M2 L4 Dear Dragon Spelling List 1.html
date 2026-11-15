@@ -584,9 +584,11 @@
 
     <h1>單字小考 - 3.1 M2 L4 Dear Dragon Spelling List 1</h1>
 
-    <div class="tab-label">單字範圍：</div>
+    <div class="tab-label">選擇考試範圍：</div>
     <div class="word-set-tabs">
         <button class="tab-btn active" id="tabDragon" onclick="switchWordSet('dragon')">🐉 3.1 M2 L4 Dear Dragon Week 1 單字（15字）</button>
+        <button class="tab-btn" id="tabBody" onclick="switchWordSet('body')">👤 生活身體部位 Week 12（5字）</button>
+        <button class="tab-btn" id="tabAll" onclick="switchWordSet('all')">🔀 全部混合（20字）</button>
     </div>
 
     <p style="font-size: 18px; color: #555;">Press the button to hear a word. It will be spoken once.</p>
@@ -868,11 +870,83 @@
 ];
         const miracleWords = dragonWords;
 
+const bodyWords = [
+        {
+                "word": "forehead",
+                "posType": "noun",
+                "breakdown": "fore - head",
+                "ipa": "/ˈfɔːrhɛd/",
+                "phonicsSounds": [
+                        "for",
+                        "hed"
+                ],
+                "pos": "n. 名詞",
+                "translation": "前額、額頭",
+                "definition": "the part of the face above the eyes and below the hair",
+                "sentence": "Mom gently kissed the baby on the forehead."
+        },
+        {
+                "word": "eyebrow",
+                "posType": "noun",
+                "breakdown": "eye - brow",
+                "ipa": "/ˈaɪbraʊ/",
+                "phonicsSounds": [
+                        "eye",
+                        "brow"
+                ],
+                "pos": "n. 名詞",
+                "translation": "眉毛",
+                "definition": "the strip of hair growing on the ridge above a person's eye socket",
+                "sentence": "He raised his eyebrow in surprise when he heard the news."
+        },
+        {
+                "word": "earlobe",
+                "posType": "noun",
+                "breakdown": "ear - lobe",
+                "ipa": "/ˈɪərloʊb/",
+                "phonicsSounds": [
+                        "eer",
+                        "lohb"
+                ],
+                "pos": "n. 名詞",
+                "translation": "耳垂",
+                "definition": "the soft, fleshy lower part of the external ear",
+                "sentence": "She had her earlobe pierced so she could wear earrings."
+        },
+        {
+                "word": "knuckle",
+                "posType": "noun",
+                "breakdown": "knuck - le",
+                "ipa": "/ˈnʌkəl/",
+                "phonicsSounds": [
+                        "nuk",
+                        "ul"
+                ],
+                "pos": "n. 名詞",
+                "translation": "指關節",
+                "definition": "a joint of a finger, especially one connecting a finger to the hand",
+                "sentence": "He knocked on the wooden door with his knuckles."
+        },
+        {
+                "word": "wrist",
+                "posType": "noun",
+                "breakdown": "wrist",
+                "ipa": "/rɪst/",
+                "phonicsSounds": [
+                        "rist"
+                ],
+                "pos": "n. 名詞",
+                "translation": "手腕",
+                "definition": "the joint connecting the hand with the forearm",
+                "sentence": "She wears a colorful fitness tracker around her wrist."
+        }
+];
+
         let currentWordObj = null;
         let selectedWords = [];
         let testedWords = [];
-        let availableWords = [...miracleWords];
-        let currentWordSet = 'miracle';
+        let availableWords = [...dragonWords];
+        let currentWordSet = 'dragon';
         let usVoice = null;
 
         // 切換單字範圍
@@ -887,14 +961,27 @@
             currentWordObj = null;
             document.getElementById("currentWordDisplay").innerHTML = "";
             document.getElementById("statusBox").innerText = "";
+            document.getElementById("autoQuizStatus").innerText = "";
+            document.getElementById("learnProgress").innerText = "";
+            document.getElementById("learnWordDisplay").innerText = "";
+            document.getElementById("learnStepDisplay").innerText = "";
             document.body.style.background = "#f0f8ff";
 
-            availableWords = [...miracleWords];
+            // 載入對應單字組
+            if (set === 'dragon') {
+                availableWords = [...dragonWords];
+            } else if (set === 'body') {
+                availableWords = [...bodyWords];
+            } else {
+                availableWords = [...dragonWords, ...bodyWords];
+            }
 
             // 更新 tab 狀態
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            const tabBtn = document.getElementById('tabDragon');
-            if (tabBtn) tabBtn.classList.add('active');
+            const tabMap = { dragon: 'tabDragon', body: 'tabBody', all: 'tabAll' };
+            if (tabMap[set] && document.getElementById(tabMap[set])) {
+                document.getElementById(tabMap[set]).classList.add('active');
+            }
 
             refreshLists();
         }
@@ -1479,6 +1566,7 @@
         function getAllPossibleWords() {
             const set = new Map();
             if (typeof dragonWords !== 'undefined') dragonWords.forEach(w => set.set(w.word, w));
+            if (typeof bodyWords !== 'undefined') bodyWords.forEach(w => set.set(w.word, w));
             if (typeof miracleWords !== 'undefined') miracleWords.forEach(w => set.set(w.word, w));
             if (typeof classroomWords !== 'undefined') classroomWords.forEach(w => set.set(w.word, w));
             if (typeof arsenioWords !== 'undefined') arsenioWords.forEach(w => set.set(w.word, w));
