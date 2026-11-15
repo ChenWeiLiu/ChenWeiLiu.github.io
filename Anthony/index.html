@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-TW">
 
 <head>
     <meta charset="UTF-8" />
@@ -15,66 +15,128 @@
         }
 
         .container {
-            max-width: 800px;
+            max-width: 860px;
             margin: 0 auto;
             background: white;
-            border-radius: 20px;
+            border-radius: 24px;
             padding: 40px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
         }
 
         h1 {
             text-align: center;
-            color: #9c27b0;
-            margin-bottom: 10px;
-            font-size: 36px;
+            color: #8e24aa;
+            margin-bottom: 8px;
+            font-size: 38px;
+            font-weight: 800;
         }
 
         .subtitle {
             text-align: center;
-            color: #888;
-            margin-bottom: 40px;
+            color: #718096;
+            margin-bottom: 32px;
             font-size: 18px;
+            font-weight: 500;
+        }
+
+        .category-title {
+            font-size: 21px;
+            font-weight: 800;
+            color: #2d3748;
+            margin: 30px 0 14px 4px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .category-title:first-of-type {
+            margin-top: 10px;
+        }
+
+        .badge-count {
+            font-size: 13px;
+            background: #f3e5f5;
+            color: #7b1fa2;
+            padding: 3px 10px;
+            border-radius: 999px;
+            font-weight: 700;
         }
 
         .test-list {
             list-style: none;
             padding: 0;
+            margin: 0 0 20px 0;
         }
 
         .test-item {
-            background: #f8f9fa;
-            margin-bottom: 15px;
-            border-radius: 12px;
-            transition: all 0.3s;
+            background: #f8fafc;
+            margin-bottom: 14px;
+            border-radius: 14px;
+            transition: all 0.25s ease;
             overflow: hidden;
-            border-left: 5px solid #9c27b0;
+            border: 1px solid #e2e8f0;
         }
 
         .test-item:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(156, 39, 176, 0.3);
+            box-shadow: 0 8px 20px rgba(156, 39, 176, 0.2);
+            border-color: #ce93d8;
         }
 
         .test-link {
-            display: block;
-            padding: 20px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 24px;
             text-decoration: none;
-            color: #333;
-            font-size: 18px;
-            font-weight: 500;
+            color: #1e293b;
+            font-size: 17px;
+            font-weight: 600;
         }
 
         .test-date {
-            color: #9c27b0;
-            font-weight: bold;
-            margin-right: 15px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            line-height: 1.4;
+            flex-wrap: wrap;
+        }
+
+        .test-tag {
+            font-size: 13px;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-weight: 600;
+            background: #f3e5f5;
+            color: #6a1b9a;
         }
 
         .test-arrow {
-            float: right;
-            color: #9c27b0;
-            font-size: 20px;
+            color: #8e24aa;
+            font-size: 15px;
+            font-weight: bold;
+            transition: transform 0.2s;
+        }
+
+        .btn-handwriting-link {
+            background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 13px;
+            box-shadow: 0 2px 6px rgba(2,132,199,0.3);
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            transition: 0.2s;
+        }
+
+        .btn-handwriting-link:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(2,132,199,0.4);
         }
     </style>
 </head>
@@ -82,40 +144,91 @@
 <body>
     <div class="container">
         <h1>🦄 Anthony's Vocabulary Tests</h1>
-        <div class="subtitle">Select a training to begin</div>
-        <ul class="test-list" id="testList">
-            <!-- Static Links for Training -->
-            <li class="test-item" style="border-left: 5px solid #0ea5e9;">
-                <a href="1.3 M5 Lesson 3 What Are You Waiting For 2.html" class="test-link">
-                    <span class="test-date" style="color: #0ea5e9;">📖 1.3 M5 Lesson 3 What Are You Waiting For 2</span>
+        <div class="subtitle">單字小考與練習清單 • 選擇單元開始複習</div>
+
+        <!-- 1. G1 Monument City -->
+        <div class="category-title">
+            🏛️ G1 Reading — 1.3 M6 L4 Monument City
+            <span class="badge-count">最新進度 • 2 回</span>
+        </div>
+        <ul class="test-list">
+            <li class="test-item" style="border-left: 6px solid #9c27b0;">
+                <a href="1.3 M6 L4 Monument City Spelling List 1.html" class="test-link">
+                    <span class="test-date" style="color: #9c27b0;">
+                        🏛️ 1.3 M6 L4 Monument City — Spelling List 1
+                        <span class="test-tag">Week 1 • 15字 (scene, monument, sights, freedom...)</span>
+                    </span>
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <span class="test-arrow">🎧 聽力</span>
+                        <span onclick="event.preventDefault(); window.location.href='../English/Handwriting_Practice.html?unit=g1_monument_1&student=Anthony';" class="btn-handwriting-link">✍️ 手寫測驗</span>
+                    </div>
+                </a>
+            </li>
+            <li class="test-item" style="border-left: 6px solid #9c27b0;">
+                <a href="1.3 M6 L4 Monument City Spelling List 2.html" class="test-link">
+                    <span class="test-date" style="color: #9c27b0;">
+                        🏛️ 1.3 M6 L4 Monument City — Spelling List 2
+                        <span class="test-tag">Week 2 • 15字 (go, no, where, who, Dad's, useful...)</span>
+                    </span>
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <span class="test-arrow">🎧 聽力</span>
+                        <span onclick="event.preventDefault(); window.location.href='../English/Handwriting_Practice.html?unit=g1_monument_2&student=Anthony';" class="btn-handwriting-link">✍️ 手寫測驗</span>
+                    </div>
+                </a>
+            </li>
+        </ul>
+
+        <!-- 2. G1 Previous Lessons -->
+        <div class="category-title">
+            📖 G1 學校閱讀單字
+            <span class="badge-count">2 回</span>
+        </div>
+        <ul class="test-list">
+            <li class="test-item" style="border-left: 6px solid #0ea5e9;">
+                <a href="g1 sem1/1.3 M5 Lesson 3 What Are You Waiting For 2.html" class="test-link">
+                    <span class="test-date" style="color: #0ea5e9;">
+                        📖 1.3 M5 Lesson 3 What Are You Waiting For 2
+                        <span class="test-tag">15字</span>
+                    </span>
                     <span class="test-arrow">→</span>
                 </a>
             </li>
-            <li class="test-item" style="border-left: 5px solid #e67e22;">
-                <a href="2026-05-14.html" class="test-link">
-                    <span class="test-date" style="color: #e67e22;">📝 5/14 單字小考（maybe, bedroom, lunchroom...）</span>
+            <li class="test-item" style="border-left: 6px solid #e67e22;">
+                <a href="g1 sem1/2026-05-14.html" class="test-link">
+                    <span class="test-date" style="color: #e67e22;">
+                        📝 5/14 單字小考（maybe, bedroom, lunchroom...）
+                        <span class="test-tag">複習</span>
+                    </span>
                     <span class="test-arrow">→</span>
                 </a>
             </li>
-            <li class="test-item" style="border-left: 5px solid #9c27b0;">
+        </ul>
+
+        <!-- 3. 基礎與發音遊戲 -->
+        <div class="category-title">
+            🎮 基礎詞彙與自然發音
+            <span class="badge-count">4 個遊戲與訓練</span>
+        </div>
+        <ul class="test-list">
+            <li class="test-item" style="border-left: 6px solid #ab47bc;">
                 <a href="calendar.html" class="test-link">
-                    <span class="test-date" style="color: #9c27b0;">📅 Time Words Training (Week & Month)</span>
+                    <span class="test-date" style="color: #ab47bc;">📅 Time Words Training (Week & Month)</span>
                     <span class="test-arrow">→</span>
                 </a>
             </li>
-            <li class="test-item" style="border-left: 5px solid #2ecc71;">
+            <li class="test-item" style="border-left: 6px solid #2ecc71;">
                 <a href="numbers.html" class="test-link">
                     <span class="test-date" style="color: #2ecc71;">🔢 Number Words Training (Numbers)</span>
                     <span class="test-arrow">→</span>
                 </a>
             </li>
-            <li class="test-item" style="border-left: 5px solid #ff6b6b;">
+            <li class="test-item" style="border-left: 6px solid #ff6b6b;">
                 <a href="ing_game.html" class="test-link">
                     <span class="test-date" style="color: #ff6b6b;">🎮 -ing Spelling Game (CVC Rule)</span>
                     <span class="test-arrow">→</span>
                 </a>
             </li>
-            <li class="test-item" style="border-left: 5px solid #667eea;">
+            <li class="test-item" style="border-left: 6px solid #667eea;">
                 <a href="Power English PHONICS/No2/index.html" class="test-link">
                     <span class="test-date" style="color: #667eea;">🎧 Power English PHONICS No.2 (自然發音)</span>
                     <span class="test-arrow">→</span>
