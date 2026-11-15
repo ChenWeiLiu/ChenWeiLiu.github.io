@@ -958,6 +958,7 @@
             <div style="display:flex;gap:8px;flex-wrap:wrap;">
                 <button class="chip-btn" id="sfxToggleBtn" onclick="toggleSfx()">🔔 SFX: ON</button>
                 <button class="chip-btn" onclick="openPassportModal()">📚 Passport &amp; Save</button>
+                <button class="chip-btn" onclick="startHandwritingExam()" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); color: white; border: none; font-weight: 800; box-shadow: 0 4px 10px rgba(2, 132, 199, 0.35);">✍️ 手寫測驗 (AI 評判)</button>
             </div>
         </div>
 
@@ -982,6 +983,11 @@
                 <span class="tab-icon">👩‍🏫</span>
                 <span class="tab-title">4. Spot the Mistake</span>
                 <span class="tab-desc">Grade &amp; Fix the Row</span>
+            </div>
+            <div class="mode-tab" data-mode="handwriting" onclick="startHandwritingExam()" style="border: 2px solid #bae6fd; background: #f0f9ff;">
+                <span class="tab-icon">✍️</span>
+                <span class="tab-title">5. Handwriting Lab</span>
+                <span class="tab-desc">四線三格手寫 • AI 自動評判</span>
             </div>
         </nav>
 
