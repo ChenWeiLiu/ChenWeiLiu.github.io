@@ -1033,12 +1033,12 @@
             ctx.restore();
         }
 
-        // ============= 防誤觸與手掌過濾系統 (Palm Rejection Engine) =============
-        // ============= 高速 120FPS 零延遲繪圖與防誤觸引擎 =============
+        // ============= 專業級極速繪圖引擎 (Professional Responsive Inking) =============
         let palmRejectionEnabled = true;
         let activePointerId = null;
         let penDeviceDetected = false;
         let canvasRect = null;
+        let strokeStartTime = 0;
 
         function updateCanvasRect() {
             canvasRect = canvas.getBoundingClientRect();
@@ -1065,52 +1065,31 @@
             }
         }
 
-        function isPalmOrAccidentalContact(e) {
+        function isPalmNoise(e) {
             if (!palmRejectionEnabled) return false;
 
-            // 若已使用 Apple Pencil，忽略手指與手掌觸摸
-            if (penDeviceDetected && e.pointerType !== 'pen') {
-                return true;
-            }
-
-            // 檢測到 Apple Pencil
+            // 1. 如果是觸控筆 (Apple Pencil)，永遠暢行無阻！
             if (e.pointerType === 'pen') {
                 if (!penDeviceDetected) {
                     penDeviceDetected = true;
                     const btn = document.getElementById('palmRejectionBtn');
-                    if (btn) {
-                        btn.innerHTML = `✏️ 觸控筆鎖定防誤觸`;
-                        btn.style.background = '#f0fdf4';
-                        btn.style.color = '#15803d';
-                    }
+                    if (btn) btn.innerHTML = `✏️ 觸控筆鎖定防誤觸`;
                 }
                 return false;
             }
 
-            // 手掌大接觸面積過濾 (e.width/height > 30px)
-            if ((e.width && e.width > 30) || (e.height && e.height > 30)) {
+            // 2. 如果已偵測到觸控筆，過濾手指/手掌觸摸
+            if (penDeviceDetected && e.pointerType !== 'pen') {
+                return true;
+            }
+
+            // 3. 手掌巨大接觸面積過濾 (e.width/height > 35px)
+            if ((e.width && e.width > 35) || (e.height && e.height > 35)) {
                 return true;
             }
 
             return false;
         }
-
-        function getStrokeTotalDistance(pts) {
-            if (!pts || pts.length < 2) return 0;
-            let d = 0;
-            for (let i = 1; i < pts.length; i++) {
-                const dx = pts[i].x - pts[i - 1].x;
-                const dy = pts[i].y - pts[i - 1].y;
-                d += Math.sqrt(dx * dx + dy * dy);
-            }
-            return d;
-        }
-
-        canvas.addEventListener('pointerdown', startDrawing);
-        canvas.addEventListener('pointermove', drawMove);
-        window.addEventListener('pointerup', stopDrawing);
-        window.addEventListener('pointercancel', stopDrawing);
-        canvas.addEventListener('contextmenu', e => e.preventDefault());
 
         function getCanvasPos(e) {
             if (!canvasRect) updateCanvasRect();
@@ -1121,18 +1100,18 @@
             };
         }
 
-        let strokeStartTime = 0;
-
         function startDrawing(e) {
-            // 更新畫布座標快取（極速響應，避免 move 時重排）
+            e.preventDefault();
+
+            // 若為手掌雜訊則忽略
+            if (isPalmNoise(e)) return;
+
+            // 若已有正在繪製的筆劃，立即結束前一筆，毫秒級無縫開啟新筆畫！
+            if (isDrawing && currentStroke && currentStroke.points && currentStroke.points.length > 0) {
+                strokeHistory.push(currentStroke);
+            }
+
             updateCanvasRect();
-
-            // 若已有書寫點且是不同觸控 ID，拒絕次要觸控
-            if (activePointerId !== null && e.pointerId !== activePointerId) return;
-
-            // 執行防手掌誤觸檢查
-            if (isPalmOrAccidentalContact(e)) return;
-
             activePointerId = e.pointerId;
             isDrawing = true;
 
@@ -1155,12 +1134,14 @@
 
         function drawMove(e) {
             if (!isDrawing) return;
-            if (e.pointerId !== activePointerId) return;
+            // 如果不是當前運筆的指針，忽略該 move 事件（避免手掌壓著移動干擾運筆）
+            if (activePointerId !== null && e.pointerId !== activePointerId) return;
 
-            // 直接讀取座標（零延遲，不觸發 getBoundingClientRect DOM reflow）
+            e.preventDefault();
+            if (!canvasRect) updateCanvasRect();
             const x = e.clientX - canvasRect.left;
             const y = e.clientY - canvasRect.top;
-            const pos = { x, y, pressure: e.pressure || 0.5 };
+            const pos = { x, y, pressure: (e.pressure && e.pressure > 0) ? e.pressure : 0.5 };
             const relTime = Date.now() - strokeStartTime;
 
             currentStroke.points.push(pos);
@@ -1173,7 +1154,11 @@
 
         function stopDrawing(e) {
             if (!isDrawing) return;
-            if (e.pointerId && activePointerId && e.pointerId !== activePointerId) return;
+
+            // 如果有指定 pointerId 且不匹配，忽略（保護當前運筆）
+            if (e && e.pointerId && activePointerId !== null && e.pointerId !== activePointerId) {
+                return;
+            }
 
             isDrawing = false;
             activePointerId = null;
@@ -1183,6 +1168,15 @@
             }
             currentStroke = null;
         }
+
+        canvas.addEventListener('pointerdown', startDrawing);
+        canvas.addEventListener('pointermove', drawMove);
+        canvas.addEventListener('pointerup', stopDrawing);
+        canvas.addEventListener('pointercancel', stopDrawing);
+        canvas.addEventListener('pointerleave', stopDrawing);
+        window.addEventListener('pointerup', stopDrawing);
+        window.addEventListener('pointercancel', stopDrawing);
+        canvas.addEventListener('contextmenu', e => e.preventDefault());
 
         function getStrokeSize(tool, pressure) {
             if (tool === 'eraser') return 24;
