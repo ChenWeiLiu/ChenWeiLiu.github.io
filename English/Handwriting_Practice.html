@@ -1,0 +1,1387 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>✍️ 英文四線格手寫作答實踐室 | English Handwriting Lab</title>
+    <style>
+        :root {
+            --theme-primary: #0284c7;
+            --theme-secondary: #0369a1;
+            --theme-light: #f0f9ff;
+            --theme-accent: #f59e0b;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+        }
+
+        [data-user="Barry"] {
+            --theme-primary: #0284c7;
+            --theme-secondary: #0369a1;
+            --theme-light: #f0f9ff;
+            --theme-accent: #10b981;
+        }
+
+        [data-user="Lilian"] {
+            --theme-primary: #ec4899;
+            --theme-secondary: #be185d;
+            --theme-light: #fdf2f8;
+            --theme-accent: #f59e0b;
+        }
+
+        [data-user="Anthony"] {
+            --theme-primary: #8b5cf6;
+            --theme-secondary: #6d28d9;
+            --theme-light: #f5f3ff;
+            --theme-accent: #f97316;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', 'PingFang TC', 'Microsoft JhengHei', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-secondary) 100%);
+            min-height: 100vh;
+            color: var(--text-main);
+            padding: 16px;
+            transition: background 0.4s ease;
+        }
+
+        .app-shell {
+            max-width: 960px;
+            margin: 0 auto;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(10px);
+            padding: 14px 22px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.16);
+            margin-bottom: 16px;
+        }
+
+        .back-link {
+            text-decoration: none;
+            background: var(--theme-light);
+            color: var(--theme-primary);
+            font-weight: 800;
+            padding: 8px 16px;
+            border-radius: 12px;
+            font-size: 16px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: transform 0.2s, background 0.2s;
+        }
+
+        .back-link:hover {
+            transform: translateY(-2px);
+        }
+
+        .app-title-group h1 {
+            margin: 0;
+            font-size: 24px;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .app-title-group p {
+            margin: 2px 0 0;
+            font-size: 14px;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        /* User Switcher */
+        .user-switcher {
+            display: flex;
+            gap: 8px;
+            background: #f1f5f9;
+            padding: 4px;
+            border-radius: 14px;
+        }
+
+        .user-btn {
+            border: none;
+            background: transparent;
+            padding: 6px 14px;
+            border-radius: 10px;
+            font-weight: 800;
+            font-size: 15px;
+            color: #64748b;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .user-btn.active {
+            background: white;
+            color: var(--theme-primary);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Control Panel */
+        .control-panel {
+            background: white;
+            border-radius: 20px;
+            padding: 18px 24px;
+            margin-bottom: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+        }
+
+        .unit-select-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
+            min-width: 260px;
+        }
+
+        .unit-select-group label {
+            font-weight: 800;
+            color: #334155;
+            font-size: 16px;
+            white-space: nowrap;
+        }
+
+        .unit-select {
+            width: 100%;
+            padding: 10px 14px;
+            border-radius: 12px;
+            border: 2px solid #cbd5e1;
+            font-size: 16px;
+            font-weight: 700;
+            color: #1e293b;
+            background: #f8fafc;
+            outline: none;
+            cursor: pointer;
+            transition: border 0.2s;
+        }
+
+        .unit-select:focus {
+            border-color: var(--theme-primary);
+        }
+
+        .stats-badge-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .stat-badge {
+            background: var(--theme-light);
+            color: var(--theme-primary);
+            padding: 8px 14px;
+            border-radius: 12px;
+            font-weight: 800;
+            font-size: 15px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-print-view {
+            background: #f8fafc;
+            border: 2px solid #cbd5e1;
+            color: #334155;
+            padding: 8px 16px;
+            border-radius: 12px;
+            font-weight: 800;
+            font-size: 15px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .btn-print-view:hover {
+            border-color: var(--theme-primary);
+            color: var(--theme-primary);
+        }
+
+        /* Practice Card */
+        .practice-card {
+            background: white;
+            border-radius: 24px;
+            padding: 26px;
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.15);
+            margin-bottom: 20px;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            gap: 12px;
+        }
+
+        .progress-text {
+            font-weight: 800;
+            font-size: 16px;
+            color: #475569;
+            white-space: nowrap;
+        }
+
+        .progress-bar-bg {
+            flex: 1;
+            height: 12px;
+            background: #e2e8f0;
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--theme-primary), #10b981);
+            border-radius: 999px;
+            transition: width 0.3s ease;
+        }
+
+        /* Question Box */
+        .question-box {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 18px;
+            padding: 20px;
+            margin-bottom: 18px;
+            text-align: center;
+            position: relative;
+        }
+
+        .speak-btn-large {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 16px;
+            font-size: 20px;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 6px 16px rgba(16, 185, 129, 0.35);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: transform 0.15s, box-shadow 0.15s;
+        }
+
+        .speak-btn-large:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.45);
+        }
+
+        .speak-btn-large:active {
+            transform: translateY(1px);
+        }
+
+        .question-zh {
+            font-size: 28px;
+            font-weight: 900;
+            color: #0f172a;
+            margin: 14px 0 6px;
+        }
+
+        .question-pos {
+            font-size: 15px;
+            color: #64748b;
+            font-weight: 700;
+        }
+
+        .question-sentence {
+            font-size: 17px;
+            color: #475569;
+            margin-top: 10px;
+            font-style: italic;
+            background: #ffffff;
+            padding: 8px 16px;
+            border-radius: 10px;
+            display: inline-block;
+            border: 1px dashed #cbd5e1;
+        }
+
+        .letter-boxes-display {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 14px;
+            flex-wrap: wrap;
+        }
+
+        .letter-slot {
+            width: 28px;
+            height: 34px;
+            border-bottom: 3px solid #64748b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--theme-primary);
+        }
+
+        .letter-slot.space {
+            border-bottom: none;
+            width: 14px;
+        }
+
+        /* Canvas Container */
+        .canvas-section {
+            position: relative;
+            background: #ffffff;
+            border: 3px solid #cbd5e1;
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.04);
+            margin-bottom: 14px;
+        }
+
+        #hwCanvas {
+            display: block;
+            width: 100%;
+            height: 220px;
+            cursor: crosshair;
+            touch-action: none;
+        }
+
+        /* Standard Overlay Text (半透明答案疊合) */
+        .overlay-text-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 220px;
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .overlay-text-layer.visible {
+            opacity: 0.45;
+        }
+
+        .overlay-word {
+            font-family: 'Century Gothic', 'Comic Sans MS', 'Chalkboard SE', sans-serif;
+            font-size: 68px;
+            font-weight: bold;
+            color: #0284c7;
+            letter-spacing: 4px;
+            user-select: none;
+        }
+
+        /* Canvas Toolbar */
+        .canvas-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 8px 14px;
+            background: #f1f5f9;
+            border-radius: 14px;
+            margin-bottom: 18px;
+        }
+
+        .tool-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tool-btn {
+            background: white;
+            border: 2px solid #cbd5e1;
+            color: #334155;
+            padding: 8px 14px;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.15s;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .tool-btn:hover {
+            border-color: var(--theme-primary);
+        }
+
+        .tool-btn.active {
+            background: var(--theme-primary);
+            color: white;
+            border-color: var(--theme-primary);
+        }
+
+        .color-dot {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            border: 2px solid #ffffff;
+            box-shadow: 0 0 0 1px #cbd5e1;
+            cursor: pointer;
+            transition: transform 0.15s;
+        }
+
+        .color-dot:hover {
+            transform: scale(1.15);
+        }
+
+        .color-dot.active {
+            box-shadow: 0 0 0 3px var(--theme-primary);
+            transform: scale(1.15);
+        }
+
+        /* Action Buttons */
+        .actions-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-check-main {
+            background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+            color: white;
+            border: none;
+            padding: 14px 34px;
+            border-radius: 16px;
+            font-size: 21px;
+            font-weight: 900;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(2, 132, 199, 0.35);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: transform 0.15s, box-shadow 0.15s;
+        }
+
+        .btn-check-main:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 24px rgba(2, 132, 199, 0.45);
+        }
+
+        .btn-check-main:active {
+            transform: translateY(1px);
+        }
+
+        .btn-peek {
+            background: #f8fafc;
+            border: 2px solid #cbd5e1;
+            color: #475569;
+            padding: 12px 18px;
+            border-radius: 14px;
+            font-size: 16px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        /* Review Card (顯示在核對後) */
+        .review-card {
+            display: none;
+            background: #f0fdf4;
+            border: 2px solid #86efac;
+            border-radius: 18px;
+            padding: 20px;
+            margin-top: 18px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .review-card.show {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .target-word-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .target-word-title {
+            font-size: 32px;
+            font-weight: 900;
+            color: #15803d;
+            letter-spacing: 1px;
+        }
+
+        .review-meta {
+            font-size: 16px;
+            color: #166534;
+            font-weight: 700;
+        }
+
+        .review-actions-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn-judgement-correct {
+            background: #16a34a;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 14px;
+            font-size: 18px;
+            font-weight: 800;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: transform 0.15s;
+        }
+
+        .btn-judgement-correct:hover {
+            transform: scale(1.03);
+        }
+
+        .btn-judgement-wrong {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 14px;
+            font-size: 18px;
+            font-weight: 800;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: transform 0.15s;
+        }
+
+        .btn-judgement-wrong:hover {
+            transform: scale(1.03);
+        }
+
+        .btn-retry-draw {
+            background: #e2e8f0;
+            color: #334155;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 14px;
+            font-size: 17px;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        /* Printable Worksheet View */
+        #printableSection {
+            display: none;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-top: 20px;
+        }
+
+        .print-header {
+            text-align: center;
+            border-bottom: 2px solid #000;
+            padding-bottom: 12px;
+            margin-bottom: 20px;
+        }
+
+        .print-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 0 0 10px;
+        }
+
+        .print-meta-fields {
+            display: flex;
+            justify-content: space-between;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .print-item {
+            margin-bottom: 24px;
+            page-break-inside: avoid;
+        }
+
+        .print-prompt {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+
+        .print-four-lines {
+            width: 100%;
+            height: 48px;
+            position: relative;
+            border-top: 1px solid #94a3b8;
+            border-bottom: 1px dashed #94a3b8;
+            margin-top: 8px;
+        }
+
+        .print-four-lines::before {
+            content: '';
+            position: absolute;
+            top: 16px;
+            left: 0;
+            right: 0;
+            border-top: 1px dashed #f87171;
+        }
+
+        .print-four-lines::after {
+            content: '';
+            position: absolute;
+            top: 32px;
+            left: 0;
+            right: 0;
+            border-top: 2px solid #3b82f6;
+        }
+
+        @media print {
+            body {
+                background: white !important;
+                padding: 0 !important;
+            }
+            .app-shell > *:not(#printableSection) {
+                display: none !important;
+            }
+            #printableSection {
+                display: block !important;
+                padding: 0 !important;
+                box-shadow: none !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+
+<body data-user="Barry">
+    <div class="app-shell">
+        <!-- Top Bar -->
+        <div class="top-bar">
+            <div style="display: flex; align-items: center; gap: 14px;">
+                <a href="index.html" class="back-link">← 回 English Hub</a>
+                <div class="app-title-group">
+                    <h1>✍️ 英文手寫作答實踐室</h1>
+                    <p>四線三格手寫練習板 • 光影疊合對照 • 支援 iPad 與觸控筆</p>
+                </div>
+            </div>
+
+            <div class="user-switcher">
+                <button class="user-btn active" id="userBtn_Barry" onclick="switchStudent('Barry')">🚀 Barry</button>
+                <button class="user-btn" id="userBtn_Lilian" onclick="switchStudent('Lilian')">🌸 Lilian</button>
+                <button class="user-btn" id="userBtn_Anthony" onclick="switchStudent('Anthony')">⚡ Anthony</button>
+            </div>
+        </div>
+
+        <!-- Control Panel -->
+        <div class="control-panel">
+            <div class="unit-select-group">
+                <label for="unitPicker">選擇練習單元：</label>
+                <select id="unitPicker" class="unit-select" onchange="onSelectUnit(this.value)">
+                    <optgroup label="🐉 Barry (G3) 學校單字小考">
+                        <option value="g3_dragon_1" selected>🐉 G3 3.1 M2 L4 Dear Dragon — List 1 (20字)</option>
+                        <option value="g3_dragon_2">🐉 G3 3.1 M2 L4 Dear Dragon — List 2 (25字)</option>
+                        <option value="g3_dragon_3">🐉 G3 3.1 M2 L4 Dear Dragon — List 3 (25字)</option>
+                        <option value="g3_primo_1">📮 G3 3.1 M2 L3 Dear Primo — List 1 (15字)</option>
+                        <option value="g3_primo_2">📮 G3 3.1 M2 L3 Dear Primo — List 2 (25字)</option>
+                        <option value="g3_primo_3">📮 G3 3.1 M2 L3 Dear Primo — List 3 (25字)</option>
+                    </optgroup>
+                    <optgroup label="🌋 Lilian (G5) 學校單字小考">
+                        <option value="g5_eruption_1">🌋 G5 5.1 M3 L4 Eruption — List 1 (20字)</option>
+                        <option value="g5_eruption_2">🌋 G5 5.1 M3 L4 Eruption — List 2 (25字)</option>
+                        <option value="g5_eruption_3">🌋 G5 5.1 M3 L4 Eruption — List 3 (25字)</option>
+                        <option value="g5_miracle_1">🌸 G5 5.1 M2 L3 Miracle of Spring — List 1 (15字)</option>
+                        <option value="g5_miracle_2">🌸 G5 5.1 M2 L3 Miracle of Spring — List 2 (25字)</option>
+                        <option value="g5_miracle_3">🌸 G5 5.1 M2 L3 Miracle of Spring — List 3 (25字)</option>
+                    </optgroup>
+                    <optgroup label="🚂 動詞三態手寫大挑戰">
+                        <option value="g3_verbs">🚂 G3 不規則動詞三態 — 寫過去式 (#1–84)</option>
+                        <option value="g5_verbs">📚 G5 不規則動詞三態 — 寫過去分詞 (#1–50)</option>
+                    </optgroup>
+                    <optgroup label="⚠️ 錯題本專區">
+                        <option value="mistakes">⚠️ 當前學生的歷史錯題複習手寫</option>
+                    </optgroup>
+                </select>
+            </div>
+
+            <div class="stats-badge-group">
+                <div class="stat-badge" id="starBadge">⭐ 0 Stars</div>
+                <div class="stat-badge" style="background:#fff7ed; color:#c2410c;" id="troubleBadge">⚠️ 錯題: 0</div>
+                <button class="btn-print-view" onclick="togglePrintView()">🖨️ A4 紙本練習卷</button>
+            </div>
+        </div>
+
+        <!-- Main Practice Card -->
+        <div class="practice-card" id="mainInteractiveCard">
+            <!-- Progress -->
+            <div class="progress-container">
+                <span class="progress-text" id="progressLabel">題號: 1 / 20</span>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" id="progressBarFill" style="width: 5%;"></div>
+                </div>
+            </div>
+
+            <!-- Question Box -->
+            <div class="question-box">
+                <button class="speak-btn-large" onclick="speakCurrentWord()">
+                    🔊 聆聽英文發音 (Listen)
+                </button>
+                <div class="question-zh" id="qTranslation">指派、分配</div>
+                <div class="question-pos" id="qPos">[v. 動詞] • to give someone a job or task to do</div>
+                <div class="question-sentence" id="qSentence">The teacher ______ a pen pal to each student.</div>
+
+                <!-- Letter Slots Indicator -->
+                <div class="letter-boxes-display" id="letterSlots"></div>
+            </div>
+
+            <!-- Canvas Section (四線三格手寫板) -->
+            <div class="canvas-section">
+                <canvas id="hwCanvas"></canvas>
+                <!-- 半透明標準字疊合圖層 -->
+                <div class="overlay-text-layer" id="overlayLayer">
+                    <span class="overlay-word" id="overlayWordText">assign</span>
+                </div>
+            </div>
+
+            <!-- Canvas Toolbar -->
+            <div class="canvas-toolbar">
+                <div class="tool-group">
+                    <button class="tool-btn active" id="toolPencil" onclick="setTool('pencil')">✏️ 鉛筆</button>
+                    <button class="tool-btn" id="toolPen" onclick="setTool('pen')">🖊️ 鋼筆</button>
+                    <button class="tool-btn" id="toolEraser" onclick="setTool('eraser')">🧹 橡皮擦</button>
+                </div>
+
+                <div class="tool-group">
+                    <span style="font-size:14px; font-weight:800; color:#64748b;">墨水：</span>
+                    <div class="color-dot active" style="background: #1e40af;" onclick="setColor('#1e40af', this)"></div>
+                    <div class="color-dot" style="background: #0f172a;" onclick="setColor('#0f172a', this)"></div>
+                    <div class="color-dot" style="background: #7c3aed;" onclick="setColor('#7c3aed', this)"></div>
+                    <div class="color-dot" style="background: #db2777;" onclick="setColor('#db2777', this)"></div>
+                </div>
+
+                <div class="tool-group">
+                    <button class="tool-btn" onclick="undoLastStroke()">↩️ 上一步</button>
+                    <button class="tool-btn" onclick="clearCanvasBoard()">🗑️ 清空重寫</button>
+                </div>
+            </div>
+
+            <!-- Action Controls -->
+            <div class="actions-bar">
+                <button class="btn-peek" id="peekBtn" onclick="togglePeekAnswer()">👁️ 偷看答案</button>
+                <button class="btn-check-main" id="checkBtn" onclick="checkAnswer()">✨ 檢查核對 (Check Answer)</button>
+                <button class="tool-btn" onclick="skipNextWord()" style="padding: 12px 20px; font-size:16px;">➡️ 下一題</button>
+            </div>
+
+            <!-- Review Card (核對後浮現) -->
+            <div class="review-card" id="reviewCard">
+                <div class="target-word-header">
+                    <div>
+                        <span class="target-word-title" id="reviewWordTitle">assign</span>
+                        <span style="font-size:20px; color:#475569; margin-left: 12px;" id="reviewIpa">/əˈsaɪn/</span>
+                    </div>
+                    <button class="tool-btn" onclick="speakCurrentWord()" style="background:#dcfce7; color:#15803d; border-color:#86efac;">
+                        🔊 再念一次
+                    </button>
+                </div>
+                <div class="review-meta" id="reviewBreakdown">自然發音拆解：as - sign</div>
+                <div style="color:#334155; margin-top:6px; font-size:15px;" id="reviewSentenceFull">例句：The teacher assigned a pen pal to each student.</div>
+
+                <div class="review-actions-group">
+                    <button class="btn-judgement-correct" onclick="recordResult(true)">
+                        ✅ 我寫對了！ (+1 ⭐)
+                    </button>
+                    <button class="btn-judgement-wrong" onclick="recordResult(false)">
+                        ❌ 寫錯了 (記錄錯題)
+                    </button>
+                    <button class="btn-retry-draw" onclick="retryCurrentWord()">
+                        🔄 擦掉重寫一次
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Printable Worksheet Section (可列印紙本測驗卷) -->
+        <div id="printableSection">
+            <div class="no-print" style="display:flex; justify-content:space-between; margin-bottom: 20px;">
+                <button class="tool-btn" onclick="togglePrintView()" style="font-size:16px;">← 返回互動手寫板</button>
+                <button class="btn-check-main" onclick="window.print()" style="font-size:16px; padding:10px 24px;">🖨️ 立即列印此試卷 (Print)</button>
+            </div>
+
+            <div class="print-header">
+                <div class="print-title" id="printUnitTitle">Grade 3 English Spelling Worksheet</div>
+                <div class="print-meta-fields">
+                    <span>Student: <strong id="printStudentName">Barry</strong></span>
+                    <span>Class: __________</span>
+                    <span>Date: __________</span>
+                    <span>Score: ______ / 100</span>
+                </div>
+            </div>
+
+            <div id="printQuestionsList">
+                <!-- 動態注入紙本題目 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Web Audio & Speech Script -->
+    <script>
+        // ============= 題庫資料庫 =============
+        const ALL_UNITS = {"g3_dragon_1": {"id": "g3_dragon_1", "title": "🐉 G3 Dear Dragon — List 1", "grade": "G3", "category": "Barry G3 學校單字", "words": [{"word": "assign", "pos": "v. 動詞", "posType": "verb", "translation": "指派、分配", "definition": "to give someone a job or task to do", "sentence": "The teacher assigned a pen pal to each student.", "breakdown": "as - sign", "ipa": "/əˈsaɪn/"}, {"word": "mosaic", "pos": "n. 名詞", "posType": "noun", "translation": "馬賽克、鑲嵌畫", "definition": "a picture or pattern made from small pieces of glass, stone, or other material", "sentence": "The class made a mosaic using pebbles, stones, and sand.", "breakdown": "mo - sa - ic", "ipa": "/moʊˈzeɪɪk/"}, {"word": "retain", "pos": "v. 動詞", "posType": "verb", "translation": "保留、保持", "definition": "to keep or continue to have something", "sentence": "Blaise's father hopes to retain the record for melting ice.", "breakdown": "re - tain", "ipa": "/rɪˈteɪn/"}, {"word": "precious", "pos": "adj. 形容詞", "posType": "adjective", "translation": "珍貴的、寶貴的", "definition": "very valuable, important, or loved", "sentence": "Blaise keeps his rock collection in a precious box.", "breakdown": "pre - cious", "ipa": "/ˈprɛʃəs/"}, {"word": "demolition", "pos": "n. 名詞", "posType": "noun", "translation": "拆除、破壞", "definition": "the work of tearing down a building or structure", "sentence": "Blaise's dad works in demolition and tears down old buildings.", "breakdown": "dem - o - li - tion", "ipa": "/ˌdɛməˈlɪʃən/"}, {"word": "project", "pos": "n. 名詞", "posType": "noun", "translation": "專案、研究計畫", "definition": "a planned task that takes time and effort to complete", "sentence": "Blaise completed a science project about a volcano.", "breakdown": "proj - ect", "ipa": "/ˈprɒdʒɛkt/"}, {"word": "sincerely", "pos": "adv. 副詞", "posType": "adverb", "translation": "真誠地、由衷地", "definition": "in an honest and genuine way; often used to end a letter", "sentence": "George ended his letter with the word sincerely.", "breakdown": "sin - cere - ly", "ipa": "/sɪnˈsɪərli/"}, {"word": "design", "pos": "v. 動詞", "posType": "verb", "translation": "設計、構思", "definition": "to plan or create how something will look or work", "sentence": "George and his dad designed a giant fort.", "breakdown": "de - sign", "ipa": "/dɪˈzaɪn/"}, {"word": "skydive", "pos": "v. 動詞", "posType": "verb", "translation": "跳傘", "definition": "to jump from an aircraft and fall before opening a parachute", "sentence": "Blaise likes to skydive near Falcor Peak.", "breakdown": "sky - dive", "ipa": "/ˈskaɪdaɪv/"}, {"word": "destroy", "pos": "v. 動詞", "posType": "verb", "translation": "摧毀、破壞", "definition": "to damage something so badly that it cannot be used or no longer exists", "sentence": "George decided to destroy his fort one night.", "breakdown": "de - stroy", "ipa": "/dɪˈstrɔɪ/"}, {"word": "pebble", "pos": "n. 名詞", "posType": "noun", "translation": "鵝卵石、小圓石", "definition": "a small, smooth, rounded stone", "sentence": "The students used pebbles to make a mosaic.", "breakdown": "peb - ble", "ipa": "/ˈpɛbəl/"}, {"word": "fair", "pos": "n. 名詞", "posType": "noun", "translation": "展覽會、市集", "definition": "an event where people display projects, products, or skills", "sentence": "George won a prize at the school science fair.", "breakdown": "fair", "ipa": "/fɛər/"}, {"word": "tower", "pos": "v. 動詞", "posType": "verb", "translation": "高聳、聳立", "definition": "to rise or stand much higher than nearby things", "sentence": "The volcano will tower over the other science projects.", "breakdown": "tow - er", "ipa": "/ˈtaʊər/"}, {"word": "psyched", "pos": "adj. 形容詞", "posType": "adjective", "translation": "極度興奮的、期待的", "definition": "very excited and eager about something", "sentence": "Blaise is psyched about the pen pal picnic.", "breakdown": "psyched", "ipa": "/saɪkt/"}, {"word": "poetry", "pos": "n. 名詞", "posType": "noun", "translation": "詩歌、詩作", "definition": "writing arranged in poems to express ideas, feelings, or stories", "sentence": "The students wrote poetry in their letters to their pen pals.", "breakdown": "po - et - ry", "ipa": "/ˈpoʊɪtri/"}, {"word": "forehead", "pos": "n. 名詞", "posType": "noun", "translation": "前額、額頭", "definition": "the part of the face above the eyes and below the hair", "sentence": "Mom gently kissed the baby on the forehead.", "breakdown": "fore - head", "ipa": "/ˈfɔːrhɛd/"}, {"word": "eyebrow", "pos": "n. 名詞", "posType": "noun", "translation": "眉毛", "definition": "the strip of hair growing on the ridge above a person's eye socket", "sentence": "He raised his eyebrow in surprise when he heard the news.", "breakdown": "eye - brow", "ipa": "/ˈaɪbraʊ/"}, {"word": "earlobe", "pos": "n. 名詞", "posType": "noun", "translation": "耳垂", "definition": "the soft, fleshy lower part of the external ear", "sentence": "She had her earlobe pierced so she could wear earrings.", "breakdown": "ear - lobe", "ipa": "/ˈɪərloʊb/"}, {"word": "knuckle", "pos": "n. 名詞", "posType": "noun", "translation": "指關節", "definition": "a joint of a finger, especially one connecting a finger to the hand", "sentence": "He knocked on the wooden door with his knuckles.", "breakdown": "knuck - le", "ipa": "/ˈnʌkəl/"}, {"word": "wrist", "pos": "n. 名詞", "posType": "noun", "translation": "手腕", "definition": "the joint connecting the hand with the forearm", "sentence": "She wears a colorful fitness tracker around her wrist.", "breakdown": "wrist", "ipa": "/rɪst/"}]}, "g3_dragon_2": {"id": "g3_dragon_2", "title": "🐉 G3 Dear Dragon — List 2", "grade": "G3", "category": "Barry G3 學校單字", "words": [{"word": "holiday", "pos": "n. 名詞", "posType": "noun", "translation": "節日、假期", "definition": "a special day of celebration or rest", "sentence": "The family gathered to celebrate the holiday with a festive meal.", "breakdown": "hol - i - day", "ipa": "/ˈhɒlɪdeɪ/"}, {"word": "toast", "pos": "n. 名詞", "posType": "noun", "translation": "烤麵包、吐司", "definition": "sliced bread that has been browned by heat", "sentence": "We had toast with scrambled eggs for breakfast.", "breakdown": "toast", "ipa": "/toʊst/"}, {"word": "moment", "pos": "n. 名詞", "posType": "noun", "translation": "片刻、瞬間", "definition": "a very short period of time", "sentence": "I'll be with you in a moment.", "breakdown": "mo - ment", "ipa": "/ˈmoʊmənt/"}, {"word": "eager", "pos": "adj. 形容詞", "posType": "adjective", "translation": "熱切的、渴望的", "definition": "wanting very much to do or have something", "sentence": "The students were eager to meet their pen pals.", "breakdown": "ea - ger", "ipa": "/ˈiːɡər/"}, {"word": "blossom", "pos": "v. 動詞", "posType": "verb", "translation": "開花、綻放", "definition": "to produce flowers or open into a flower", "sentence": "The cherry trees blossom in the spring.", "breakdown": "blos - som", "ipa": "/ˈblɒsəm/"}, {"word": "stuff", "pos": "n. 名詞", "posType": "noun", "translation": "東西、物品", "definition": "things or materials whose exact names are not stated", "sentence": "We packed all our camping stuff into the car.", "breakdown": "stuff", "ipa": "/stʌf/"}, {"word": "pay", "pos": "v. 動詞", "posType": "verb", "translation": "付錢、支付", "definition": "to give money for something bought or a service received", "sentence": "I will pay for the groceries at the checkout counter.", "breakdown": "pay", "ipa": "/peɪ/"}, {"word": "cheese", "pos": "n. 名詞", "posType": "noun", "translation": "起司、乳酪", "definition": "a food made from milk", "sentence": "We added cheese to the sandwiches.", "breakdown": "cheese", "ipa": "/tʃiːz/"}, {"word": "eighteen", "pos": "adj. 形容詞", "posType": "adjective", "translation": "十八的", "definition": "being one more than seventeen", "sentence": "There were eighteen books on the table.", "breakdown": "eigh - teen", "ipa": "/ˌeɪˈtiːn/"}, {"word": "elbow", "pos": "n. 名詞", "posType": "noun", "translation": "手肘", "definition": "the joint that bends in the middle of the arm", "sentence": "I bumped my elbow on the door frame.", "breakdown": "el - bow", "ipa": "/ˈɛlboʊ/"}, {"word": "program", "pos": "n. 名詞", "posType": "noun", "translation": "程式、計畫", "definition": "a set of instructions that tells a computer what to do", "sentence": "A computer program tells the machine what to do.", "breakdown": "pro - gram", "ipa": "/ˈproʊɡræm/"}, {"word": "shiny", "pos": "adj. 形容詞", "posType": "adjective", "translation": "發亮的、有光澤的", "definition": "having a bright surface that reflects light", "sentence": "The new car had a shiny red paint job.", "breakdown": "shin - y", "ipa": "/ˈʃaɪni/"}, {"word": "piles", "pos": "n. 名詞", "posType": "noun", "translation": "一堆、堆疊", "definition": "a group of things placed or stacked together", "sentence": "There were piles of leaves on the ground.", "breakdown": "piles", "ipa": "/paɪlz/"}, {"word": "fossil", "pos": "n. 名詞", "posType": "noun", "translation": "化石", "definition": "something that has turned to stone or left a mark in rock from a plant or animal that lived long ago", "sentence": "Giulia found an ancient fossil while digging in the sand.", "breakdown": "fos - sil", "ipa": "/ˈfɒsəl/"}, {"word": "Friday", "pos": "n. 名詞", "posType": "noun", "translation": "星期五", "definition": "the day of the week after Thursday and before Saturday", "sentence": "My family often has pizza for dinner on Friday.", "breakdown": "Fri - day", "ipa": "/ˈfraɪdeɪ/"}, {"word": "abdomen", "pos": "n. 名詞", "posType": "noun", "translation": "腹部", "definition": "the part of the body between the chest and the hips, containing the stomach and intestines", "sentence": "Doing sit-ups regularly helps strengthen your abdomen muscles.", "breakdown": "ab - do - men", "ipa": "/ˈæbdəmən/"}, {"word": "kidney", "pos": "n. 名詞", "posType": "noun", "translation": "腎臟", "definition": "one of a pair of organs in the body that filter waste products from the blood", "sentence": "Drinking plenty of water helps your kidneys work properly.", "breakdown": "kid - ney", "ipa": "/ˈkɪdni/"}, {"word": "liver", "pos": "n. 名詞", "posType": "noun", "translation": "肝臟", "definition": "a large organ in the body that cleans the blood and produces bile", "sentence": "The liver is one of the largest and most vital internal organs.", "breakdown": "liv - er", "ipa": "/ˈlɪvər/"}, {"word": "lungs", "pos": "n. 名詞", "posType": "noun", "translation": "肺臟", "definition": "the two organs in the chest with which people and animals breathe", "sentence": "She took a deep breath, filling her lungs with fresh morning air.", "breakdown": "lungs", "ipa": "/lʌŋz/"}, {"word": "stomach", "pos": "n. 名詞", "posType": "noun", "translation": "胃", "definition": "the organ inside the body where food goes and begins to be digested", "sentence": "He had an empty stomach because he skipped breakfast.", "breakdown": "stom - ach", "ipa": "/ˈstʌmək/"}, {"word": "small intestine", "pos": "n. 名詞", "posType": "noun", "translation": "小腸", "definition": "the long narrow part of the intestine between the stomach and large intestine where most food is absorbed", "sentence": "Nutrients from our food are absorbed into the bloodstream through the small intestine.", "breakdown": "small in - tes - tine", "ipa": "/smɔːl ɪnˈtɛstɪn/"}, {"word": "large intestine", "pos": "n. 名詞", "posType": "noun", "translation": "大腸", "definition": "the wide lower part of the intestine that absorbs water and forms waste", "sentence": "The large intestine absorbs remaining water from digested matter before waste is eliminated.", "breakdown": "large in - tes - tine", "ipa": "/lɑːrdʒ ɪnˈtɛstɪn/"}, {"word": "cranium", "pos": "n. 名詞", "posType": "noun", "translation": "頭蓋骨", "definition": "the skull, especially the part enclosing and protecting the brain", "sentence": "Wearing a bicycle helmet helps protect your cranium from head injuries.", "breakdown": "cra - ni - um", "ipa": "/ˈkreɪniəm/"}, {"word": "cerebellum", "pos": "n. 名詞", "posType": "noun", "translation": "小腦", "definition": "the part of the brain at the back of the skull that coordinates movement and balance", "sentence": "Your cerebellum controls physical balance and coordination when you ride a bike.", "breakdown": "cer - e - bel - lum", "ipa": "/ˌsɛrɪˈbɛləm/"}, {"word": "cerebrum", "pos": "n. 名詞", "posType": "noun", "translation": "大腦", "definition": "the principal and most front part of the brain that controls thinking, learning, and emotions", "sentence": "The cerebrum is the largest part of the human brain responsible for speech and memory.", "breakdown": "cer - e - brum", "ipa": "/ˈsɛrɪbrəm/"}]}, "g3_dragon_3": {"id": "g3_dragon_3", "title": "🐉 G3 Dear Dragon — List 3", "grade": "G3", "category": "Barry G3 學校單字", "words": [{"word": "sock", "pos": "n. 名詞", "posType": "noun", "translation": "短襪", "definition": "soft covering worn on the foot, usually inside shoes", "sentence": "The mismatched socks made everyone laugh.", "breakdown": "sock", "ipa": "/sɒk/"}, {"word": "rain", "pos": "n. 名詞", "posType": "noun", "translation": "雨水、降雨", "definition": "water that falls in drops from clouds", "sentence": "I love the sound of rain falling on the roof.", "breakdown": "rain", "ipa": "/reɪn/"}, {"word": "mind", "pos": "n. 名詞", "posType": "noun", "translation": "心思、頭腦", "definition": "the part of a person used for thinking, feeling, and remembering", "sentence": "It's important to keep your mind active.", "breakdown": "mind", "ipa": "/maɪnd/"}, {"word": "math", "pos": "n. 名詞", "posType": "noun", "translation": "數學", "definition": "the study of numbers, shapes, and patterns", "sentence": "Math is used in science and engineering.", "breakdown": "math", "ipa": "/mæθ/"}, {"word": "easy", "pos": "adj. 形容詞", "posType": "adjective", "translation": "容易的、簡單的", "definition": "not difficult; requiring little effort", "sentence": "The test was surprisingly easy.", "breakdown": "eas - y", "ipa": "/ˈiːzi/"}, {"word": "forest", "pos": "n. 名詞", "posType": "noun", "translation": "森林", "definition": "a large area of land covered with trees", "sentence": "He went for a hike in the forest.", "breakdown": "for - est", "ipa": "/ˈfɒrɪst/"}, {"word": "drop", "pos": "v. 動詞", "posType": "verb", "translation": "掉落、使落下", "definition": "to fall or let something fall", "sentence": "Be careful not to drop the glass.", "breakdown": "drop", "ipa": "/drɒp/"}, {"word": "respect", "pos": "n. 名詞", "posType": "noun", "translation": "尊敬、敬意", "definition": "a feeling of admiration or care for someone or something", "sentence": "I have a lot of respect for my teachers.", "breakdown": "re - spect", "ipa": "/rɪˈspɛkt/"}, {"word": "clever", "pos": "adj. 形容詞", "posType": "adjective", "translation": "聰明的、伶俐的", "definition": "quick to understand, learn, or think of good ideas", "sentence": "The inventor came up with a clever solution.", "breakdown": "clev - er", "ipa": "/ˈklɛvər/"}, {"word": "polish", "pos": "v. 動詞", "posType": "verb", "translation": "擦亮、磨光", "definition": "to make something smooth and shiny by rubbing it", "sentence": "Please polish the silverware before dinner.", "breakdown": "pol - ish", "ipa": "/ˈpɒlɪʃ/"}, {"word": "limit", "pos": "v. 動詞", "posType": "verb", "translation": "限制、限定", "definition": "to keep something from going beyond a certain amount or level", "sentence": "It's important to limit your screen time.", "breakdown": "lim - it", "ipa": "/ˈlɪmɪt/"}, {"word": "silent", "pos": "adj. 形容詞", "posType": "adjective", "translation": "無聲的、安靜的", "definition": "making no sound; completely quiet", "sentence": "The library was silent.", "breakdown": "si - lent", "ipa": "/ˈsaɪlənt/"}, {"word": "cozy", "pos": "adj. 形容詞", "posType": "adjective", "translation": "溫暖舒適的", "definition": "warm, comfortable, and relaxing", "sentence": "The small cabin was cozy and warm.", "breakdown": "co - zy", "ipa": "/ˈkoʊzi/"}, {"word": "mist", "pos": "n. 名詞", "posType": "noun", "translation": "薄霧", "definition": "a cloud of tiny water drops close to the ground", "sentence": "The morning mist covered the valley.", "breakdown": "mist", "ipa": "/mɪst/"}, {"word": "raisin", "pos": "n. 名詞", "posType": "noun", "translation": "葡萄乾", "definition": "a dried grape", "sentence": "My favorite cookie is an oatmeal raisin cookie.", "breakdown": "rai - sin", "ipa": "/ˈreɪzən/"}, {"word": "return address", "pos": "n. 名詞", "posType": "noun", "translation": "寄信人地址", "definition": "the address of the sender written on an envelope or package", "sentence": "Write your return address in the top left corner of the envelope.", "breakdown": "re - turn ad - dress", "ipa": "/rɪˈtɜːrn əˈdrɛs/"}, {"word": "address of the recipient", "pos": "n. 名詞", "posType": "noun", "translation": "收件人地址", "definition": "the location where the letter or package is to be delivered", "sentence": "Make sure the address of the recipient is written clearly and correctly.", "breakdown": "ad - dress of the re - cip - i - ent", "ipa": "/əˈdrɛs ʌv ðə rɪˈsɪpiənt/"}, {"word": "zip code/postal code", "pos": "n. 名詞", "posType": "noun", "translation": "郵遞區號、區域號碼", "definition": "a postal code consisting of a series of letters or digits used to sort mail", "sentence": "Don't forget to include the zip code to ensure fast delivery.", "breakdown": "zip code / pos - tal code", "ipa": "/ˈzɪp koʊd / ˈpoʊstəl koʊd/"}, {"word": "postcard", "pos": "n. 名詞", "posType": "noun", "translation": "明信片", "definition": "a card for sending a message by mail without an envelope, often having a picture on one side", "sentence": "She sent a colorful postcard to her grandparents while on vacation.", "breakdown": "post - card", "ipa": "/ˈpoʊstkɑːrd/"}, {"word": "postmark", "pos": "n. 名詞", "posType": "noun", "translation": "郵戳", "definition": "an official stamp printed on letters showing the date and place of mailing", "sentence": "The letter bore a postmark dated November 15th.", "breakdown": "post - mark", "ipa": "/ˈpoʊstmɑːrk/"}, {"word": "envelope", "pos": "n. 名詞", "posType": "noun", "translation": "信封", "definition": "a flat paper container used for enclosing a letter or document", "sentence": "He slipped the birthday card into a crisp white envelope.", "breakdown": "en - ve - lope", "ipa": "/ˈɛnvəloʊp/"}, {"word": "stamp", "pos": "n. 名詞", "posType": "noun", "translation": "郵票", "definition": "a small adhesive piece of paper stuck to mail to show payment for postage", "sentence": "She stuck a commemorative stamp in the upper right corner of the envelope.", "breakdown": "stamp", "ipa": "/stæmp/"}, {"word": "parcel", "pos": "n. 名詞", "posType": "noun", "translation": "包裹", "definition": "a package wrapped in paper and tied, ready to be sent by mail", "sentence": "The mail carrier delivered a heavy parcel to our front doorstep.", "breakdown": "par - cel", "ipa": "/ˈpɑːrsəl/"}, {"word": "courier", "pos": "n. 名詞", "posType": "noun", "translation": "快遞員", "definition": "a person or company employed to deliver messages, packages, or mail quickly", "sentence": "The courier arrived promptly on a motorbike to pick up the urgent documents.", "breakdown": "cou - ri - er", "ipa": "/ˈkʊriər/"}, {"word": "express mail", "pos": "n. 名詞", "posType": "noun", "translation": "快捷信件、特快郵件", "definition": "an accelerated postal delivery service for which the customer pays a higher fee", "sentence": "He sent the passport application via express mail so it would arrive tomorrow.", "breakdown": "ex - press mail", "ipa": "/ɪkˈsprɛs meɪl/"}]}, "g3_primo_1": {"id": "g3_primo_1", "title": "📮 G3 Dear Primo — List 1", "grade": "G3", "category": "Barry G3 學校單字", "words": [{"word": "video", "pos": "n. 名詞", "posType": "noun", "translation": "影片", "definition": "a recording of moving pictures and sound watched on a screen", "sentence": "Charlie likes to play video games with his friend.", "breakdown": "vid - e - o", "ipa": "/ˈvɪdioʊ/"}, {"word": "costume", "pos": "n. 名詞", "posType": "noun", "translation": "服裝；戲服", "definition": "special clothes worn to look like someone or something else", "sentence": "The sparkly costume ripped during the crowded parade because it was too tight.", "breakdown": "cos - tume", "ipa": "/ˈkɒstjuːm/"}, {"word": "block", "pos": "n. 名詞", "posType": "noun", "translation": "街區", "definition": "the length of one street, usually the distance between two intersections", "sentence": "The firefighters closed off the block around the hydrant.", "breakdown": "block", "ipa": "/blɒk/"}, {"word": "hydrant", "pos": "n. 名詞", "posType": "noun", "translation": "消防栓", "definition": "an outdoor pipe firefighters use to get water for fires", "sentence": "Firefighters opened the hydrant to spray water into the street.", "breakdown": "hy - drant", "ipa": "/ˈhaɪdrənt/"}, {"word": "march", "pos": "v. 動詞", "posType": "verb", "translation": "前進；行軍", "definition": "to walk with steady steps, often in a group", "sentence": "People in uniforms march down the street during parades.", "breakdown": "march", "ipa": "/mɑːrtʃ/"}, {"word": "surround", "pos": "v. 動詞", "posType": "verb", "translation": "環繞；包圍", "definition": "to be all around something on every side", "sentence": "Mountains and trees surround Carlitos's farm.", "breakdown": "sur - round", "ipa": "/səˈraʊnd/"}, {"word": "skyscraper", "pos": "n. 名詞", "posType": "noun", "translation": "摩天大樓", "definition": "a very tall building with many floors", "sentence": "Charlie can see a skyscraper from his window.", "breakdown": "sky - scrap - er", "ipa": "/ˈskaɪskreɪpər/"}, {"word": "tickle", "pos": "v. 動詞", "posType": "verb", "translation": "搔癢；輕觸", "definition": "to touch or brush lightly, often causing laughter", "sentence": "The tallest skyscrapers seem to tickle the clouds.", "breakdown": "tick - le", "ipa": "/ˈtɪkəl/"}, {"word": "stoop", "pos": "n. 名詞", "posType": "noun", "translation": "門廊；階梯門階", "definition": "a small porch or steps at a building entrance", "sentence": "Charlie plays games with his friends near the stoop.", "breakdown": "stoop", "ipa": "/stuːp/"}, {"word": "parade", "pos": "n. 名詞", "posType": "noun", "translation": "遊行", "definition": "a public event where people march, often with music and costumes", "sentence": "The colorful parade moved along the wide avenue.", "breakdown": "pa - rade", "ipa": "/pəˈreɪd/"}, {"word": "tradition", "pos": "n. 名詞", "posType": "noun", "translation": "傳統", "definition": "a special activity or way of doing something that is passed down from generation to generation", "sentence": "Carlitos's favorite tradition is attending the December Posadas.", "breakdown": "tra - di - tion", "ipa": "/trəˈdɪʃən/"}, {"word": "slice", "pos": "n. 名詞", "posType": "noun", "translation": "薄片；一片", "definition": "a thin, flat piece cut from something", "sentence": "Ben ate a warm slice of pizza after school.", "breakdown": "slice", "ipa": "/slaɪs/"}, {"word": "zoom", "pos": "v. 動詞", "posType": "verb", "translation": "快速移動；呼嘯而過", "definition": "to move very quickly", "sentence": "Charlie sees cars zooming by from his window.", "breakdown": "zoom", "ipa": "/zuːm/"}, {"word": "break-dancer", "pos": "n. 名詞", "posType": "noun", "translation": "霹靂舞者", "definition": "a person who performs breakdancing with spins and flips", "sentence": "The amazing break-dancer spun near the busy corner.", "breakdown": "break - dan - cer", "ipa": "/ˈbreɪkˌdænsər/"}, {"word": "piñata", "pos": "n. 名詞", "posType": "noun", "translation": "皮納塔（裝滿糖果的紙糊容器）", "definition": "a decorated container filled with treats and broken at a celebration", "sentence": "At the end of each Posada, the children break a piñata filled with treats.", "breakdown": "pi - ña - ta", "ipa": "/pɪnˈjɑːtə/"}]}, "g3_primo_2": {"id": "g3_primo_2", "title": "📮 G3 Dear Primo — List 2", "grade": "G3", "category": "Barry G3 學校單字", "words": [{"word": "load", "pos": "v. 動詞", "posType": "verb", "translation": "裝載；裝上", "definition": "to put items into or onto a vehicle or container", "sentence": "The moving company used a forklift to load the heavy boxes onto the truck.", "breakdown": "load", "ipa": "/loʊd/"}, {"word": "open", "pos": "v. 動詞", "posType": "verb", "translation": "打開", "definition": "to move something so it is no longer closed", "sentence": "I slowly opened the creaky door to the attic full of old toys and books.", "breakdown": "o - pen", "ipa": "/ˈoʊpən/"}, {"word": "told", "pos": "v. 動詞(過去式)", "posType": "verb", "translation": "告訴（tell的過去式）", "definition": "to give information or instructions to someone", "sentence": "Charlie's mom told him to brush his teeth and go to bed.", "breakdown": "told", "ipa": "/toʊld/"}, {"word": "yellow", "pos": "adj. 形容詞", "posType": "adjective", "translation": "黃色的", "definition": "having the color of the sun or a lemon", "sentence": "The school bus's bright yellow color helps it to be easily seen by other drivers on the road.", "breakdown": "yel - low", "ipa": "/ˈjɛloʊ/"}, {"word": "soak", "pos": "v. 動詞", "posType": "verb", "translation": "浸泡；浸濕", "definition": "to leave something in liquid until very wet", "sentence": "To remove the stubborn food stain, my mom soaked the shirt in a mixture of soap and warm water.", "breakdown": "soak", "ipa": "/soʊk/"}, {"word": "shadow", "pos": "n. 名詞", "posType": "noun", "translation": "影子；陰影", "definition": "a dark shape made when something blocks light", "sentence": "During the puppet show, the children used their hands to create animal shadows on the wall.", "breakdown": "shad - ow", "ipa": "/ˈʃædoʊ/"}, {"word": "toe", "pos": "n. 名詞", "posType": "noun", "translation": "腳趾", "definition": "one of the five small parts at the end of a foot", "sentence": "I accidentally bumped my toe on the leg of the chair and cried out in pain.", "breakdown": "toe", "ipa": "/toʊ/"}, {"word": "follow", "pos": "v. 動詞", "posType": "verb", "translation": "跟隨；跟著", "definition": "to go behind or along the same path as someone or something", "sentence": "The hikers followed the trail through the forest, using a compass and map to guide their way.", "breakdown": "fol - low", "ipa": "/ˈfɒloʊ/"}, {"word": "glow", "pos": "v. 動詞", "posType": "verb", "translation": "發光；發熱", "definition": "to give off a soft, steady light", "sentence": "The fireflies glowed like tiny lanterns as they danced through the summer night air.", "breakdown": "glow", "ipa": "/ɡloʊ/"}, {"word": "sold", "pos": "v. 動詞(過去式)", "posType": "verb", "translation": "賣出（sell的過去式）", "definition": "to exchange something for money", "sentence": "Carlitos and his family sold corn and prickly pears at the market.", "breakdown": "sold", "ipa": "/soʊld/"}, {"word": "window", "pos": "n. 名詞", "posType": "noun", "translation": "窗戶", "definition": "an opening in a wall, usually covered with glass", "sentence": "I opened the window to let in the fresh air and the sounds of birds singing in the trees.", "breakdown": "win - dow", "ipa": "/ˈwɪndoʊ/"}, {"word": "almost", "pos": "adv. 副詞", "posType": "adverb", "translation": "幾乎；差不多", "definition": "very nearly, but not completely", "sentence": "The basketball player almost made the game-winning shot, but the ball bounced off the rim.", "breakdown": "al - most", "ipa": "/ˈɔːlmoʊst/"}, {"word": "boast", "pos": "v. 動詞", "posType": "verb", "translation": "自誇；吹噓", "definition": "to talk with too much pride about yourself or your achievements", "sentence": "The boy boasted about his new video game console, telling everyone how awesome it was.", "breakdown": "boast", "ipa": "/boʊst/"}, {"word": "doe", "pos": "n. 名詞", "posType": "noun", "translation": "雌鹿；母鹿", "definition": "an adult female deer", "sentence": "A doe and her two fawns grazed peacefully in the meadow.", "breakdown": "doe", "ipa": "/doʊ/"}, {"word": "chosen", "pos": "v. 動詞(過去分詞)", "posType": "verb", "translation": "挑選（choose的過去分詞）", "definition": "to select one person or thing from a group", "sentence": "The students had chosen a leader after a long argument in class.", "breakdown": "cho - sen", "ipa": "/ˈtʃoʊzən/"}, {"word": "class schedule", "pos": "n. 名詞", "posType": "noun", "translation": "課表", "definition": "a timetable that shows the days and times when classes meet", "sentence": "I checked my class schedule to see which classroom we should go to next.", "breakdown": "class sched - ule", "ipa": "/klæs ˈskɛdʒuːl/"}, {"word": "announcement speaker", "pos": "n. 名詞", "posType": "noun", "translation": "廣播裝置", "definition": "a loudspeaker used to broadcast notices and messages across the school", "sentence": "The principal made an important morning notice through the announcement speaker.", "breakdown": "an - nounce - ment speak - er", "ipa": "/əˈnaʊnsmənt ˈspiːkər/"}, {"word": "platform", "pos": "n. 名詞", "posType": "noun", "translation": "講台", "definition": "a raised floor or stage in the front of a classroom for the teacher to speak from", "sentence": "The teacher stood on the platform so all students could clearly see the lesson.", "breakdown": "plat - form", "ipa": "/ˈplætfɔːrm/"}, {"word": "shoe rack", "pos": "n. 名詞", "posType": "noun", "translation": "鞋櫃", "definition": "a storage unit or shelf where shoes are placed neatly", "sentence": "Please take off your outdoor shoes and place them neatly on the shoe rack.", "breakdown": "shoe rack", "ipa": "/ʃuː ræk/"}, {"word": "cabinet", "pos": "n. 名詞", "posType": "noun", "translation": "置物櫃", "definition": "a piece of furniture with shelves or drawers used for storing supplies", "sentence": "We store all our extra art supplies and textbooks in the classroom cabinet.", "breakdown": "cab - i - net", "ipa": "/ˈkæbɪnɪt/"}, {"word": "globe", "pos": "n. 名詞", "posType": "noun", "translation": "地球儀", "definition": "a spherical model of the Earth showing continents and oceans", "sentence": "We spun the globe on the desk to find the location of Taiwan.", "breakdown": "globe", "ipa": "/ɡloʊb/"}, {"word": "fluorescent lights", "pos": "n. 名詞", "posType": "noun", "translation": "日光燈", "definition": "tubular electric lamps that provide bright illumination in classrooms", "sentence": "The teacher turned on the fluorescent lights because it was raining outside.", "breakdown": "fluo - res - cent lights", "ipa": "/ˌflʊəˈrɛsənt laɪts/"}, {"word": "projector screen", "pos": "n. 名詞", "posType": "noun", "translation": "螢幕", "definition": "a flat white surface onto which a projector displays slides or videos", "sentence": "The teacher pulled down the projector screen to show us a science video.", "breakdown": "pro - jec - tor screen", "ipa": "/prəˈdʒɛktər skriːn/"}, {"word": "projector", "pos": "n. 名詞", "posType": "noun", "translation": "投影機", "definition": "an optical device that projects images onto a large screen", "sentence": "The computer was connected to the projector so we could view the presentation.", "breakdown": "pro - jec - tor", "ipa": "/prəˈdʒɛktər/"}, {"word": "remote control", "pos": "n. 名詞", "posType": "noun", "translation": "遙控器", "definition": "a handheld device used to operate electronic equipment from a distance", "sentence": "The teacher used the remote control to turn on the air conditioner.", "breakdown": "re - mote con - trol", "ipa": "/rɪˈmoʊt kənˈtroʊl/"}]}, "g3_primo_3": {"id": "g3_primo_3", "title": "📮 G3 Dear Primo — List 3", "grade": "G3", "category": "Barry G3 學校單字", "words": [{"word": "subway", "pos": "n. 名詞", "posType": "noun", "translation": "地鐵", "definition": "an underground railway system used for travel in a city", "sentence": "We took the fast subway at the crowded city station.", "breakdown": "sub - way", "ipa": "/ˈsʌbweɪ/"}, {"word": "tunnel", "pos": "n. 名詞", "posType": "noun", "translation": "隧道；地道", "definition": "a long passage built underground or through a hill", "sentence": "The subway traveled through a long tunnel beneath the city.", "breakdown": "tun - nel", "ipa": "/ˈtʌnəl/"}, {"word": "grow", "pos": "v. 動詞", "posType": "verb", "translation": "成長；種植", "definition": "to become larger or to raise plants and crops", "sentence": "The sunflower grew tall because the garden stayed sunny.", "breakdown": "grow", "ipa": "/ɡroʊ/"}, {"word": "approach", "pos": "v. 動詞", "posType": "verb", "translation": "接近；走近", "definition": "to move closer to someone or something", "sentence": "The girl approached the lost puppy near the back gate.", "breakdown": "ap - proach", "ipa": "/əˈproʊtʃ/"}, {"word": "alone", "pos": "adj. 形容詞", "posType": "adjective", "translation": "單獨的；孤獨的", "definition": "without anyone else; not with other people", "sentence": "She felt alone after the parade because everyone left early.", "breakdown": "a - lone", "ipa": "/əˈloʊn/"}, {"word": "love", "pos": "v. 動詞", "posType": "verb", "translation": "愛；熱愛", "definition": "a strong, warm feeling of care and happiness for someone or something", "sentence": "She loves her dad because he always protects her.", "breakdown": "love", "ipa": "/lʌv/"}, {"word": "happy", "pos": "adj. 形容詞", "posType": "adjective", "translation": "開心的；快樂的", "definition": "feeling or showing joy or pleasure", "sentence": "The tired girl felt happy because her drawing of a rainbow won first place.", "breakdown": "hap - py", "ipa": "/ˈhæpi/"}, {"word": "below", "pos": "prep. 介系詞", "posType": "preposition", "translation": "在…下方", "definition": "in a lower position than something else", "sentence": "The scared cat hid below the table during the storm.", "breakdown": "be - low", "ipa": "/bɪˈloʊ/"}, {"word": "believe", "pos": "v. 動詞", "posType": "verb", "translation": "相信", "definition": "to think that something is true", "sentence": "She believed the kind student after he explained what had happened after the accident.", "breakdown": "be - lieve", "ipa": "/bɪˈliːv/"}, {"word": "feel", "pos": "v. 動詞", "posType": "verb", "translation": "感受；感覺", "definition": "to experience an emotion or physical sensation", "sentence": "He could feel the smooth rock during the nature hike.", "breakdown": "feel", "ipa": "/fiːl/"}, {"word": "revisit", "pos": "v. 動詞", "posType": "verb", "translation": "重遊；重新考慮", "definition": "to visit, examine, or think about something again", "sentence": "We revisited the quiet museum because the lights went out last time.", "breakdown": "re - vis - it", "ipa": "/ˌriːˈvɪzɪt/"}, {"word": "redraw", "pos": "v. 動詞", "posType": "verb", "translation": "重畫；修改", "definition": "to draw something again, usually to improve or correct it", "sentence": "She redrew the messy picture because the first one ripped.", "breakdown": "re - draw", "ipa": "/ˌriːˈdrɔː/"}, {"word": "pregame", "pos": "adj. 形容詞", "posType": "adjective", "translation": "比賽前的", "definition": "happening before a game", "sentence": "The players stretched during the short pregame warm-up before the tournament.", "breakdown": "pre - game", "ipa": "/ˈpriːɡeɪm/"}, {"word": "swoosh", "pos": "interj. 感嘆詞", "posType": "interjection", "translation": "（風聲、球刷網聲）嗖的一聲", "definition": "a word used to imitate the sound of something moving quickly through the air", "sentence": "Swoosh! The basketball flew through the hoop.", "breakdown": "swoosh", "ipa": "/swuːʃ/"}, {"word": "dribble", "pos": "v. 動詞", "posType": "verb", "translation": "運球；運球行進", "definition": "to move a ball by bouncing it repeatedly while running or walking", "sentence": "He dribbled the basketball across the long court with speed.", "breakdown": "drib - ble", "ipa": "/ˈdrɪbəl/"}, {"word": "necklace", "pos": "n. 名詞", "posType": "noun", "translation": "項鍊", "definition": "a piece of jewelry worn around the neck", "sentence": "She wore a beautiful gold necklace for her birthday party.", "breakdown": "neck - lace", "ipa": "/ˈnɛklɪs/"}, {"word": "bracelet", "pos": "n. 名詞", "posType": "noun", "translation": "手鍊", "definition": "an ornamental band or chain worn on the wrist or arm", "sentence": "He gave his sister a shiny silver bracelet as a graduation gift.", "breakdown": "brace - let", "ipa": "/ˈbreɪslɪt/"}, {"word": "earrings", "pos": "n. 名詞", "posType": "noun", "translation": "耳環", "definition": "pieces of jewelry worn on or hanging from the earlobes", "sentence": "She chose a pair of sparkling pearl earrings to match her dress.", "breakdown": "ear - rings", "ipa": "/ˈɪrɪŋz/"}, {"word": "pin", "pos": "n. 名詞", "posType": "noun", "translation": "胸針", "definition": "a decorative piece of jewelry with a clasp that attaches to clothing", "sentence": "She fastened a delicate floral pin onto her coat lapel.", "breakdown": "pin", "ipa": "/pɪn/"}, {"word": "tie clip", "pos": "n. 名詞", "posType": "noun", "translation": "領帶夾", "definition": "a piece of jewelry used to fasten a necktie to the front of a dress shirt", "sentence": "Dad clipped a neat silver tie clip onto his tie before the ceremony.", "breakdown": "tie clip", "ipa": "/taɪ klɪp/"}, {"word": "key chain", "pos": "n. 名詞", "posType": "noun", "translation": "鑰匙圈", "definition": "a small chain or ring holding several keys together with a small ornament", "sentence": "She bought a cute star-shaped key chain during her trip.", "breakdown": "key chain", "ipa": "/kiː tʃeɪn/"}, {"word": "shawl", "pos": "n. 名詞", "posType": "noun", "translation": "方形披巾", "definition": "a large piece of fabric worn over the shoulders or head for warmth or decoration", "sentence": "Grandmother wrapped a warm woolen shawl around her shoulders.", "breakdown": "shawl", "ipa": "/ʃɔːl/"}, {"word": "handkerchief", "pos": "n. 名詞", "posType": "noun", "translation": "手帕", "definition": "a small square of fabric carried in a pocket for wiping the face or hands", "sentence": "He took a clean cotton handkerchief from his pocket to wipe his forehead.", "breakdown": "hand - ker - chief", "ipa": "/ˈhæŋkərtʃɪf/"}, {"word": "cuff links", "pos": "n. 名詞", "posType": "noun", "translation": "袖扣", "definition": "small decorative fasteners used to secure the cuffs of a dress shirt", "sentence": "He put on elegant cuff links before heading out to the formal banquet.", "breakdown": "cuff links", "ipa": "/kʌf lɪŋks/"}, {"word": "scrunchie", "pos": "n. 名詞", "posType": "noun", "translation": "髮束", "definition": "a fabric-covered elastic band used for fastening hair in a ponytail or bun", "sentence": "She tied her hair into a neat ponytail using a pink velvet scrunchie.", "breakdown": "scrun - chie", "ipa": "/ˈskrʌntʃi/"}]}, "g5_eruption_1": {"id": "g5_eruption_1", "title": "🌋 G5 Eruption — List 1", "grade": "G5", "category": "Lilian G5 學校單字", "words": [{"word": "seismograph", "pos": "n. 名詞", "posType": "noun", "translation": "地震儀", "definition": "a device that measures earthquakes", "sentence": "The seismograph recorded a minor tremor in the early morning hours.", "breakdown": "seis - mo - graph", "ipa": "/ˈsaɪzməɡræf/"}, {"word": "evacuation", "pos": "n. 名詞", "posType": "noun", "translation": "疏散；撤離", "definition": "the act of moving people from a dangerous place to somewhere safe", "sentence": "The evacuation of the building proceeded smoothly during the fire drill.", "breakdown": "e - vac - u - a - tion", "ipa": "/ɪˌvækjuˈeɪʃən/"}, {"word": "reservoir", "pos": "n. 名詞", "posType": "noun", "translation": "水庫；蓄水池", "definition": "a large natural or artificial lake used as a source of water supply", "sentence": "The reservoir supplies water to the entire city during periods of drought.", "breakdown": "res - er - voir", "ipa": "/ˈrɛzərvwɑːr/"}, {"word": "confer", "pos": "v. 動詞", "posType": "verb", "translation": "商討；商議", "definition": "to have a discussion or share ideas", "sentence": "The scientists are conferring about the results of their latest research project.", "breakdown": "con - fer", "ipa": "/kənˈfɜːr/"}, {"word": "consequence", "pos": "n. 名詞", "posType": "noun", "translation": "後果；結果", "definition": "a result or effect of an action or condition", "sentence": "Not wearing a helmet while biking can have serious consequences.", "breakdown": "con - se - quence", "ipa": "/ˈkɒnsɪkwəns/"}, {"word": "widespread", "pos": "adj. 形容詞", "posType": "adjective", "translation": "廣泛的；普遍的", "definition": "existing or happening over a large area or among many people", "sentence": "Widespread fires across the country have been causing a lot of damage.", "breakdown": "wide - spread", "ipa": "/ˈwaɪdsprɛd/"}, {"word": "alarming", "pos": "adj. 形容詞", "posType": "adjective", "translation": "令人擔憂的；驚人的", "definition": "causing worry or fear; disturbing", "sentence": "The alarming increase in pollution levels requires immediate action.", "breakdown": "a - larm - ing", "ipa": "/əˈlɑːrmɪŋ/"}, {"word": "victim", "pos": "n. 名詞", "posType": "noun", "translation": "受害者；罹難者", "definition": "a person harmed in a crime or accident", "sentence": "The victim of the accident was taken to the hospital for treatment.", "breakdown": "vic - tim", "ipa": "/ˈvɪktɪm/"}, {"word": "photograph", "pos": "n. 名詞", "posType": "noun", "translation": "照片；相片", "definition": "a picture made by a camera", "sentence": "The photographer took a photograph of the sunset over the ocean.", "breakdown": "pho - to - graph", "ipa": "/ˈfoʊtəɡræf/"}, {"word": "diagram", "pos": "n. 名詞", "posType": "noun", "translation": "圖表；圖解", "definition": "a simple drawing that shows how something works", "sentence": "The diagram illustrates the process of photosynthesis in plants.", "breakdown": "di - a - gram", "ipa": "/ˈdaɪəɡræm/"}, {"word": "hologram", "pos": "n. 名詞", "posType": "noun", "translation": "全息圖；全像攝影", "definition": "a 3D image created with laser light that looks real but isn't", "sentence": "The science museum displayed a hologram of a dinosaur that seemed almost real.", "breakdown": "hol - o - gram", "ipa": "/ˈhɒləɡræm/"}, {"word": "interrupt", "pos": "v. 動詞", "posType": "verb", "translation": "打斷；插嘴", "definition": "to stop the progress of something", "sentence": "Please do not interrupt the speaker during the presentation.", "breakdown": "in - ter - rupt", "ipa": "/ˌɪntəˈrʌpt/"}, {"word": "disrupt", "pos": "v. 動詞", "posType": "verb", "translation": "擾亂；中斷", "definition": "to cause a disturbance or a problem", "sentence": "The construction work disrupted traffic flow in the city center.", "breakdown": "dis - rupt", "ipa": "/dɪsˈrʌpt/"}, {"word": "transfer", "pos": "v. 動詞", "posType": "verb", "translation": "轉移；轉讓", "definition": "to move from one place to another", "sentence": "He transferred his files from the old computer to the new one.", "breakdown": "trans - fer", "ipa": "/trænsˈfɜːr/"}, {"word": "refer", "pos": "v. 動詞", "posType": "verb", "translation": "提及；談到", "definition": "to mention or talk about something", "sentence": "The professor referred to several historical events during the lecture.", "breakdown": "re - fer", "ipa": "/rɪˈfɜːr/"}, {"word": "forehead", "pos": "n. 名詞", "posType": "noun", "translation": "前額、額頭", "definition": "the part of the face above the eyes and below the hair", "sentence": "Mom gently kissed the baby on the forehead.", "breakdown": "fore - head", "ipa": "/ˈfɔːrhɛd/"}, {"word": "eyebrow", "pos": "n. 名詞", "posType": "noun", "translation": "眉毛", "definition": "the strip of hair growing on the ridge above a person's eye socket", "sentence": "He raised his eyebrow in surprise when he heard the news.", "breakdown": "eye - brow", "ipa": "/ˈaɪbraʊ/"}, {"word": "earlobe", "pos": "n. 名詞", "posType": "noun", "translation": "耳垂", "definition": "the soft, fleshy lower part of the external ear", "sentence": "She had her earlobe pierced so she could wear earrings.", "breakdown": "ear - lobe", "ipa": "/ˈɪərloʊb/"}, {"word": "knuckle", "pos": "n. 名詞", "posType": "noun", "translation": "指關節", "definition": "a joint of a finger, especially one connecting a finger to the hand", "sentence": "He knocked on the wooden door with his knuckles.", "breakdown": "knuck - le", "ipa": "/ˈnʌkəl/"}, {"word": "wrist", "pos": "n. 名詞", "posType": "noun", "translation": "手腕", "definition": "the joint connecting the hand with the forearm", "sentence": "She wears a colorful fitness tracker around her wrist.", "breakdown": "wrist", "ipa": "/rɪst/"}]}, "g5_eruption_2": {"id": "g5_eruption_2", "title": "🌋 G5 Eruption — List 2", "grade": "G5", "category": "Lilian G5 學校單字", "words": [{"word": "worthwhile", "pos": "adj. 形容詞", "posType": "adjective", "translation": "值得的", "definition": "worth the time, effort, or money spent", "sentence": "Studying hard at university is a worthwhile activity that can help you find a job one day.", "breakdown": "worth - while", "ipa": "/ˌwɜːrθˈwaɪl/"}, {"word": "nerve", "pos": "n. 名詞", "posType": "noun", "translation": "神經", "definition": "a thin fiber that sends messages in your body", "sentence": "When you want to move your hand, your brain sends messages along your nerves.", "breakdown": "nerve", "ipa": "/nɜːrv/"}, {"word": "pier", "pos": "n. 名詞", "posType": "noun", "translation": "突堤；碼頭", "definition": "a platform built out over the water", "sentence": "They walked along the pier, watching the boats come and go.", "breakdown": "pier", "ipa": "/pɪr/ "}, {"word": "squirm", "pos": "v. 動詞", "posType": "verb", "translation": "蠕動；扭動", "definition": "to wriggle or twist the body from side to side", "sentence": "The spoilt child began to squirm on the floor in the toy store.", "breakdown": "squirm", "ipa": "/skwɜːrm/"}, {"word": "weary", "pos": "adj. 形容詞", "posType": "adjective", "translation": "疲勞的；筋疲力盡的", "definition": "feeling or showing tiredness", "sentence": "After a long day's work, the lawyer felt weary and ready to relax.", "breakdown": "wea - ry", "ipa": "/ˈwɪəri/"}, {"word": "alert", "pos": "v. 動詞", "posType": "verb", "translation": "使警覺；向…報警", "definition": "to warn someone of a danger or problem", "sentence": "The lifeguard alerted the swimmers to the strong currents in the water.", "breakdown": "a - lert", "ipa": "/əˈlɜːrt/"}, {"word": "murmur", "pos": "v. 動詞", "posType": "verb", "translation": "低聲說；咕噥", "definition": "to say something in a low, soft, or indistinct voice", "sentence": "She murmured a thank you as she received the unexpected gift (that she didn’t want).", "breakdown": "mur - mur", "ipa": "/ˈmɜːrmər/"}, {"word": "thirsty", "pos": "adj. 形容詞", "posType": "adjective", "translation": "口渴的", "definition": "feeling a need to drink something", "sentence": "After playing soccer outside, the children were thirsty and asked for water.", "breakdown": "thirst - y", "ipa": "/ˈθɜːrsti/"}, {"word": "reverse", "pos": "v. 動詞", "posType": "verb", "translation": "倒車；翻轉", "definition": "to move backward", "sentence": "She had to reverse the car into the narrow parking spot which wasn’t easy.", "breakdown": "re - verse", "ipa": "/rɪˈvɜːrs/"}, {"word": "worship", "pos": "v. 動詞", "posType": "verb", "translation": "敬拜；崇拜", "definition": "to show respect and love for a god", "sentence": "The members of the church gather every Sunday to worship together.", "breakdown": "wor - ship", "ipa": "/ˈwɜːrʃɪp/"}, {"word": "career", "pos": "n. 名詞", "posType": "noun", "translation": "職業；生涯", "definition": "a job that someone does for a large part of their life", "sentence": "He chose a career in medicine to help others and to be able to keep studying science.", "breakdown": "ca - reer", "ipa": "/kəˈrɪr/"}, {"word": "research", "pos": "v. 動詞", "posType": "verb", "translation": "研究；調查", "definition": "to study or investigate something", "sentence": "Scientists research space and other planets to discover new facts about the universe.", "breakdown": "re - search", "ipa": "/rɪˈsɜːrtʃ/"}, {"word": "volunteer", "pos": "n. 名詞", "posType": "noun", "translation": "志工；自願者", "definition": "a helpful person who freely offers to do something", "sentence": "She became a volunteer at the local animal shelter to help homeless pets.", "breakdown": "vol - un - teer", "ipa": "/ˌvɒlənˈtɪr/"}, {"word": "aware", "pos": "adj. 形容詞", "posType": "adjective", "translation": "意識到的；知道的", "definition": "having knowledge of a situation or fact", "sentence": "Kids need to be aware of the dangers of cooking in the kitchen.", "breakdown": "a - ware", "ipa": "/əˈwɛər/"}, {"word": "pardon", "pos": "v. 動詞", "posType": "verb", "translation": "原諒；赦免", "definition": "to forgive or excuse someone for an error, offense, or fault", "sentence": "The upset man quickly apologized, hoping his friends would pardon his mistake.", "breakdown": "par - don", "ipa": "/ˈpɑːrdən/"}, {"word": "abdomen", "pos": "n. 名詞", "posType": "noun", "translation": "腹部", "definition": "the part of the body between the chest and the hips, containing the stomach and intestines", "sentence": "Doing sit-ups regularly helps strengthen your abdomen muscles.", "breakdown": "ab - do - men", "ipa": "/ˈæbdəmən/"}, {"word": "kidney", "pos": "n. 名詞", "posType": "noun", "translation": "腎臟", "definition": "one of a pair of organs in the body that filter waste products from the blood", "sentence": "Drinking plenty of water helps your kidneys work properly.", "breakdown": "kid - ney", "ipa": "/ˈkɪdni/"}, {"word": "liver", "pos": "n. 名詞", "posType": "noun", "translation": "肝臟", "definition": "a large organ in the body that cleans the blood and produces bile", "sentence": "The liver is one of the largest and most vital internal organs.", "breakdown": "liv - er", "ipa": "/ˈlɪvər/"}, {"word": "lungs", "pos": "n. 名詞", "posType": "noun", "translation": "肺臟", "definition": "the two organs in the chest with which people and animals breathe", "sentence": "She took a deep breath, filling her lungs with fresh morning air.", "breakdown": "lungs", "ipa": "/lʌŋz/"}, {"word": "stomach", "pos": "n. 名詞", "posType": "noun", "translation": "胃", "definition": "the organ inside the body where food goes and begins to be digested", "sentence": "He had an empty stomach because he skipped breakfast.", "breakdown": "stom - ach", "ipa": "/ˈstʌmək/"}, {"word": "small intestine", "pos": "n. 名詞", "posType": "noun", "translation": "小腸", "definition": "the long narrow part of the intestine between the stomach and large intestine where most food is absorbed", "sentence": "Nutrients from our food are absorbed into the bloodstream through the small intestine.", "breakdown": "small in - tes - tine", "ipa": "/smɔːl ɪnˈtɛstɪn/"}, {"word": "large intestine", "pos": "n. 名詞", "posType": "noun", "translation": "大腸", "definition": "the wide lower part of the intestine that absorbs water and forms waste", "sentence": "The large intestine absorbs remaining water from digested matter before waste is eliminated.", "breakdown": "large in - tes - tine", "ipa": "/lɑːrdʒ ɪnˈtɛstɪn/"}, {"word": "cranium", "pos": "n. 名詞", "posType": "noun", "translation": "頭蓋骨", "definition": "the skull, especially the part enclosing and protecting the brain", "sentence": "Wearing a bicycle helmet helps protect your cranium from head injuries.", "breakdown": "cra - ni - um", "ipa": "/ˈkreɪniəm/"}, {"word": "cerebellum", "pos": "n. 名詞", "posType": "noun", "translation": "小腦", "definition": "the part of the brain at the back of the skull that coordinates movement and balance", "sentence": "Your cerebellum controls physical balance and coordination when you ride a bike.", "breakdown": "cer - e - bel - lum", "ipa": "/ˌsɛrɪˈbɛləm/"}, {"word": "cerebrum", "pos": "n. 名詞", "posType": "noun", "translation": "大腦", "definition": "the principal and most front part of the brain that controls thinking, learning, and emotions", "sentence": "The cerebrum is the largest part of the human brain responsible for speech and memory.", "breakdown": "cer - e - brum", "ipa": "/ˈsɛrɪbrəm/"}]}, "g5_eruption_3": {"id": "g5_eruption_3", "title": "🌋 G5 Eruption — List 3", "grade": "G5", "category": "Lilian G5 學校單字", "words": [{"word": "volcano", "pos": "n. 名詞", "posType": "noun", "translation": "火山", "definition": "a mountain with a hole at the top that sometimes erupts", "sentence": "The volcano erupted with a loud roar, sending ash and lava into the sky.", "breakdown": "vol - ca - no", "ipa": "/vɒlˈkeɪnoʊ/"}, {"word": "catastrophe", "pos": "n. 名詞", "posType": "noun", "translation": "大災難；大禍", "definition": "a disaster", "sentence": "If a meteorite hit the earth, it would be a global catastrophe.", "breakdown": "ca - tas - tro - phe", "ipa": "/kəˈtæstrəfi/"}, {"word": "equipment", "pos": "n. 名詞", "posType": "noun", "translation": "設備；裝備", "definition": "the necessary items for a particular purpose", "sentence": "She packed her camping equipment, including a tent, sleeping bag, and cooking stove.", "breakdown": "e - quip - ment", "ipa": "/ɪˈkwɪpmənt/"}, {"word": "scientist", "pos": "n. 名詞", "posType": "noun", "translation": "科學家", "definition": "a person who studies a branch of science, such as biology, physics, chemistry etc.", "sentence": "The scientist conducted experiments to study the effects of the medicine.", "breakdown": "sci - en - tist", "ipa": "/ˈsaɪəntɪst/"}, {"word": "geologist", "pos": "n. 名詞", "posType": "noun", "translation": "地質學家", "definition": "a scientist who studies the solid and liquid matter that constitutes the Earth", "sentence": "The geologist examined rock formations to understand the history of the landscape.", "breakdown": "ge - ol - o - gist", "ipa": "/dʒiˈɒlədʒɪst/"}, {"word": "debate", "pos": "v. 動詞", "posType": "verb", "translation": "辯論；討論", "definition": "to argue about a subject, especially in a formal manner", "sentence": "The candidates will debate important issues during the election campaign.", "breakdown": "de - bate", "ipa": "/dɪˈbeɪt/"}, {"word": "accelerate", "pos": "v. 動詞", "posType": "verb", "translation": "加速；加快", "definition": "to increase in speed", "sentence": "The car accelerated as it merged onto the highway.", "breakdown": "ac - cel - er - ate", "ipa": "/əkˈsɛləreɪt/"}, {"word": "relocate", "pos": "v. 動詞", "posType": "verb", "translation": "搬遷；重新安置", "definition": "to move to a new place or position", "sentence": "The company decided to relocate its headquarters to a larger city.", "breakdown": "re - lo - cate", "ipa": "/ˌriːloʊˈkeɪt/"}, {"word": "horrified", "pos": "adj. 形容詞", "posType": "adjective", "translation": "極度震驚的；恐懼的", "definition": "filled with horror; shocked or dismayed", "sentence": "I was horrified to discover that my passport was missing just before my flight.", "breakdown": "hor - ri - fied", "ipa": "/ˈhɒrɪfaɪd/"}, {"word": "unusual", "pos": "adj. 形容詞", "posType": "adjective", "translation": "不尋常的；罕見的", "definition": "not habitually or commonly occurring or done", "sentence": "The tourists saw an unusual bird species that was rarely seen in that region.", "breakdown": "un - u - su - al", "ipa": "/ʌnˈjuːʒuəl/"}, {"word": "unpredictable", "pos": "adj. 形容詞", "posType": "adjective", "translation": "不可預測的；變化莫測的", "definition": "not able to be predicted; changeable", "sentence": "The weather in mountainous regions can be unpredictable, with sudden storms.", "breakdown": "un - pre - dict - a - ble", "ipa": "/ˌʌnprɪˈdɪktəbəl/"}, {"word": "impossible", "pos": "adj. 形容詞", "posType": "adjective", "translation": "不可能的", "definition": "not able to occur, exist, or be done", "sentence": "It seemed impossible to reach the summit of the mountain while climbing the steep cliff.", "breakdown": "im - pos - si - ble", "ipa": "/ɪmˈpɒsəbəl/"}, {"word": "deadly", "pos": "adj. 形容詞", "posType": "adjective", "translation": "致命的", "definition": "likely to cause death", "sentence": "The snake's venom is deadly and can kill within hours if untreated.", "breakdown": "dead - ly", "ipa": "/ˈdɛdli/"}, {"word": "orderly", "pos": "adj. 形容詞", "posType": "adjective", "translation": "整齊的；井然有序的", "definition": "in an organized or systematic manner", "sentence": "She arranged the books on the shelf so they were orderly and easy to find.", "breakdown": "or - der - ly", "ipa": "/ˈɔːrdərli/"}, {"word": "intently", "pos": "adv. 副詞", "posType": "adverb", "translation": "專注地；熱切地", "definition": "with earnest and eager attention", "sentence": "The student listened intently as the teacher explained the challenging concept.", "breakdown": "in - tent - ly", "ipa": "/ɪnˈtɛntli/"}, {"word": "return address", "pos": "n. 名詞", "posType": "noun", "translation": "寄信人地址", "definition": "the address of the sender written on an envelope or package", "sentence": "Write your return address in the top left corner of the envelope.", "breakdown": "re - turn ad - dress", "ipa": "/rɪˈtɜːrn əˈdrɛs/"}, {"word": "address of the recipient", "pos": "n. 名詞", "posType": "noun", "translation": "收件人地址", "definition": "the location where the letter or package is to be delivered", "sentence": "Make sure the address of the recipient is written clearly and correctly.", "breakdown": "ad - dress of the re - cip - i - ent", "ipa": "/əˈdrɛs ʌv ðə rɪˈsɪpiənt/"}, {"word": "zip code/postal code", "pos": "n. 名詞", "posType": "noun", "translation": "郵遞區號、區域號碼", "definition": "a postal code consisting of a series of letters or digits used to sort mail", "sentence": "Don't forget to include the zip code to ensure fast delivery.", "breakdown": "zip code / pos - tal code", "ipa": "/ˈzɪp koʊd / ˈpoʊstəl koʊd/"}, {"word": "postcard", "pos": "n. 名詞", "posType": "noun", "translation": "明信片", "definition": "a card for sending a message by mail without an envelope, often having a picture on one side", "sentence": "She sent a colorful postcard to her grandparents while on vacation.", "breakdown": "post - card", "ipa": "/ˈpoʊstkɑːrd/"}, {"word": "postmark", "pos": "n. 名詞", "posType": "noun", "translation": "郵戳", "definition": "an official stamp printed on letters showing the date and place of mailing", "sentence": "The letter bore a postmark dated November 15th.", "breakdown": "post - mark", "ipa": "/ˈpoʊstmɑːrk/"}, {"word": "envelope", "pos": "n. 名詞", "posType": "noun", "translation": "信封", "definition": "a flat paper container used for enclosing a letter or document", "sentence": "He slipped the birthday card into a crisp white envelope.", "breakdown": "en - ve - lope", "ipa": "/ˈɛnvəloʊp/"}, {"word": "stamp", "pos": "n. 名詞", "posType": "noun", "translation": "郵票", "definition": "a small adhesive piece of paper stuck to mail to show payment for postage", "sentence": "She stuck a commemorative stamp in the upper right corner of the envelope.", "breakdown": "stamp", "ipa": "/stæmp/"}, {"word": "parcel", "pos": "n. 名詞", "posType": "noun", "translation": "包裹", "definition": "a package wrapped in paper and tied, ready to be sent by mail", "sentence": "The mail carrier delivered a heavy parcel to our front doorstep.", "breakdown": "par - cel", "ipa": "/ˈpɑːrsəl/"}, {"word": "courier", "pos": "n. 名詞", "posType": "noun", "translation": "快遞員", "definition": "a person or company employed to deliver messages, packages, or mail quickly", "sentence": "The courier arrived promptly on a motorbike to pick up the urgent documents.", "breakdown": "cou - ri - er", "ipa": "/ˈkʊriər/"}, {"word": "express mail", "pos": "n. 名詞", "posType": "noun", "translation": "快捷信件、特快郵件", "definition": "an accelerated postal delivery service for which the customer pays a higher fee", "sentence": "He sent the passport application via express mail so it would arrive tomorrow.", "breakdown": "ex - press mail", "ipa": "/ɪkˈsprɛs meɪl/"}]}, "g5_miracle_1": {"id": "g5_miracle_1", "title": "🌸 G5 Miracle of Spring — List 1", "grade": "G5", "category": "Lilian G5 學校單字", "words": [{"word": "witness", "pos": "n. 名詞", "posType": "noun", "translation": "目擊者；見證人", "definition": "someone who sees an event and can describe it", "sentence": "The witness saw the crime and immediately called for help.", "breakdown": "wit - ness", "ipa": "/ˈwɪtnɪs/"}, {"word": "preside", "pos": "v. 動詞", "posType": "verb", "translation": "主持；擔任主席", "definition": "to be in charge of a meeting or ceremony", "sentence": "The judge was presiding over the courtroom during the trial.", "breakdown": "pre - side", "ipa": "/prɪˈzaɪd/"}, {"word": "attempted", "pos": "adj. 形容詞", "posType": "adjective", "translation": "企圖的；未遂的", "definition": "tried to do something, especially a crime like murder", "sentence": "The suspect was charged with attempted murder after the violent incident.", "breakdown": "at - tempt - ed", "ipa": "/əˈtɛmptɪd/"}, {"word": "restrain", "pos": "v. 動詞", "posType": "verb", "translation": "抑制；克制；阻止", "definition": "to prevent someone or something from doing something", "sentence": "He tried to restrain his excitement before the surprise was revealed.", "breakdown": "re - strain", "ipa": "/rɪˈstreɪn/"}, {"word": "contempt", "pos": "n. 名詞", "posType": "noun", "translation": "鄙視；輕蔑", "definition": "a feeling of disrespect or disobedience", "sentence": "The man looked at his friend with contempt after he made the rude comment.", "breakdown": "con - tempt", "ipa": "/kənˈtɛmpt/"}, {"word": "redo", "pos": "v. 動詞", "posType": "verb", "translation": "重做；重新修改", "definition": "to do something again or differently", "sentence": "She decided to redo her homework to correct the mistakes.", "breakdown": "re - do", "ipa": "/ˌriːˈduː/"}, {"word": "restart", "pos": "v. 動詞", "posType": "verb", "translation": "重新啟動；重開", "definition": "to begin something again after stopping", "sentence": "They had to restart the computer to fix the technical issue.", "breakdown": "re - start", "ipa": "/ˌriːˈstɑːrt/"}, {"word": "reread", "pos": "v. 動詞", "posType": "verb", "translation": "重讀；重新閱讀", "definition": "to read something again, especially to understand it better", "sentence": "He often rereads his favorite books to relive the adventures.", "breakdown": "re - read", "ipa": "/ˌriːˈriːd/"}, {"word": "preschool", "pos": "n. 名詞", "posType": "noun", "translation": "幼稚園；學前班", "definition": "a kindergarten", "sentence": "My niece attends a preschool where she learns through play … and makes a mess.", "breakdown": "pre - school", "ipa": "/ˈpriːskuːl/"}, {"word": "preview", "pos": "n. 名詞", "posType": "noun", "translation": "預告片；預覽", "definition": "a viewing or showing of something before it is released to the public", "sentence": "They got a preview of the new movie before its official launch.", "breakdown": "pre - view", "ipa": "/ˈpriːvjuː/"}, {"word": "postgame", "pos": "adj. 形容詞", "posType": "adjective", "translation": "賽後的", "definition": "occurring after a game, especially in sports", "sentence": "The players participated in a postgame interview to discuss their performance.", "breakdown": "post - game", "ipa": "/ˈpoʊstɡeɪm/"}, {"word": "postwar", "pos": "adj. 形容詞", "posType": "adjective", "translation": "戰後的", "definition": "occurring after a war, especially in terms of rebuilding", "sentence": "The country faced many challenges during the postwar period.", "breakdown": "post - war", "ipa": "/ˈpoʊstwɔːr/"}, {"word": "forehead", "pos": "n. 名詞", "posType": "noun", "translation": "額頭", "definition": "the part of the face above the eyes and below the hair", "sentence": "The cartoon character slaps his forehead whenever he gets upset.", "breakdown": "fore - head", "ipa": "/ˈfɔːrhɛd/"}, {"word": "forecast", "pos": "n. 名詞", "posType": "noun", "translation": "預報；預測", "definition": "a prediction of what the weather will be like", "sentence": "The meteorologist gave a detailed forecast of rain and thunderstorms this week.", "breakdown": "fore - cast", "ipa": "/ˈfɔːrkæst/"}, {"word": "forearm", "pos": "n. 名詞", "posType": "noun", "translation": "前臂", "definition": "the part of the arm between the elbow and wrist", "sentence": "He rolled up his sleeves to reveal his muscles on his forearm.", "breakdown": "fore - arm", "ipa": "/ˈfɔːrɑːrm/"}]}, "g5_miracle_2": {"id": "g5_miracle_2", "title": "🌸 G5 Miracle of Spring — List 2", "grade": "G5", "category": "Lilian G5 學校單字", "words": [{"word": "destroy", "pos": "v. 動詞", "posType": "verb", "translation": "破壞；毀滅", "definition": "to damage and ruin something", "sentence": "The hurricane could destroy entire neighborhoods in just a few hours.", "breakdown": "de - stroy", "ipa": "/dɪˈstrɔɪ/"}, {"word": "saucer", "pos": "n. 名詞", "posType": "noun", "translation": "茶托；小碟子", "definition": "a small, shallow dish on which a cup is set when not in use", "sentence": "She placed the tea cup on the saucer after finishing her drink.", "breakdown": "sau - cer", "ipa": "/ˈsɔːsər/"}, {"word": "pounce", "pos": "v. 動詞", "posType": "verb", "translation": "撲向；突襲", "definition": "to jump on to catch or attack it", "sentence": "The cat pounced on the toy mouse with great excitement.", "breakdown": "pounce", "ipa": "/paʊns/"}, {"word": "poison", "pos": "n. 名詞", "posType": "noun", "translation": "毒藥；毒物", "definition": "a substance that can cause illness or death", "sentence": "The colorful frog’s skin is actually covered with poison … so don’t touch it!", "breakdown": "poi - son", "ipa": "/ˈpɔɪzən/"}, {"word": "loyal", "pos": "adj. 形容詞", "posType": "adjective", "translation": "忠誠的；忠實的", "definition": "always supporting someone or something, being trustworthy", "sentence": "His dog has been his loyal friend throughout all the ups and downs.", "breakdown": "loy - al", "ipa": "/ˈlɔɪəl/"}, {"word": "auction", "pos": "n. 名詞", "posType": "noun", "translation": "拍賣", "definition": "a public sale where things are sold to the highest bidder", "sentence": "They sold their antiques at an auction to raise money for charity.", "breakdown": "auc - tion", "ipa": "/ˈɔːkʃən/"}, {"word": "royal", "pos": "adj. 形容詞", "posType": "adjective", "translation": "皇家的；王室的", "definition": "related to a king or queen, or the members of their family", "sentence": "The royal family attended the state dinner at the palace after the parade.", "breakdown": "roy - al", "ipa": "/ˈrɔɪəl/"}, {"word": "coward", "pos": "n. 名詞", "posType": "noun", "translation": "懦夫；膽小鬼", "definition": "a person who lacks courage in facing danger, difficulty, or pain", "sentence": "The man was called a coward for running away from difficult challenges and problems.", "breakdown": "cow - ard", "ipa": "/ˈkaʊərd/"}, {"word": "awkward", "pos": "adj. 形容詞", "posType": "adjective", "translation": "尷尬的；笨拙的", "definition": "causing or feeling embarrassment", "sentence": "The woman felt awkward when she tried to greet the really shy British guy.", "breakdown": "awk - ward", "ipa": "/ˈɔːkwərd/"}, {"word": "encounter", "pos": "v. 動詞", "posType": "verb", "translation": "遭遇；邂逅；不期而遇", "definition": "to come across or meet, especially unexpectedly", "sentence": "They encountered a terrifying bear while hiking high up in the mountains.", "breakdown": "en - coun - ter", "ipa": "/ɪnˈkaʊntər/"}, {"word": "execute", "pos": "v. 動詞", "posType": "verb", "translation": "執行；實行", "definition": "to accomplish a plan, order, or course of action", "sentence": "The team will execute their strategy to win the championship game.", "breakdown": "ex - e - cute", "ipa": "/ˈɛksɪkjuːt/"}, {"word": "boil", "pos": "v. 動詞", "posType": "verb", "translation": "沸騰；煮沸", "definition": "to heat a liquid until bubbles rise and break on the surface", "sentence": "The woman boiled some water to make boiled eggs for breakfast.", "breakdown": "boil", "ipa": "/bɔɪl/"}, {"word": "avoidable", "pos": "adj. 形容詞", "posType": "adjective", "translation": "可避免的", "definition": "something that can be prevented or stopped from happening", "sentence": "Wearing your seatbelt in the car makes seriously dangerous car accidents more avoidable.", "breakdown": "a - void - a - ble", "ipa": "/əˈvɔɪdəbəl/"}, {"word": "employ", "pos": "v. 動詞", "posType": "verb", "translation": "雇用；聘用", "definition": "to pay someone to do a job", "sentence": "The company plans to employ new workers next month to handle the extra orders.", "breakdown": "em - ploy", "ipa": "/ɪmˈplɔɪ/"}, {"word": "autograph", "pos": "n. 名詞", "posType": "noun", "translation": "親筆簽名", "definition": "a person's signature, especially that of a famous person", "sentence": "The fan asked the actor for an autograph after the show.", "breakdown": "au - to - graph", "ipa": "/ˈɔːtəɡræf/"}, {"word": "class schedule", "pos": "n. 名詞", "posType": "noun", "translation": "課表", "definition": "a timetable that shows the days and times when classes meet", "sentence": "I checked my class schedule to see which classroom we should go to next.", "breakdown": "class sched - ule", "ipa": "/klæs ˈskɛdʒuːl/"}, {"word": "announcement speaker", "pos": "n. 名詞", "posType": "noun", "translation": "廣播裝置", "definition": "a loudspeaker used to broadcast notices and messages across the school", "sentence": "The principal made an important morning notice through the announcement speaker.", "breakdown": "an - nounce - ment speak - er", "ipa": "/əˈnaʊnsmənt ˈspiːkər/"}, {"word": "platform", "pos": "n. 名詞", "posType": "noun", "translation": "講台", "definition": "a raised floor or stage in the front of a classroom for the teacher to speak from", "sentence": "The teacher stood on the platform so all students could clearly see the lesson.", "breakdown": "plat - form", "ipa": "/ˈplætfɔːrm/"}, {"word": "shoe rack", "pos": "n. 名詞", "posType": "noun", "translation": "鞋櫃", "definition": "a storage unit or shelf where shoes are placed neatly", "sentence": "Please take off your outdoor shoes and place them neatly on the shoe rack.", "breakdown": "shoe rack", "ipa": "/ʃuː ræk/"}, {"word": "cabinet", "pos": "n. 名詞", "posType": "noun", "translation": "置物櫃", "definition": "a piece of furniture with shelves or drawers used for storing supplies", "sentence": "We store all our extra art supplies and textbooks in the classroom cabinet.", "breakdown": "cab - i - net", "ipa": "/ˈkæbɪnɪt/"}, {"word": "globe", "pos": "n. 名詞", "posType": "noun", "translation": "地球儀", "definition": "a spherical model of the Earth showing continents and oceans", "sentence": "We spun the globe on the desk to find the location of Taiwan.", "breakdown": "globe", "ipa": "/ɡloʊb/"}, {"word": "fluorescent lights", "pos": "n. 名詞", "posType": "noun", "translation": "日光燈", "definition": "tubular electric lamps that provide bright illumination in classrooms", "sentence": "The teacher turned on the fluorescent lights because it was raining outside.", "breakdown": "fluo - res - cent lights", "ipa": "/ˌflʊəˈrɛsənt laɪts/"}, {"word": "projector screen", "pos": "n. 名詞", "posType": "noun", "translation": "螢幕", "definition": "a flat white surface onto which a projector displays slides or videos", "sentence": "The teacher pulled down the projector screen to show us a science video.", "breakdown": "pro - jec - tor screen", "ipa": "/prəˈdʒɛktər skriːn/"}, {"word": "projector", "pos": "n. 名詞", "posType": "noun", "translation": "投影機", "definition": "an optical device that projects images onto a large screen", "sentence": "The computer was connected to the projector so we could view the presentation.", "breakdown": "pro - jec - tor", "ipa": "/prəˈdʒɛktər/"}, {"word": "remote control", "pos": "n. 名詞", "posType": "noun", "translation": "遙控器", "definition": "a handheld device used to operate electronic equipment from a distance", "sentence": "The teacher used the remote control to turn on the air conditioner.", "breakdown": "re - mote con - trol", "ipa": "/rɪˈmoʊt kənˈtroʊl/"}]}, "g5_miracle_3": {"id": "g5_miracle_3", "title": "🌸 G5 Miracle of Spring — List 3", "grade": "G5", "category": "Lilian G5 學校單字", "words": [{"word": "diet", "pos": "n. 名詞", "posType": "noun", "translation": "飲食；節食", "definition": "the food and drink regularly consumed by a person or animal", "sentence": "She started a new diet to improve her health but she really wanted to eat ice cream again.", "breakdown": "di - et", "ipa": "/ˈdaɪət/"}, {"word": "idler", "pos": "n. 名詞", "posType": "noun", "translation": "遊手好閒者；懶漢", "definition": "a person who is lazy and does not work", "sentence": "The idler spent most of his days lounging around the office, pretending to work.", "breakdown": "i - dler", "ipa": "/ˈaɪdlər/"}, {"word": "valet", "pos": "n. 名詞", "posType": "noun", "translation": "隨從；侍從；貼身男僕", "definition": "a servant who helps the king", "sentence": "The king’s valets walked beside him during the royal parade, looking the other way.", "breakdown": "val - et", "ipa": "/ˈvæleɪ/"}, {"word": "dungeon", "pos": "n. 名詞", "posType": "noun", "translation": "地牢；地下監獄", "definition": "a dark, underground prison", "sentence": "The dungeon was cold, damp, and seriously spooky with only one window.", "breakdown": "dun - geon", "ipa": "/ˈdʌndʒən/"}, {"word": "outing", "pos": "n. 名詞", "posType": "noun", "translation": "郊遊；短途旅行", "definition": "a short trip", "sentence": "The family planned an outing to the beach on Saturday and the amusement park on Sunday.", "breakdown": "out - ing", "ipa": "/ˈaʊtɪŋ/"}, {"word": "realize", "pos": "v. 動詞", "posType": "verb", "translation": "意識到；理解；實現", "definition": "to become aware of something that was not known before", "sentence": "The engineer didn't realize how late he was for the meeting until he looked at the clock.", "breakdown": "re - al - iz", "ipa": "/ˈriːəlaɪz/"}, {"word": "daydream", "pos": "v. 動詞", "posType": "verb", "translation": "做白日夢；幻想", "definition": "to imagine nice things while you are awake", "sentence": "He often daydreams about sleeping, so he can really dream about eating a sandwich.", "breakdown": "day - dream", "ipa": "/ˈdeɪdriːm/"}, {"word": "doze", "pos": "v. 動詞", "posType": "verb", "translation": "打瞌睡；小睡", "definition": "to sleep lightly or briefly, especially during the daytime", "sentence": "The student dozed off during the math lesson because he went to bed at midnight.", "breakdown": "doze", "ipa": "/doʊz/"}, {"word": "salute", "pos": "v. 動詞", "posType": "verb", "translation": "敬禮；致敬", "definition": "to greet someone with a gesture of respect", "sentence": "The soldiers saluted their commanding officer as he passed by.", "breakdown": "sa - lute", "ipa": "/səˈluːt/"}, {"word": "prevent", "pos": "v. 動詞", "posType": "verb", "translation": "預防；防止；阻止", "definition": "to stop something from happening or stop someone from doing something", "sentence": "Regular exercise can help prevent many health problems.", "breakdown": "pre - vent", "ipa": "/prɪˈvɛnt/"}, {"word": "aggravated", "pos": "adj. 形容詞", "posType": "adjective", "translation": "激怒的；惱火的", "definition": "feeling very annoyed or upset", "sentence": "The grumpy cat felt aggravated after listening to the loud, barking dogs all night.", "breakdown": "ag - gra - vat - ed", "ipa": "/ˈæɡrəveɪtɪd/"}, {"word": "drab", "pos": "adj. 形容詞", "posType": "adjective", "translation": "單調的；灰暗沉悶的", "definition": "dull or lacking in brightness, color, or interest", "sentence": "The drab room was in need of some colorful decorations.", "breakdown": "drab", "ipa": "/dræb/"}, {"word": "cheery", "pos": "adj. 形容詞", "posType": "adjective", "translation": "歡快的；興高采烈的", "definition": "bright and happy", "sentence": "She always has a cheery smile on her face, no matter what happens to her.", "breakdown": "cheer - y", "ipa": "/ˈtʃɪəri/"}, {"word": "harsh", "pos": "adj. 形容詞", "posType": "adjective", "translation": "嚴厲的；殘酷的", "definition": "severe, cruel, or unkind", "sentence": "He received harsh punishment from his dad and now his hand has some of the alphabet on it.", "breakdown": "harsh", "ipa": "/hɑːrʃ/"}, {"word": "immediately", "pos": "adv. 副詞", "posType": "adverb", "translation": "立刻；馬上", "definition": "without delay or hesitation", "sentence": "She responded to the email immediately after receiving it.", "breakdown": "im - me - di - ate - ly", "ipa": "/ɪˈmiːdiətli/"}, {"word": "necklace", "pos": "n. 名詞", "posType": "noun", "translation": "項鍊", "definition": "a piece of jewelry worn around the neck", "sentence": "She wore a beautiful gold necklace for her birthday party.", "breakdown": "neck - lace", "ipa": "/ˈnɛklɪs/"}, {"word": "bracelet", "pos": "n. 名詞", "posType": "noun", "translation": "手鍊", "definition": "an ornamental band or chain worn on the wrist or arm", "sentence": "He gave his sister a shiny silver bracelet as a graduation gift.", "breakdown": "brace - let", "ipa": "/ˈbreɪslɪt/"}, {"word": "earrings", "pos": "n. 名詞", "posType": "noun", "translation": "耳環", "definition": "pieces of jewelry worn on or hanging from the earlobes", "sentence": "She chose a pair of sparkling pearl earrings to match her dress.", "breakdown": "ear - rings", "ipa": "/ˈɪrɪŋz/"}, {"word": "pin", "pos": "n. 名詞", "posType": "noun", "translation": "胸針", "definition": "a decorative piece of jewelry with a clasp that attaches to clothing", "sentence": "She fastened a delicate floral pin onto her coat lapel.", "breakdown": "pin", "ipa": "/pɪn/"}, {"word": "tie clip", "pos": "n. 名詞", "posType": "noun", "translation": "領帶夾", "definition": "a piece of jewelry used to fasten a necktie to the front of a dress shirt", "sentence": "Dad clipped a neat silver tie clip onto his tie before the ceremony.", "breakdown": "tie clip", "ipa": "/taɪ klɪp/"}, {"word": "key chain", "pos": "n. 名詞", "posType": "noun", "translation": "鑰匙圈", "definition": "a small chain or ring holding several keys together with a small ornament", "sentence": "She bought a cute star-shaped key chain during her trip.", "breakdown": "key chain", "ipa": "/kiː tʃeɪn/"}, {"word": "shawl", "pos": "n. 名詞", "posType": "noun", "translation": "方形披巾", "definition": "a large piece of fabric worn over the shoulders or head for warmth or decoration", "sentence": "Grandmother wrapped a warm woolen shawl around her shoulders.", "breakdown": "shawl", "ipa": "/ʃɔːl/"}, {"word": "handkerchief", "pos": "n. 名詞", "posType": "noun", "translation": "手帕", "definition": "a small square of fabric carried in a pocket for wiping the face or hands", "sentence": "He took a clean cotton handkerchief from his pocket to wipe his forehead.", "breakdown": "hand - ker - chief", "ipa": "/ˈhæŋkərtʃɪf/"}, {"word": "cuff links", "pos": "n. 名詞", "posType": "noun", "translation": "袖扣", "definition": "small decorative fasteners used to secure the cuffs of a dress shirt", "sentence": "He put on elegant cuff links before heading out to the formal banquet.", "breakdown": "cuff links", "ipa": "/kʌf lɪŋks/"}, {"word": "scrunchie", "pos": "n. 名詞", "posType": "noun", "translation": "髮束", "definition": "a fabric-covered elastic band used for fastening hair in a ponytail or bun", "sentence": "She tied her hair into a neat ponytail using a pink velvet scrunchie.", "breakdown": "scrun - chie", "ipa": "/ˈskrʌntʃi/"}]}, "g3_verbs": {"id": "g3_verbs", "title": "🚂 G3 不規則動詞三態 — 寫過去式 (#1–84)", "grade": "G3", "category": "不規則動詞專區", "words": [{"word": "was/were", "base": "be", "pp": "been", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "是 (原形: be)", "definition": "Base: be • Past: was/were • PP: been", "sentence": "Yesterday, they ______ (be) together.", "breakdown": "ABC", "ipa": "Verb: be • Simple Past: was/were • Past Participle: been"}, {"word": "began", "base": "begin", "pp": "begun", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "開始 (原形: begin)", "definition": "Base: begin • Past: began • PP: begun", "sentence": "Yesterday, they ______ (begin) together.", "breakdown": "ABC", "ipa": "Vowel chant i → a → u: begin → began → begun!"}, {"word": "blew", "base": "blow", "pp": "blown", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "吹 (原形: blow)", "definition": "Base: blow • Past: blew • PP: blown", "sentence": "Yesterday, they ______ (blow) together.", "breakdown": "ABC", "ipa": "-ow changes to -ew / -own: blow → blew → blown"}, {"word": "broke", "base": "break", "pp": "broken", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "打破 (原形: break)", "definition": "Base: break • Past: broke • PP: broken", "sentence": "Yesterday, they ______ (break) together.", "breakdown": "ABC", "ipa": "break → broke → broken"}, {"word": "chose", "base": "choose", "pp": "chosen", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "選擇 (原形: choose)", "definition": "Base: choose • Past: chose • PP: chosen", "sentence": "Yesterday, they ______ (choose) together.", "breakdown": "ABC", "ipa": "Drop one o in Simple Past: choose → chose → chosen"}, {"word": "did", "base": "do", "pp": "done", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "做 (原形: do)", "definition": "Base: do • Past: did • PP: done", "sentence": "Yesterday, they ______ (do) together.", "breakdown": "ABC", "ipa": "do → did → done"}, {"word": "drew", "base": "draw", "pp": "drawn", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "畫 (原形: draw)", "definition": "Base: draw • Past: drew • PP: drawn", "sentence": "Yesterday, they ______ (draw) together.", "breakdown": "ABC", "ipa": "draw → drew → drawn"}, {"word": "drank", "base": "drink", "pp": "drunk", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "喝 (原形: drink)", "definition": "Base: drink • Past: drank • PP: drunk", "sentence": "Yesterday, they ______ (drink) together.", "breakdown": "ABC", "ipa": "Vowel chant i → a → u: drink → drank → drunk"}, {"word": "drove", "base": "drive", "pp": "driven", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "開車 (原形: drive)", "definition": "Base: drive • Past: drove • PP: driven", "sentence": "Yesterday, they ______ (drive) together.", "breakdown": "ABC", "ipa": "drive → drove → driven"}, {"word": "ate", "base": "eat", "pp": "eaten", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "吃 (原形: eat)", "definition": "Base: eat • Past: ate • PP: eaten", "sentence": "Yesterday, they ______ (eat) together.", "breakdown": "ABC", "ipa": "Rearrange e-a-t to a-t-e: eat → ate → eaten"}, {"word": "fell", "base": "fall", "pp": "fallen", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "落下 (原形: fall)", "definition": "Base: fall • Past: fell • PP: fallen", "sentence": "Yesterday, they ______ (fall) together.", "breakdown": "ABC", "ipa": "fall (落下) → fell → fallen (Watch out: feel → felt → felt)"}, {"word": "flew", "base": "fly", "pp": "flown", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "飛 (原形: fly)", "definition": "Base: fly • Past: flew • PP: flown", "sentence": "Yesterday, they ______ (fly) together.", "breakdown": "ABC", "ipa": "fly → flew → flown"}, {"word": "forgot", "base": "forget", "pp": "forgot / forgotten", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "忘記 (原形: forget)", "definition": "Base: forget • Past: forgot • PP: forgot / forgotten", "sentence": "Yesterday, they ______ (forget) together.", "breakdown": "ABC", "ipa": "forget → forgot → forgot / forgotten (double t in forgotten!)"}, {"word": "forgave", "base": "forgive", "pp": "forgiven", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "原諒 (原形: forgive)", "definition": "Base: forgive • Past: forgave • PP: forgiven", "sentence": "Yesterday, they ______ (forgive) together.", "breakdown": "ABC", "ipa": "Just like give → gave → given: forgive → forgave → forgiven"}, {"word": "froze", "base": "freeze", "pp": "frozen", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "結冰 (原形: freeze)", "definition": "Base: freeze • Past: froze • PP: frozen", "sentence": "Yesterday, they ______ (freeze) together.", "breakdown": "ABC", "ipa": "freeze → froze → frozen"}, {"word": "got", "base": "get", "pp": "got / gotten", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "獲得 (原形: get)", "definition": "Base: get • Past: got • PP: got / gotten", "sentence": "Yesterday, they ______ (get) together.", "breakdown": "ABC", "ipa": "get → got → got / gotten"}, {"word": "gave", "base": "give", "pp": "given", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "給 (原形: give)", "definition": "Base: give • Past: gave • PP: given", "sentence": "Yesterday, they ______ (give) together.", "breakdown": "ABC", "ipa": "give → gave → given"}, {"word": "went", "base": "go", "pp": "gone", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "去 (原形: go)", "definition": "Base: go • Past: went • PP: gone", "sentence": "Yesterday, they ______ (go) together.", "breakdown": "ABC", "ipa": "Super important: go → went → gone!"}, {"word": "grew", "base": "grow", "pp": "grown", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "成長 (原形: grow)", "definition": "Base: grow • Past: grew • PP: grown", "sentence": "Yesterday, they ______ (grow) together.", "breakdown": "ABC", "ipa": "Like blow & know: grow → grew → grown"}, {"word": "hid", "base": "hide", "pp": "hidden", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "藏 (原形: hide)", "definition": "Base: hide • Past: hid • PP: hidden", "sentence": "Yesterday, they ______ (hide) together.", "breakdown": "ABC", "ipa": "Like bite → bit → bitten: hide → hid → hidden (double d!)"}, {"word": "knew", "base": "know", "pp": "known", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "知道 (原形: know)", "definition": "Base: know • Past: knew • PP: known", "sentence": "Yesterday, they ______ (know) together.", "breakdown": "ABC", "ipa": "know → knew → known"}, {"word": "rode", "base": "ride", "pp": "ridden", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "騎車 (原形: ride)", "definition": "Base: ride • Past: rode • PP: ridden", "sentence": "Yesterday, they ______ (ride) together.", "breakdown": "ABC", "ipa": "ride → rode → ridden (double d in ridden!)"}, {"word": "rang", "base": "ring", "pp": "rung", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "鈴響 (原形: ring)", "definition": "Base: ring • Past: rang • PP: rung", "sentence": "Yesterday, they ______ (ring) together.", "breakdown": "ABC", "ipa": "Vowel chant i → a → u: ring → rang → rung"}, {"word": "saw", "base": "see", "pp": "seen", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "看 (原形: see)", "definition": "Base: see • Past: saw • PP: seen", "sentence": "Yesterday, they ______ (see) together.", "breakdown": "ABC", "ipa": "see → saw → seen"}, {"word": "shook", "base": "shake", "pp": "shaken", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "搖動 (原形: shake)", "definition": "Base: shake • Past: shook • PP: shaken", "sentence": "Yesterday, they ______ (shake) together.", "breakdown": "ABC", "ipa": "Like take → took → taken: shake → shook → shaken"}, {"word": "sang", "base": "sing", "pp": "sung", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "唱歌 (原形: sing)", "definition": "Base: sing • Past: sang • PP: sung", "sentence": "Yesterday, they ______ (sing) together.", "breakdown": "ABC", "ipa": "Vowel chant i → a → u: sing → sang → sung"}, {"word": "spoke", "base": "speak", "pp": "spoken", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "說話 (原形: speak)", "definition": "Base: speak • Past: spoke • PP: spoken", "sentence": "Yesterday, they ______ (speak) together.", "breakdown": "ABC", "ipa": "Like break → broke → broken: speak → spoke → spoken"}, {"word": "stole", "base": "steal", "pp": "stolen", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "偷竊 (原形: steal)", "definition": "Base: steal • Past: stole • PP: stolen", "sentence": "Yesterday, they ______ (steal) together.", "breakdown": "ABC", "ipa": "steal → stole → stolen"}, {"word": "swore", "base": "swear", "pp": "sworn", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "發誓 (原形: swear)", "definition": "Base: swear • Past: swore • PP: sworn", "sentence": "Yesterday, they ______ (swear) together.", "breakdown": "ABC", "ipa": "Like wear → wore → worn: swear → swore → sworn"}, {"word": "swam", "base": "swim", "pp": "swum", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "游泳 (原形: swim)", "definition": "Base: swim • Past: swam • PP: swum", "sentence": "Yesterday, they ______ (swim) together.", "breakdown": "ABC", "ipa": "Vowel chant i → a → u: swim → swam → swum"}, {"word": "took", "base": "take", "pp": "taken", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "拿 (原形: take)", "definition": "Base: take • Past: took • PP: taken", "sentence": "Yesterday, they ______ (take) together.", "breakdown": "ABC", "ipa": "take → took → taken"}, {"word": "threw", "base": "throw", "pp": "thrown", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "丟出 (原形: throw)", "definition": "Base: throw • Past: threw • PP: thrown", "sentence": "Yesterday, they ______ (throw) together.", "breakdown": "ABC", "ipa": "Like blow & grow: throw → threw → thrown"}, {"word": "woke", "base": "wake", "pp": "woken", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "醒 (原形: wake)", "definition": "Base: wake • Past: woke • PP: woken", "sentence": "Yesterday, they ______ (wake) together.", "breakdown": "ABC", "ipa": "wake → woke → woken"}, {"word": "wore", "base": "wear", "pp": "worn", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "穿戴 (原形: wear)", "definition": "Base: wear • Past: wore • PP: worn", "sentence": "Yesterday, they ______ (wear) together.", "breakdown": "ABC", "ipa": "wear → wore → worn"}, {"word": "wrote", "base": "write", "pp": "written", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "寫 (原形: write)", "definition": "Base: write • Past: wrote • PP: written", "sentence": "Yesterday, they ______ (write) together.", "breakdown": "ABC", "ipa": "write → wrote → written (double t in written!)"}, {"word": "became", "base": "become", "pp": "become", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "變成 (原形: become)", "definition": "Base: become • Past: became • PP: become", "sentence": "Yesterday, they ______ (become) together.", "breakdown": "ABA", "ipa": "A-B-A Boomerang! Past Participle returns to become: become → became → become"}, {"word": "came", "base": "come", "pp": "come", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "來 (原形: come)", "definition": "Base: come • Past: came • PP: come", "sentence": "Yesterday, they ______ (come) together.", "breakdown": "ABA", "ipa": "A-B-A Boomerang! come → came → come"}, {"word": "ran", "base": "run", "pp": "run", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "跑 (原形: run)", "definition": "Base: run • Past: ran • PP: run", "sentence": "Yesterday, they ______ (run) together.", "breakdown": "ABA", "ipa": "A-B-A Boomerang! Past Participle returns to run: run → ran → run"}, {"word": "bled", "base": "bleed", "pp": "bled", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "流血 (原形: bleed)", "definition": "Base: bleed • Past: bled • PP: bled", "sentence": "Yesterday, they ______ (bleed) together.", "breakdown": "ABB", "ipa": "Drop one e: bleed → bled → bled"}, {"word": "bought", "base": "buy", "pp": "bought", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "買 (原形: buy)", "definition": "Base: buy • Past: bought • PP: bought", "sentence": "Yesterday, they ______ (buy) together.", "breakdown": "ABB", "ipa": "No r in buy, so no r in bought: buy → bought → bought"}, {"word": "brought", "base": "bring", "pp": "brought", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "帶來 (原形: bring)", "definition": "Base: bring • Past: brought • PP: brought", "sentence": "Yesterday, they ______ (bring) together.", "breakdown": "ABB", "ipa": "bring has r → brought: bring → brought → brought"}, {"word": "caught", "base": "catch", "pp": "caught", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "接住 (原形: catch)", "definition": "Base: catch • Past: caught • PP: caught", "sentence": "Yesterday, they ______ (catch) together.", "breakdown": "ABB", "ipa": "catch has a → caught (-aught): catch → caught → caught"}, {"word": "fed", "base": "feed", "pp": "fed", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "餵 (原形: feed)", "definition": "Base: feed • Past: fed • PP: fed", "sentence": "Yesterday, they ______ (feed) together.", "breakdown": "ABB", "ipa": "Drop one e: feed → fed → fed"}, {"word": "fought", "base": "fight", "pp": "fought", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "打架 (原形: fight)", "definition": "Base: fight • Past: fought • PP: fought", "sentence": "Yesterday, they ______ (fight) together.", "breakdown": "ABB", "ipa": "fight → fought → fought (-ought)"}, {"word": "found", "base": "find", "pp": "found", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "尋找 (原形: find)", "definition": "Base: find • Past: found • PP: found", "sentence": "Yesterday, they ______ (find) together.", "breakdown": "ABB", "ipa": "find → found → found"}, {"word": "built", "base": "build", "pp": "built", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "建築 (原形: build)", "definition": "Base: build • Past: built • PP: built", "sentence": "Yesterday, they ______ (build) together.", "breakdown": "ABB", "ipa": "Change d to t: build → built → built"}, {"word": "won", "base": "win", "pp": "won", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "贏 (原形: win)", "definition": "Base: win • Past: won • PP: won", "sentence": "Yesterday, they ______ (win) together.", "breakdown": "ABB", "ipa": "win → won → won"}, {"word": "had", "base": "have", "pp": "had", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "有 (原形: have)", "definition": "Base: have • Past: had • PP: had", "sentence": "Yesterday, they ______ (have) together.", "breakdown": "ABB", "ipa": "have → had → had"}, {"word": "hung", "base": "hang", "pp": "hung", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "懸掛 (原形: hang)", "definition": "Base: hang • Past: hung • PP: hung", "sentence": "Yesterday, they ______ (hang) together.", "breakdown": "ABB", "ipa": "hang → hung → hung"}, {"word": "heard", "base": "hear", "pp": "heard", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "聽見 (原形: hear)", "definition": "Base: hear • Past: heard • PP: heard", "sentence": "Yesterday, they ______ (hear) together.", "breakdown": "ABB", "ipa": "Add d (not ed!): hear → heard → heard"}, {"word": "held", "base": "hold", "pp": "held", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "抓住 (原形: hold)", "definition": "Base: hold • Past: held • PP: held", "sentence": "Yesterday, they ______ (hold) together.", "breakdown": "ABB", "ipa": "o changes to e: hold → held → held"}, {"word": "kept", "base": "keep", "pp": "kept", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "保持 (原形: keep)", "definition": "Base: keep • Past: kept • PP: kept", "sentence": "Yesterday, they ______ (keep) together.", "breakdown": "ABB", "ipa": "Like sleep → slept: keep → kept → kept"}, {"word": "led", "base": "lead", "pp": "led", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "導致 (原形: lead)", "definition": "Base: lead • Past: led • PP: led", "sentence": "Yesterday, they ______ (lead) together.", "breakdown": "ABB", "ipa": "Drop a: lead → led → led"}, {"word": "left", "base": "leave", "pp": "left", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "離開 (原形: leave)", "definition": "Base: leave • Past: left • PP: left", "sentence": "Yesterday, they ______ (leave) together.", "breakdown": "ABB", "ipa": "leave → left → left"}, {"word": "lent", "base": "lend", "pp": "lent", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "借出 (原形: lend)", "definition": "Base: lend • Past: lent • PP: lent", "sentence": "Yesterday, they ______ (lend) together.", "breakdown": "ABB", "ipa": "Change d to t (like send → sent): lend → lent → lent"}, {"word": "lost", "base": "lose", "pp": "lost", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "遺失 (原形: lose)", "definition": "Base: lose • Past: lost • PP: lost", "sentence": "Yesterday, they ______ (lose) together.", "breakdown": "ABB", "ipa": "lose → lost → lost"}, {"word": "made", "base": "make", "pp": "made", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "製作 (原形: make)", "definition": "Base: make • Past: made • PP: made", "sentence": "Yesterday, they ______ (make) together.", "breakdown": "ABB", "ipa": "Change k to d: make → made → made"}, {"word": "meant", "base": "mean", "pp": "meant", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "表示…意思 (原形: mean)", "definition": "Base: mean • Past: meant • PP: meant", "sentence": "Yesterday, they ______ (mean) together.", "breakdown": "ABB", "ipa": "Add t: mean → meant → meant"}, {"word": "met", "base": "meet", "pp": "met", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "遇見 (原形: meet)", "definition": "Base: meet • Past: met • PP: met", "sentence": "Yesterday, they ______ (meet) together.", "breakdown": "ABB", "ipa": "Drop one e: meet → met → met"}, {"word": "paid", "base": "pay", "pp": "paid", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "付帳 (原形: pay)", "definition": "Base: pay • Past: paid • PP: paid", "sentence": "Yesterday, they ______ (pay) together.", "breakdown": "ABB", "ipa": "Like say → said: pay → paid → paid (not payed!)"}, {"word": "said", "base": "say", "pp": "said", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "說 (原形: say)", "definition": "Base: say • Past: said • PP: said", "sentence": "Yesterday, they ______ (say) together.", "breakdown": "ABB", "ipa": "Like pay → paid: say → said → said"}, {"word": "sold", "base": "sell", "pp": "sold", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "賣 (原形: sell)", "definition": "Base: sell • Past: sold • PP: sold", "sentence": "Yesterday, they ______ (sell) together.", "breakdown": "ABB", "ipa": "Like tell → told: sell → sold → sold"}, {"word": "sent", "base": "send", "pp": "sent", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "寄出 (原形: send)", "definition": "Base: send • Past: sent • PP: sent", "sentence": "Yesterday, they ______ (send) together.", "breakdown": "ABB", "ipa": "Change d to t: send → sent → sent"}, {"word": "shot", "base": "shoot", "pp": "shot", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "發射 (原形: shoot)", "definition": "Base: shoot • Past: shot • PP: shot", "sentence": "Yesterday, they ______ (shoot) together.", "breakdown": "ABB", "ipa": "Drop one o: shoot → shot → shot"}, {"word": "sat", "base": "sit", "pp": "sat", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "坐 (原形: sit)", "definition": "Base: sit • Past: sat • PP: sat", "sentence": "Yesterday, they ______ (sit) together.", "breakdown": "ABB", "ipa": "i changes to a: sit → sat → sat"}, {"word": "shone", "base": "shine", "pp": "shone", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "發光 (原形: shine)", "definition": "Base: shine • Past: shone • PP: shone", "sentence": "Yesterday, they ______ (shine) together.", "breakdown": "ABB", "ipa": "shine → shone → shone"}, {"word": "slept", "base": "sleep", "pp": "slept", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "睡覺 (原形: sleep)", "definition": "Base: sleep • Past: slept • PP: slept", "sentence": "Yesterday, they ______ (sleep) together.", "breakdown": "ABB", "ipa": "Like keep → kept: sleep → slept → slept"}, {"word": "spent", "base": "spend", "pp": "spent", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "花費 (原形: spend)", "definition": "Base: spend • Past: spent • PP: spent", "sentence": "Yesterday, they ______ (spend) together.", "breakdown": "ABB", "ipa": "Change d to t: spend → spent → spent"}, {"word": "stood", "base": "stand", "pp": "stood", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "站 (原形: stand)", "definition": "Base: stand • Past: stood • PP: stood", "sentence": "Yesterday, they ______ (stand) together.", "breakdown": "ABB", "ipa": "Like understand → understood: stand → stood → stood"}, {"word": "taught", "base": "teach", "pp": "taught", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "教 (原形: teach)", "definition": "Base: teach • Past: taught • PP: taught", "sentence": "Yesterday, they ______ (teach) together.", "breakdown": "ABB", "ipa": "teach has a → taught (-aught): teach → taught → taught"}, {"word": "told", "base": "tell", "pp": "told", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "告訴 (原形: tell)", "definition": "Base: tell • Past: told • PP: told", "sentence": "Yesterday, they ______ (tell) together.", "breakdown": "ABB", "ipa": "Like sell → sold: tell → told → told"}, {"word": "thought", "base": "think", "pp": "thought", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "想 (原形: think)", "definition": "Base: think • Past: thought • PP: thought", "sentence": "Yesterday, they ______ (think) together.", "breakdown": "ABB", "ipa": "think → thought → thought (-ought)"}, {"word": "understood", "base": "understand", "pp": "understood", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "懂；理解 (原形: understand)", "definition": "Base: understand • Past: understood • PP: understood", "sentence": "Yesterday, they ______ (understand) together.", "breakdown": "ABB", "ipa": "Just like stand → stood: understand → understood → understood"}, {"word": "beat", "base": "beat", "pp": "beat/beaten", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "打擊 (原形: beat)", "definition": "Base: beat • Past: beat • PP: beat/beaten", "sentence": "Yesterday, they ______ (beat) together.", "breakdown": "AAA", "ipa": "beat → beat → beat/beaten"}, {"word": "bet", "base": "bet", "pp": "bet", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "打賭 (原形: bet)", "definition": "Base: bet • Past: bet • PP: bet", "sentence": "Yesterday, they ______ (bet) together.", "breakdown": "AAA", "ipa": "All 3 forms are identical: bet → bet → bet"}, {"word": "cost", "base": "cost", "pp": "cost", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "花費 (原形: cost)", "definition": "Base: cost • Past: cost • PP: cost", "sentence": "Yesterday, they ______ (cost) together.", "breakdown": "AAA", "ipa": "All 3 forms are identical: cost → cost → cost"}, {"word": "cut", "base": "cut", "pp": "cut", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "切；割 (原形: cut)", "definition": "Base: cut • Past: cut • PP: cut", "sentence": "Yesterday, they ______ (cut) together.", "breakdown": "AAA", "ipa": "All 3 forms are identical: cut → cut → cut"}, {"word": "hit", "base": "hit", "pp": "hit", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "打 (原形: hit)", "definition": "Base: hit • Past: hit • PP: hit", "sentence": "Yesterday, they ______ (hit) together.", "breakdown": "AAA", "ipa": "All 3 forms are identical: hit → hit → hit"}, {"word": "hurt", "base": "hurt", "pp": "hurt", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "傷害 (原形: hurt)", "definition": "Base: hurt • Past: hurt • PP: hurt", "sentence": "Yesterday, they ______ (hurt) together.", "breakdown": "AAA", "ipa": "All 3 forms are identical: hurt → hurt → hurt"}, {"word": "let", "base": "let", "pp": "let", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "允許；讓 (原形: let)", "definition": "Base: let • Past: let • PP: let", "sentence": "Yesterday, they ______ (let) together.", "breakdown": "AAA", "ipa": "All 3 forms are identical: let → let → let"}, {"word": "put", "base": "put", "pp": "put", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "放 (原形: put)", "definition": "Base: put • Past: put • PP: put", "sentence": "Yesterday, they ______ (put) together.", "breakdown": "AAA", "ipa": "All 3 forms are identical: put → put → put"}, {"word": "shut", "base": "shut", "pp": "shut", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "關上 (原形: shut)", "definition": "Base: shut • Past: shut • PP: shut", "sentence": "Yesterday, they ______ (shut) together.", "breakdown": "AAA", "ipa": "All 3 forms are identical: shut → shut → shut"}, {"word": "quit", "base": "quit", "pp": "quit", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "退出 (原形: quit)", "definition": "Base: quit • Past: quit • PP: quit", "sentence": "Yesterday, they ______ (quit) together.", "breakdown": "AAA", "ipa": "All 3 forms are identical: quit → quit → quit"}, {"word": "read", "base": "read", "pp": "read", "pos": "v. 過去式 (Past Tense)", "posType": "verb", "translation": "閱讀 (原形: read)", "definition": "Base: read • Past: read • PP: read", "sentence": "Yesterday, they ______ (read) together.", "breakdown": "AAA", "ipa": "Spelling is read → read → read, but pronunciation is /riːd/ → /red/ → /red/!"}]}, "g5_verbs": {"id": "g5_verbs", "title": "📚 G5 不規則動詞三態 — 寫過去分詞 (#1–50)", "grade": "G5", "category": "不規則動詞專區", "words": [{"word": "been", "base": "be", "past": "was / were", "pos": "v. 過去分詞 (Past Participle)", "posType": "verb", "translation": "是 (原形: be, 過去: was / were)", "definition": "Base: be • Past: was / were • PP: been", "sentence": "She has already ______ (be) the task.", "breakdown": "ABC", "ipa": "Simple Past: was / were • Past Participle: been • V-ing: being"}, {"word": "beat", "base": "beat", "past": "beat", "pos": "v. 過去分詞 (Past Participle)", "posType": "verb", "translation": "打擊 (原形: beat, 過去: beat)", "definition": "Base: beat • Past: beat • PP: beat", "sentence": "She has already ______ (beat) the task.", "breakdown": "AAA", "ipa": "Same form for all three: beat → beat → beat! Just add -ing for beating."}, {"word": "become", "base": "become", "past": "became", "pos": "v. 過去分詞 (Past Participle)", "posType": "verb", "translation": "變成 (原形: become, 過去: became)", "definition": "Base: become • Past: became • PP: become", "sentence": "She has already ______ (become) the task.", "breakdown": "ABA", "ipa": "Just like come: become → became → become! Drop silent e before -ing: becoming."}, {"word": "begun", "base": "begin", "past": "began", "pos": "v. 過去分詞 (Past Participle)", "posType": "verb", "translation": "開始 (原形: begin, 過去: began)", "definition": "Base: begin • Past: began • PP: begun", "sentence": "She has already ______ (begin) the task.", "breakdown": "ABC", "ipa": "⚠️ Vowel change i → a → u (begin - began - begun). Double the n in V-ing: beginning!"}, {"word": "bent", "base": "bend", "past": "bent", "pos": "v. 過去分詞 (Past Participle)", "posType": "verb", "translation": "動詞 (原形: bend, 過去: bent)", "definition": "Base: bend • Past: bent • PP: bent", "sentence": "She has already ______ (bend) the task.", "breakdown": "ABB", "ipa": "Change the final d to t: bend → bent → bent!"}, {"word": "bet", "base": "bet", "past": "bet", "pos": "v. 過去分詞 (Past Participle)", "posType": "verb", "translation": "打賭 (原形: bet, 過去: bet)", "definition": "Base: bet • Past: bet • PP: bet", "sentence": "She has already ______ (bet) the task.", "breakdown": "AAA", "ipa": "⚠️ Same three forms: bet - bet - bet. Double the t in V-ing: betting!"}, {"word": "bitten", "base": "bite", "past": "bit", "pos": "v. 過去分詞 (Past Participle)", "posType": "verb", "translation": "動詞 (原形: bite, 過去: bit)", "definition": "Base: bite • Past: bit • PP: bitten", "sentence": "She has already ______ (bite) the task.", "breakdown": "ABC", "ipa": "⚠️ bite → bit → bitten (double t + en)! Drop e for V-ing: biting."}, {"word": "blown", "base": "blow", "past": "blew", "pos": "v. 過去分詞 (Past Participle)", "posType": "verb", "translation": "吹 (原形: blow, 過去: blew)", "definition": "Base: blow • Past: blew • PP: blown", "sentence": "She has already ______ (blow) the task.", "breakdown": "ABC", "ipa": "⚠️ Change ow to ew in Simple Past (blew), and add n in Past Participle (blown)!"}, {"word": "broken", "base": "break", "past": "broke", "pos": "v. 過去分詞 (Past Participle)", "posType": "verb", "translation": "打破 (原形: break, 過去: broke)", "definition": "Base: break • Past: broke • PP: broken", "sentence": "She has already ______ (break) the task.", "breakdown": "ABC", "ipa": "break → broke → broken! Add n to broke for the Past Participle."}, {"word": "brought", "base": "bring", "past": "brought", "pos": "v. 過去分詞 (Past Participle)", "posType": "verb", "translation": "帶來 (原形: bring, 過去: brought)", "definition": "Base: bring • Past: brought • PP: brought", "sentence": "She has already ______ (bring) the task.", "breakdown": "ABB", "ipa": "br + ought = brought! Simple Past and Past Participle are the same."}, {"word": "built", "base": "build", "past": "built", "pos": "v. 過去分詞 (Past Participle)", "posType": "verb", "translation": "建築 (原形: build, 過去: built)", "definition": "Base: build • Past: built • PP: built", "sentence": "She has already ______ (build) the task.", "breakdown": "ABB", "ipa": "Change the final d to t: build → built → built!"}, {"word": "burnt", "base": "burn", "past": "burnt", "pos": "v. 過去分詞 (Past Participle)", "posType": "verb", "translation": "動詞 (原形: burn, 過去: burnt)", "definition": "Base: burn • Past: burnt • PP: burnt", "sentence": "She has already ______ (burn) the task.", "breakdown": "ABB", "ipa": "Add t at the end: burn → burnt → burnt!"}, {"word": "bought", "base": "buy", "past": "bought", "pos": "v. 過去分詞 (Past Participle)", "posType": "verb", "translation": "買 (原形: buy, 過去: bought)", "definition": "Base: buy • Past: bought • PP: bought", "sentence": "She has already ______ (buy) the task.", "breakdown": "ABB", "ipa": "b + ought = bought! Rhymes with brought."}, {"word": "caught", "base": "catch", "past": "caught", "pos": "v. 過去分詞 (Past Participle)", "posType": "verb", "translation": "接住 (原形: catch, 過去: caught)", "definition": "Base: catch • Past: caught • PP: caught", "sentence": "She has already ______ (catch) the task.", "breakdown": "ABB", "ipa": "catch has an \"a\", so use -aught: catch → caught → caught!"}, {"word": "chosen", "base": "choose", "past": "chose", "pos": "v. 過去分詞 (Past Participle)", "posType": "verb", "translation": "選擇 (原形: choose, 過去: chose)", "definition": "Base: choose • Past: chose • PP: chosen", "sentence": "She has already ______ (choose) the task.", "breakdown": "ABC", "ipa": "choose (oo) → chose (one o) → chosen (+n)! Drop e for V-ing: choosing."}, {"word": "come", "base": "come", "past": "came", "pos": "v. 過去分詞 (Past Participle)", "posType": "verb", "translation": "來 (原形: come, 過去: came)", "definition": "Base: come • Past: came • PP: come", "sentence": "She has already ______ (come) the task.", "breakdown": "ABA", "ipa": "come → came → come! Drop silent e before -ing: coming."}, {"word": "cost", "base": "cost", "past": "cost", "pos": "v. 過去分詞 (Past Participle)", "posType": "verb", "translation": "花費 (原形: cost, 過去: cost)", "definition": "Base: cost • Past: cost • PP: cost", "sentence": "She has already ______ (cost) the task.", "breakdown": "AAA", "ipa": "All three forms stay the same: cost → cost → cost!"}, {"word": "cut", "base": "cut", "past": "cut", "pos": "v. 過去分詞 (Past Participle)", "posType": "verb", "translation": "切；割 (原形: cut, 過去: cut)", "definition": "Base: cut • Past: cut • PP: cut", "sentence": "She has already ______ (cut) the task.", "breakdown": "AAA", "ipa": "Same three forms: cut - cut - cut! Double the t in V-ing: cutting."}, {"word": "dug", "base": "dig", "past": "dug", "pos": "v. 過去分詞 (Past Participle)", "posType": "verb", "translation": "動詞 (原形: dig, 過去: dug)", "definition": "Base: dig • Past: dug • PP: dug", "sentence": "She has already ______ (dig) the task.", "breakdown": "ABB", "ipa": "⚠️ Never \"digged\"! Change i to u: dig → dug → dug! Double the g in V-ing: digging."}, {"word": "done", "base": "do", "past": "did", "pos": "v. 過去分詞 (Past Participle)", "posType": "verb", "translation": "做 (原形: do, 過去: did)", "definition": "Base: do • Past: did • PP: done", "sentence": "She has already ______ (do) the task.", "breakdown": "ABC", "ipa": "do → did → done! Add -ing to the base verb: doing."}, {"word": "drawn", "base": "draw", "past": "drew", "pos": "v. 過去分詞 (Past Participle)", "posType": "verb", "translation": "畫 (原形: draw, 過去: drew)", "definition": "Base: draw • Past: drew • PP: drawn", "sentence": "She has already ______ (draw) the task.", "breakdown": "ABC", "ipa": "Change aw to ew (drew), and add n to draw for Past Participle (drawn)!"}, {"word": "dreamt", "base": "dream", "past": "dreamt", "pos": "v. 過去分詞 (Past Participle)", "posType": "verb", "translation": "動詞 (原形: dream, 過去: dreamt)", "definition": "Base: dream • Past: dreamt • PP: dreamt", "sentence": "She has already ______ (dream) the task.", "breakdown": "ABB", "ipa": "⚠️ Add t at the end for Simple Past & Past Participle: dream → dreamt → dreamt!"}, {"word": "drunk", "base": "drink", "past": "drank", "pos": "v. 過去分詞 (Past Participle)", "posType": "verb", "translation": "喝 (原形: drink, 過去: drank)", "definition": "Base: drink • Past: drank • PP: drunk", "sentence": "She has already ______ (drink) the task.", "breakdown": "ABC", "ipa": "Vowel rhythm i → a → u: drink → drank → drunk!"}, {"word": "driven", "base": "drive", "past": "drove", "pos": "v. 過去分詞 (Past Participle)", "posType": "verb", "translation": "開車 (原形: drive, 過去: drove)", "definition": "Base: drive • Past: drove • PP: driven", "sentence": "She has already ______ (drive) the task.", "breakdown": "ABC", "ipa": "drive → drove → driven! Drop silent e before -ing: driving."}, {"word": "eaten", "base": "eat", "past": "ate", "pos": "v. 過去分詞 (Past Participle)", "posType": "verb", "translation": "吃 (原形: eat, 過去: ate)", "definition": "Base: eat • Past: ate • PP: eaten", "sentence": "She has already ______ (eat) the task.", "breakdown": "ABC", "ipa": "eat → ate → eaten! Add -ing to the base verb: eating."}, {"word": "fallen", "base": "fall", "past": "fell", "pos": "v. 過去分詞 (Past Participle)", "posType": "verb", "translation": "落下 (原形: fall, 過去: fell)", "definition": "Base: fall • Past: fell • PP: fallen", "sentence": "She has already ______ (fall) the task.", "breakdown": "ABC", "ipa": "fall → fell → fallen! Add -en to the base verb for Past Participle."}, {"word": "fed", "base": "feed", "past": "fed", "pos": "v. 過去分詞 (Past Participle)", "posType": "verb", "translation": "餵 (原形: feed, 過去: fed)", "definition": "Base: feed • Past: fed • PP: fed", "sentence": "She has already ______ (feed) the task.", "breakdown": "ABB", "ipa": "Double e becomes single e: feed → fed → fed! Keep ee in V-ing: feeding."}, {"word": "felt", "base": "feel", "past": "felt", "pos": "v. 過去分詞 (Past Participle)", "posType": "verb", "translation": "動詞 (原形: feel, 過去: felt)", "definition": "Base: feel • Past: felt • PP: felt", "sentence": "She has already ______ (feel) the task.", "breakdown": "ABB", "ipa": "feel → felt → felt! Keep double e in V-ing: feeling."}, {"word": "fought", "base": "fight", "past": "fought", "pos": "v. 過去分詞 (Past Participle)", "posType": "verb", "translation": "打架 (原形: fight, 過去: fought)", "definition": "Base: fight • Past: fought • PP: fought", "sentence": "She has already ______ (fight) the task.", "breakdown": "ABB", "ipa": "f + ought = fought! Same for Simple Past and Past Participle."}, {"word": "found", "base": "find", "past": "found", "pos": "v. 過去分詞 (Past Participle)", "posType": "verb", "translation": "尋找 (原形: find, 過去: found)", "definition": "Base: find • Past: found • PP: found", "sentence": "She has already ______ (find) the task.", "breakdown": "ABB", "ipa": "Change i to ou: find → found → found!"}, {"word": "flown", "base": "fly", "past": "flew", "pos": "v. 過去分詞 (Past Participle)", "posType": "verb", "translation": "飛 (原形: fly, 過去: flew)", "definition": "Base: fly • Past: flew • PP: flown", "sentence": "She has already ______ (fly) the task.", "breakdown": "ABC", "ipa": "fly → flew → flown! Keep the y when adding -ing: flying."}, {"word": "forgotten", "base": "forget", "past": "forgot", "pos": "v. 過去分詞 (Past Participle)", "posType": "verb", "translation": "忘記 (原形: forget, 過去: forgot)", "definition": "Base: forget • Past: forgot • PP: forgotten", "sentence": "She has already ______ (forget) the task.", "breakdown": "ABC", "ipa": "⚠️ forget → forgot → forgotten (double t)! Also double t in V-ing: forgetting!"}, {"word": "forgiven", "base": "forgive", "past": "forgave", "pos": "v. 過去分詞 (Past Participle)", "posType": "verb", "translation": "原諒 (原形: forgive, 過去: forgave)", "definition": "Base: forgive • Past: forgave • PP: forgiven", "sentence": "She has already ______ (forgive) the task.", "breakdown": "ABC", "ipa": "Just like give: forgive → forgave → forgiven! Drop silent e in V-ing: forgiving."}, {"word": "frozen", "base": "freeze", "past": "froze", "pos": "v. 過去分詞 (Past Participle)", "posType": "verb", "translation": "結冰 (原形: freeze, 過去: froze)", "definition": "Base: freeze • Past: froze • PP: frozen", "sentence": "She has already ______ (freeze) the task.", "breakdown": "ABC", "ipa": "freeze → froze → frozen! Drop silent e before -ing: freezing."}, {"word": "got / gotten", "base": "get", "past": "got", "pos": "v. 過去分詞 (Past Participle)", "posType": "verb", "translation": "獲得 (原形: get, 過去: got)", "definition": "Base: get • Past: got • PP: got / gotten", "sentence": "She has already ______ (get) the task.", "breakdown": "ABB", "ipa": "⚠️ get → got → got / gotten! Double the t in V-ing: getting!"}, {"word": "given", "base": "give", "past": "gave", "pos": "v. 過去分詞 (Past Participle)", "posType": "verb", "translation": "給 (原形: give, 過去: gave)", "definition": "Base: give • Past: gave • PP: given", "sentence": "She has already ______ (give) the task.", "breakdown": "ABC", "ipa": "give → gave → given! Drop silent e before -ing: giving."}, {"word": "gone", "base": "go", "past": "went", "pos": "v. 過去分詞 (Past Participle)", "posType": "verb", "translation": "去 (原形: go, 過去: went)", "definition": "Base: go • Past: went • PP: gone", "sentence": "She has already ______ (go) the task.", "breakdown": "ABC", "ipa": "Super common verb: go → went → gone! V-ing is going."}, {"word": "grown", "base": "grow", "past": "grew", "pos": "v. 過去分詞 (Past Participle)", "posType": "verb", "translation": "成長 (原形: grow, 過去: grew)", "definition": "Base: grow • Past: grew • PP: grown", "sentence": "She has already ______ (grow) the task.", "breakdown": "ABC", "ipa": "Just like blow: grow → grew → grown!"}, {"word": "hung", "base": "hang", "past": "hung", "pos": "v. 過去分詞 (Past Participle)", "posType": "verb", "translation": "懸掛 (原形: hang, 過去: hung)", "definition": "Base: hang • Past: hung • PP: hung", "sentence": "She has already ______ (hang) the task.", "breakdown": "ABB", "ipa": "Change a to u: hang → hung → hung!"}, {"word": "had", "base": "have", "past": "had", "pos": "v. 過去分詞 (Past Participle)", "posType": "verb", "translation": "有 (原形: have, 過去: had)", "definition": "Base: have • Past: had • PP: had", "sentence": "She has already ______ (have) the task.", "breakdown": "ABB", "ipa": "have → had → had! Drop silent e before -ing: having."}, {"word": "heard", "base": "hear", "past": "heard", "pos": "v. 過去分詞 (Past Participle)", "posType": "verb", "translation": "聽見 (原形: hear, 過去: heard)", "definition": "Base: hear • Past: heard • PP: heard", "sentence": "She has already ______ (hear) the task.", "breakdown": "ABB", "ipa": "Just add d (not ed!): hear → heard → heard!"}, {"word": "hidden", "base": "hide", "past": "hid", "pos": "v. 過去分詞 (Past Participle)", "posType": "verb", "translation": "藏 (原形: hide, 過去: hid)", "definition": "Base: hide • Past: hid • PP: hidden", "sentence": "She has already ______ (hide) the task.", "breakdown": "ABC", "ipa": "⚠️ Just like bite: hide → hid → hidden (double d + en)! Drop e in V-ing: hiding."}, {"word": "hit", "base": "hit", "past": "hit", "pos": "v. 過去分詞 (Past Participle)", "posType": "verb", "translation": "打 (原形: hit, 過去: hit)", "definition": "Base: hit • Past: hit • PP: hit", "sentence": "She has already ______ (hit) the task.", "breakdown": "AAA", "ipa": "⚠️ All three forms are the same: hit - hit - hit! Double the t in V-ing: hitting."}, {"word": "held", "base": "hold", "past": "held", "pos": "v. 過去分詞 (Past Participle)", "posType": "verb", "translation": "抓住 (原形: hold, 過去: held)", "definition": "Base: hold • Past: held • PP: held", "sentence": "She has already ______ (hold) the task.", "breakdown": "ABB", "ipa": "Change o to e: hold → held → held!"}, {"word": "hurt", "base": "hurt", "past": "hurt", "pos": "v. 過去分詞 (Past Participle)", "posType": "verb", "translation": "傷害 (原形: hurt, 過去: hurt)", "definition": "Base: hurt • Past: hurt • PP: hurt", "sentence": "She has already ______ (hurt) the task.", "breakdown": "AAA", "ipa": "All three forms stay the same: hurt → hurt → hurt!"}, {"word": "kept", "base": "keep", "past": "kept", "pos": "v. 過去分詞 (Past Participle)", "posType": "verb", "translation": "保持 (原形: keep, 過去: kept)", "definition": "Base: keep • Past: kept • PP: kept", "sentence": "She has already ______ (keep) the task.", "breakdown": "ABB", "ipa": "Just like feel: keep → kept → kept! Keep ee in V-ing: keeping."}, {"word": "known", "base": "know", "past": "knew", "pos": "v. 過去分詞 (Past Participle)", "posType": "verb", "translation": "知道 (原形: know, 過去: knew)", "definition": "Base: know • Past: knew • PP: known", "sentence": "She has already ______ (know) the task.", "breakdown": "ABC", "ipa": "Just like blow & grow: know → knew → known!"}, {"word": "laid", "base": "lay", "past": "laid", "pos": "v. 過去分詞 (Past Participle)", "posType": "verb", "translation": "動詞 (原形: lay, 過去: laid)", "definition": "Base: lay • Past: laid • PP: laid", "sentence": "She has already ______ (lay) the task.", "breakdown": "ABB", "ipa": "⚠️ Change y to i + d: lay → laid → laid! Keep y in V-ing: laying."}, {"word": "led", "base": "lead", "past": "led", "pos": "v. 過去分詞 (Past Participle)", "posType": "verb", "translation": "導致 (原形: lead, 過去: led)", "definition": "Base: lead • Past: led • PP: led", "sentence": "She has already ______ (lead) the task.", "breakdown": "ABB", "ipa": "Drop the a in past: lead → led → led! Keep ea in V-ing: leading."}, {"word": "learnt", "base": "learn", "past": "learnt", "pos": "v. 過去分詞 (Past Participle)", "posType": "verb", "translation": "動詞 (原形: learn, 過去: learnt)", "definition": "Base: learn • Past: learnt • PP: learnt", "sentence": "She has already ______ (learn) the task.", "breakdown": "ABB", "ipa": "Just like burn & dream: learn → learnt → learnt (or learned)!"}]}};
+
+        // ============= 學生身分與狀態 =============
+        const USERS = ['Barry', 'Lilian', 'Anthony'];
+        let currentStudent = localStorage.getItem('spelling_current_student') || 'Barry';
+        if (!USERS.includes(currentStudent)) currentStudent = 'Barry';
+
+        let currentUnitKey = 'g3_dragon_1';
+        let currentWordsQueue = [];
+        let currentIndex = 0;
+        let currentWordObj = null;
+        let isChecked = false;
+        let isPeeking = false;
+
+        // ============= Canvas 手寫板引擎 =============
+        const canvas = document.getElementById('hwCanvas');
+        const ctx = canvas.getContext('2d');
+        let isDrawing = false;
+        let currentTool = 'pencil';
+        let currentColor = '#1e40af';
+        let strokeHistory = [];
+        let currentStroke = [];
+
+        function resizeCanvas() {
+            const rect = canvas.getBoundingClientRect();
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = rect.width * dpr;
+            canvas.height = 220 * dpr;
+            ctx.scale(dpr, dpr);
+            redrawCanvas();
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+
+        // 繪製四線三格背景
+        function drawFourLines() {
+            const width = canvas.getBoundingClientRect().width;
+            const height = 220;
+
+            const lineY = {
+                top: 45,
+                mid: 90,
+                base: 135,
+                bottom: 180
+            };
+
+            ctx.save();
+            ctx.clearRect(0, 0, width, height);
+
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, width, height);
+
+            // 1. Top Line (Ascender) - 頂線 (淡紫灰)
+            ctx.strokeStyle = '#cbd5e1';
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.moveTo(0, lineY.top);
+            ctx.lineTo(width, lineY.top);
+            ctx.stroke();
+
+            // 2. Midline (Mean Line) - 中線 (粉紅虛線)
+            ctx.strokeStyle = '#f87171';
+            ctx.lineWidth = 1.5;
+            ctx.setLineDash([6, 6]);
+            ctx.beginPath();
+            ctx.moveTo(0, lineY.mid);
+            ctx.lineTo(width, lineY.mid);
+            ctx.stroke();
+
+            // 3. Baseline - 底線 (實心深藍/紫基準線)
+            ctx.strokeStyle = '#4f46e5';
+            ctx.lineWidth = 2.5;
+            ctx.setLineDash([]);
+            ctx.beginPath();
+            ctx.moveTo(0, lineY.base);
+            ctx.lineTo(width, lineY.base);
+            ctx.stroke();
+
+            // 4. Descender Line - 下沉線 (灰色虛線)
+            ctx.strokeStyle = '#94a3b8';
+            ctx.lineWidth = 1.5;
+            ctx.setLineDash([4, 6]);
+            ctx.beginPath();
+            ctx.moveTo(0, lineY.bottom);
+            ctx.lineTo(width, lineY.bottom);
+            ctx.stroke();
+
+            ctx.restore();
+        }
+
+        canvas.addEventListener('pointerdown', startDrawing);
+        canvas.addEventListener('pointermove', drawMove);
+        canvas.addEventListener('pointerup', stopDrawing);
+        canvas.addEventListener('pointercancel', stopDrawing);
+
+        function getCanvasPos(e) {
+            const rect = canvas.getBoundingClientRect();
+            return {
+                x: e.clientX - rect.left,
+                y: e.clientY - rect.top,
+                pressure: e.pressure || 0.5
+            };
+        }
+
+        function startDrawing(e) {
+            e.preventDefault();
+            isDrawing = true;
+            canvas.setPointerCapture(e.pointerId);
+            const pos = getCanvasPos(e);
+            currentStroke = {
+                tool: currentTool,
+                color: currentTool === 'eraser' ? '#ffffff' : currentColor,
+                size: getStrokeSize(currentTool, pos.pressure),
+                points: [pos]
+            };
+            playStrokeTone();
+        }
+
+        function drawMove(e) {
+            if (!isDrawing) return;
+            e.preventDefault();
+            const pos = getCanvasPos(e);
+            currentStroke.points.push(pos);
+
+            drawCurrentSegment();
+        }
+
+        function stopDrawing(e) {
+            if (!isDrawing) return;
+            e.preventDefault();
+            isDrawing = false;
+            try { canvas.releasePointerCapture(e.pointerId); } catch(err){}
+            if (currentStroke.points.length > 0) {
+                strokeHistory.push(currentStroke);
+            }
+            currentStroke = null;
+        }
+
+        function getStrokeSize(tool, pressure) {
+            if (tool === 'eraser') return 24;
+            if (tool === 'pencil') return 3.5;
+            if (tool === 'pen') return Math.max(3.5, 6 * (pressure > 0 ? pressure : 0.6));
+            return 4;
+        }
+
+        function drawCurrentSegment() {
+            if (!currentStroke || currentStroke.points.length < 2) return;
+            const pts = currentStroke.points;
+            const p1 = pts[pts.length - 2];
+            const p2 = pts[pts.length - 1];
+
+            ctx.save();
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            ctx.strokeStyle = currentStroke.color;
+            ctx.lineWidth = currentStroke.size;
+
+            ctx.beginPath();
+            ctx.moveTo(p1.x, p1.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.stroke();
+            ctx.restore();
+        }
+
+        function redrawCanvas() {
+            drawFourLines();
+            ctx.save();
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+
+            strokeHistory.forEach(stroke => {
+                if (stroke.points.length === 0) return;
+                ctx.strokeStyle = stroke.color;
+                ctx.lineWidth = stroke.size;
+                ctx.beginPath();
+                ctx.moveTo(stroke.points[0].x, stroke.points[0].y);
+                for (let i = 1; i < stroke.points.length; i++) {
+                    const p1 = stroke.points[i - 1];
+                    const p2 = stroke.points[i];
+                    ctx.lineTo(p2.x, p2.y);
+                }
+                ctx.stroke();
+            });
+
+            ctx.restore();
+        }
+
+        function setTool(tool) {
+            currentTool = tool;
+            document.querySelectorAll('.canvas-toolbar .tool-btn').forEach(btn => {
+                if (btn.id === 'toolPencil' || btn.id === 'toolPen' || btn.id === 'toolEraser') {
+                    btn.classList.remove('active');
+                }
+            });
+            if (tool === 'pencil') document.getElementById('toolPencil').classList.add('active');
+            if (tool === 'pen') document.getElementById('toolPen').classList.add('active');
+            if (tool === 'eraser') document.getElementById('toolEraser').classList.add('active');
+        }
+
+        function setColor(hex, el) {
+            currentColor = hex;
+            if (currentTool === 'eraser') setTool('pen');
+            document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('active'));
+            if (el) el.classList.add('active');
+        }
+
+        function undoLastStroke() {
+            if (strokeHistory.length > 0) {
+                strokeHistory.pop();
+                redrawCanvas();
+            }
+        }
+
+        function clearCanvasBoard() {
+            strokeHistory = [];
+            redrawCanvas();
+            hideOverlayWord();
+        }
+
+        // ============= Web Audio 音效 =============
+        let audioCtx = null;
+        function playTone(freq, type = 'sine', duration = 0.12) {
+            try {
+                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration);
+            } catch (e) { }
+        }
+
+        function playStrokeTone() {
+            playTone(800 + Math.random() * 200, 'triangle', 0.03);
+        }
+
+        function playCorrectChime() {
+            playTone(523.25, 'triangle', 0.1);
+            setTimeout(() => playTone(659.25, 'triangle', 0.12), 90);
+            setTimeout(() => playTone(783.99, 'triangle', 0.15), 180);
+            setTimeout(() => playTone(1046.50, 'triangle', 0.3), 270);
+        }
+
+        function playWrongTone() {
+            playTone(320, 'sawtooth', 0.15);
+            setTimeout(() => playTone(280, 'sawtooth', 0.25), 120);
+        }
+
+        // ============= 語音發音 (Web Speech API) =============
+        function speakCurrentWord() {
+            if (!currentWordObj) return;
+            window.speechSynthesis.cancel();
+            const textToSpeak = currentWordObj.word.replace(/\/|\(.*\)/g, ' or ');
+            const u = new SpeechSynthesisUtterance(textToSpeak);
+            u.lang = 'en-US';
+            u.rate = 0.85;
+
+            const voices = window.speechSynthesis.getVoices();
+            const enUS = voices.find(v => v.name.includes('Google') && v.lang === 'en-US') ||
+                         voices.find(v => v.lang === 'en-US');
+            if (enUS) u.voice = enUS;
+            window.speechSynthesis.speak(u);
+        }
+
+        // ============= 題庫載入與答題邏輯 =============
+        function onSelectUnit(unitId) {
+            currentUnitKey = unitId;
+            loadUnitQuestions();
+        }
+
+        function getStudentMistakesMap(student) {
+            try {
+                const raw = localStorage.getItem(`spelling_mistakes_${student}`);
+                return raw ? JSON.parse(raw) : {};
+            } catch (e) {
+                return {};
+            }
+        }
+
+        function saveStudentMistakesMap(student, map) {
+            localStorage.setItem(`spelling_mistakes_${student}`, JSON.stringify(map));
+        }
+
+        function loadUnitQuestions() {
+            if (currentUnitKey === 'mistakes') {
+                const map = getStudentMistakesMap(currentStudent);
+                const pool = [];
+                const seen = new Set();
+                Object.values(ALL_UNITS).forEach(u => {
+                    u.words.forEach(w => {
+                        if ((map[w.word] || 0) > 0 && !seen.has(w.word)) {
+                            seen.add(w.word);
+                            pool.push(w);
+                        }
+                    });
+                });
+                if (pool.length === 0) {
+                    alert(`${currentStudent} 目前沒有歷史錯題！系統將載入 G3 Dear Dragon List 1 供您練習。`);
+                    currentUnitKey = 'g3_dragon_1';
+                    document.getElementById('unitPicker').value = 'g3_dragon_1';
+                    loadUnitQuestions();
+                    return;
+                }
+                currentWordsQueue = pool;
+            } else {
+                const unit = ALL_UNITS[currentUnitKey];
+                if (!unit || unit.words.length === 0) return;
+                currentWordsQueue = [...unit.words];
+            }
+
+            currentIndex = 0;
+            renderCurrentQuestion();
+            updateStatsUI();
+        }
+
+        function renderCurrentQuestion() {
+            if (currentWordsQueue.length === 0) return;
+            currentWordObj = currentWordsQueue[currentIndex];
+            isChecked = false;
+            isPeeking = false;
+
+            clearCanvasBoard();
+
+            const total = currentWordsQueue.length;
+            document.getElementById('progressLabel').textContent = `題號: ${currentIndex + 1} / ${total}`;
+            const pct = Math.round(((currentIndex + 1) / total) * 100);
+            document.getElementById('progressBarFill').style.width = `${pct}%`;
+
+            document.getElementById('qTranslation').textContent = currentWordObj.translation || currentWordObj.word;
+            document.getElementById('qPos').textContent = `${currentWordObj.pos || ''} • ${currentWordObj.definition || ''}`;
+            document.getElementById('qSentence').textContent = currentWordObj.sentence || 'Practice writing the word on the lines.';
+
+            renderLetterSlots(currentWordObj.word);
+
+            document.getElementById('overlayWordText').textContent = currentWordObj.word;
+            hideOverlayWord();
+
+            document.getElementById('reviewCard').classList.remove('show');
+            document.getElementById('peekBtn').textContent = '👁️ 偷看答案';
+
+            setTimeout(speakCurrentWord, 350);
+        }
+
+        function renderLetterSlots(word) {
+            const container = document.getElementById('letterSlots');
+            container.innerHTML = '';
+            for (let ch of word) {
+                const slot = document.createElement('div');
+                if (ch === ' ' || ch === '-' || ch === '/') {
+                    slot.className = 'letter-slot space';
+                    slot.textContent = ch === ' ' ? '' : ch;
+                } else {
+                    slot.className = 'letter-slot';
+                    slot.textContent = isPeeking ? ch : '_';
+                }
+                container.appendChild(slot);
+            }
+        }
+
+        function togglePeekAnswer() {
+            isPeeking = !isPeeking;
+            const btn = document.getElementById('peekBtn');
+            btn.textContent = isPeeking ? '🙈 隱藏提示' : '👁️ 偷看答案';
+            renderLetterSlots(currentWordObj.word);
+            if (isPeeking) {
+                showOverlayWord();
+            } else if (!isChecked) {
+                hideOverlayWord();
+            }
+        }
+
+        function showOverlayWord() {
+            document.getElementById('overlayLayer').classList.add('visible');
+        }
+
+        function hideOverlayWord() {
+            document.getElementById('overlayLayer').classList.remove('visible');
+        }
+
+        function checkAnswer() {
+            isChecked = true;
+            showOverlayWord();
+
+            document.getElementById('reviewWordTitle').textContent = currentWordObj.word;
+            document.getElementById('reviewIpa').textContent = currentWordObj.ipa || '';
+            document.getElementById('reviewBreakdown').textContent = `自然發音拆解：${currentWordObj.breakdown || currentWordObj.word}`;
+            document.getElementById('reviewSentenceFull').textContent = `例句：${currentWordObj.sentence || ''}`;
+            document.getElementById('reviewCard').classList.add('show');
+
+            playTone(600, 'triangle', 0.15);
+            speakCurrentWord();
+        }
+
+        function recordResult(isCorrect) {
+            const map = getStudentMistakesMap(currentStudent);
+            const word = currentWordObj.word;
+
+            if (isCorrect) {
+                playCorrectChime();
+                addStarToStudent();
+                if (map[word]) {
+                    map[word] = Math.max(0, map[word] - 1);
+                    if (map[word] === 0) delete map[word];
+                    saveStudentMistakesMap(currentStudent, map);
+                }
+            } else {
+                playWrongTone();
+                map[word] = (map[word] || 0) + 1;
+                saveStudentMistakesMap(currentStudent, map);
+            }
+
+            updateStatsUI();
+
+            setTimeout(() => {
+                if (currentIndex < currentWordsQueue.length - 1) {
+                    currentIndex++;
+                    renderCurrentQuestion();
+                } else {
+                    alert(`🎉 恭喜 ${currentStudent} 完成本單元手寫練習！太厲害了！`);
+                    loadUnitQuestions();
+                }
+            }, 600);
+        }
+
+        function retryCurrentWord() {
+            clearCanvasBoard();
+            document.getElementById('reviewCard').classList.remove('show');
+            hideOverlayWord();
+            isChecked = false;
+        }
+
+        function skipNextWord() {
+            if (currentIndex < currentWordsQueue.length - 1) {
+                currentIndex++;
+                renderCurrentQuestion();
+            } else {
+                alert(`已經是本單元最後一題囉！`);
+            }
+        }
+
+        function addStarToStudent() {
+            const curStars = Number(localStorage.getItem(`english_stars_${currentStudent}`) || 0) + 1;
+            localStorage.setItem(`english_stars_${currentStudent}`, curStars);
+        }
+
+        function updateStatsUI() {
+            const stars = Number(localStorage.getItem(`english_stars_${currentStudent}`) || 0);
+            const mistakes = Object.keys(getStudentMistakesMap(currentStudent)).length;
+            document.getElementById('starBadge').textContent = `⭐ ${stars} Stars`;
+            document.getElementById('troubleBadge').textContent = `⚠️ 錯題: ${mistakes}`;
+        }
+
+        function switchStudent(student) {
+            currentStudent = student;
+            localStorage.setItem('spelling_current_student', student);
+            localStorage.setItem('english_g5_last_user', student);
+            document.body.setAttribute('data-user', student);
+
+            USERS.forEach(u => {
+                document.getElementById(`userBtn_${u}`).classList.toggle('active', u === student);
+            });
+
+            if (student === 'Barry' && currentUnitKey.startsWith('g5')) {
+                currentUnitKey = 'g3_dragon_1';
+                document.getElementById('unitPicker').value = currentUnitKey;
+            } else if (student === 'Lilian' && currentUnitKey.startsWith('g3')) {
+                currentUnitKey = 'g5_eruption_1';
+                document.getElementById('unitPicker').value = currentUnitKey;
+            }
+
+            loadUnitQuestions();
+        }
+
+        function togglePrintView() {
+            const printSec = document.getElementById('printableSection');
+            const mainCard = document.getElementById('mainInteractiveCard');
+            const isCurrentlyShown = printSec.style.display === 'block';
+
+            if (!isCurrentlyShown) {
+                generatePrintQuestions();
+                printSec.style.display = 'block';
+                mainCard.style.display = 'none';
+            } else {
+                printSec.style.display = 'none';
+                mainCard.style.display = 'block';
+            }
+        }
+
+        function generatePrintQuestions() {
+            const unit = ALL_UNITS[currentUnitKey] || ALL_UNITS['g3_dragon_1'];
+            document.getElementById('printUnitTitle').textContent = `${unit.title} — 英文手寫測驗卷`;
+            document.getElementById('printStudentName').textContent = currentStudent;
+
+            const listEl = document.getElementById('printQuestionsList');
+            listEl.innerHTML = currentWordsQueue.map((item, idx) => `
+                <div class="print-item">
+                    <div class="print-prompt">
+                        #${idx + 1}. [${item.pos}] ${item.translation}
+                        <span style="font-size:14px; color:#475569; font-weight:normal; margin-left:8px;">(${item.definition})</span>
+                    </div>
+                    <div style="font-size:14px; font-style:italic; color:#334155;">${item.sentence}</div>
+                    <div class="print-four-lines"></div>
+                </div>
+            `).join('');
+        }
+
+        switchStudent(currentStudent);
+        setTimeout(resizeCanvas, 100);
+    </script>
+</body>
+
+</html>
