@@ -1,0 +1,1759 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>單字小考 - 1.3 M6 L5 Hooray for Holidays Spelling List 1</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #fbf5fd;
+            padding: 20px;
+            text-align: center;
+            color: #333;
+        }
+
+        .back-nav {
+            margin-bottom: 12px;
+            text-align: left;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .back-link {
+            text-decoration: none;
+            color: #8e24aa;
+            font-weight: bold;
+            font-size: 16px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+            transition: 0.2s;
+            border: 1px solid #e1bee7;
+        }
+
+        .back-link:hover {
+            background: #f3e5f5;
+            transform: translateX(-2px);
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .list-box {
+            width: 290px;
+            background: white;
+            border: 2px solid #ba68c8;
+            border-radius: 12px;
+            padding: 15px;
+            text-align: left;
+            min-height: 250px;
+            box-shadow: 0 4px 12px rgba(156, 39, 176, 0.08);
+        }
+
+        .list-box h2 {
+            text-align: center;
+            font-size: 20px;
+            color: #8e24aa;
+            margin-top: 0;
+            border-bottom: 2px dashed #e1bee7;
+            padding-bottom: 8px;
+        }
+
+        li {
+            font-size: 18px;
+            margin: 8px 0;
+            cursor: pointer;
+            transition: 0.2s;
+            padding: 4px 8px;
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+        }
+
+        li:hover {
+            background: #f3e5f5;
+        }
+
+        .pos-badge {
+            font-size: 13px;
+            color: #7b1fa2;
+            font-weight: normal;
+            margin-left: 6px;
+        }
+
+        .selected-word-tag {
+            background: #9c27b0;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 2px 6px rgba(156, 39, 176, 0.3);
+        }
+
+        .selected-word-tag:hover {
+            background: #7b1fa2;
+        }
+
+        .tested {
+            color: #27ae60;
+            font-size: 28px;
+        }
+
+        .tested .pos-badge {
+            color: #27ae60;
+            opacity: 0.8;
+            font-size: 18px;
+        }
+
+        button {
+            padding: 14px 26px;
+            font-size: 20px;
+            margin: 8px;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            background: #ff9f43;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(255, 159, 67, 0.3);
+            transition: 0.2s;
+        }
+
+        button:hover {
+            background: #ff7f00;
+            transform: translateY(-1px);
+        }
+
+        button:active {
+            transform: translateY(1px);
+        }
+
+        #currentWordDisplay {
+            font-size: 44px;
+            font-weight: bold;
+            margin-top: 20px;
+            min-height: 120px;
+            line-height: 1.4;
+            color: #2d3748;
+        }
+
+        .word-box {
+            margin-top: 30px;
+            font-size: 26px;
+            font-weight: bold;
+            min-height: 40px;
+            color: #4a5568;
+        }
+
+        .learn-controls {
+            margin-top: 20px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f3e5f5, #fce4ec);
+            border-radius: 16px;
+            border: 2px solid #ba68c8;
+            box-shadow: 0 4px 12px rgba(186, 104, 200, 0.2);
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .learn-controls h3 {
+            color: #7b1fa2;
+            margin-top: 0;
+            font-size: 22px;
+        }
+
+        .loop-selector {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin: 10px 0;
+            font-size: 18px;
+        }
+
+        .loop-selector select {
+            padding: 8px 12px;
+            font-size: 18px;
+            border-radius: 10px;
+            border: 2px solid #ab47bc;
+            background: white;
+        }
+
+        #learnProgress {
+            margin-top: 12px;
+            font-size: 20px;
+            color: #7b1fa2;
+            font-weight: bold;
+            min-height: 30px;
+        }
+
+        #learnWordDisplay {
+            margin-top: 10px;
+            font-size: 36px;
+            font-weight: bold;
+            color: #4a148c;
+            min-height: 100px;
+            line-height: 1.4;
+        }
+
+        #learnStepDisplay {
+            margin-top: 6px;
+            font-size: 18px;
+            color: #555;
+            min-height: 25px;
+        }
+
+        .word-set-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin: 16px 0 4px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 10px 22px;
+            font-size: 17px;
+            font-weight: bold;
+            border-radius: 30px;
+            border: 2px solid #9c27b0;
+            cursor: pointer;
+            background: white;
+            color: #9c27b0;
+            transition: 0.2s;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+        }
+
+        .tab-btn:hover {
+            background: #f3e5f5;
+            transform: translateY(-1px);
+        }
+
+        .tab-btn.active {
+            background: #9c27b0;
+            color: white;
+            box-shadow: 0 4px 12px rgba(156, 39, 176, 0.35);
+        }
+
+        .tab-label {
+            text-align: center;
+            font-size: 15px;
+            color: #777;
+            margin-bottom: 4px;
+        }
+
+        /* ============= 學生切換與錯題本樣式 ============= */
+        .student-bar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+        }
+
+        .student-label {
+            font-size: 16px;
+            font-weight: bold;
+            color: #4a5568;
+        }
+
+        .student-pills {
+            display: inline-flex;
+            gap: 8px;
+            background: #f3e5f5;
+            padding: 4px;
+            border-radius: 20px;
+        }
+
+        .student-pill {
+            margin: 0 !important;
+            padding: 6px 16px !important;
+            font-size: 15px !important;
+            border-radius: 16px !important;
+            border: none;
+            cursor: pointer;
+            background: transparent;
+            color: #6a1b9a;
+            font-weight: bold;
+            box-shadow: none !important;
+            transition: 0.2s;
+        }
+
+        .student-pill:hover {
+            background: rgba(255, 255, 255, 0.7);
+            transform: none !important;
+        }
+
+        .student-pill.active {
+            background: #9c27b0 !important;
+            color: white !important;
+            box-shadow: 0 2px 8px rgba(156, 39, 176, 0.4) !important;
+        }
+
+        .wrong-book-btn {
+            margin: 0 !important;
+            padding: 8px 18px !important;
+            font-size: 15px !important;
+            background: #ff5252 !important;
+            border-radius: 20px !important;
+            box-shadow: 0 2px 8px rgba(255, 82, 82, 0.3) !important;
+        }
+
+        .wrong-book-btn:hover {
+            background: #e04040 !important;
+        }
+
+        .review-exam-btn {
+            background: #e67e22 !important;
+            box-shadow: 0 4px 10px rgba(230, 126, 34, 0.3) !important;
+        }
+
+        .review-exam-btn:hover {
+            background: #d35400 !important;
+        }
+
+        .mistake-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            font-size: 12px;
+            padding: 2px 7px;
+            border-radius: 10px;
+            background: #ffebee;
+            color: #c62828;
+            border: 1px solid #ffcdd2;
+            font-weight: bold;
+            margin-left: 6px;
+            vertical-align: middle;
+        }
+
+        .mark-wrong-quick-btn {
+            border: none;
+            background: #ffebee;
+            color: #d32f2f;
+            border-radius: 8px;
+            font-size: 12px;
+            padding: 2px 8px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-left: 6px;
+            transition: 0.2s;
+            box-shadow: none !important;
+            margin-top: 0 !important;
+            margin-bottom: 0 !important;
+        }
+
+        .mark-wrong-quick-btn:hover {
+            background: #ffcdd2;
+            transform: none !important;
+        }
+
+        /* Modal Overlay & Card */
+        .spelling-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.55);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            padding: 20px;
+            backdrop-filter: blur(4px);
+        }
+
+        .spelling-modal-card {
+            background: white;
+            border-radius: 20px;
+            max-width: 720px;
+            width: 100%;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            text-align: left;
+            animation: modalFadeIn 0.25s ease-out;
+            overflow: hidden;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(20px) scale(0.97); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .modal-header {
+            padding: 18px 24px;
+            border-bottom: 2px solid #edf2f7;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #f8fafc;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 22px;
+            color: #2d3748;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .modal-close-btn {
+            background: none !important;
+            border: none;
+            font-size: 28px;
+            color: #a0aec0;
+            cursor: pointer;
+            padding: 0 !important;
+            margin: 0 !important;
+            box-shadow: none !important;
+            line-height: 1;
+        }
+
+        .modal-close-btn:hover {
+            color: #4a5568;
+            background: none !important;
+            transform: none !important;
+        }
+
+        .modal-subtitle {
+            padding: 12px 24px;
+            background: #f3e5f5;
+            color: #6a1b9a;
+            font-size: 15px;
+            border-bottom: 1px solid #e1bee7;
+            line-height: 1.5;
+        }
+
+        .modal-body {
+            padding: 16px 24px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .exam-review-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 14px;
+            border-radius: 12px;
+            background: #f8fafc;
+            border: 2px solid #edf2f7;
+            margin-bottom: 10px;
+            transition: 0.2s;
+        }
+
+        .exam-review-item:hover {
+            border-color: #cbd5e0;
+        }
+
+        .exam-review-item.is-wrong {
+            background: #fff5f5;
+            border-color: #feb2b2;
+        }
+
+        .exam-item-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+        }
+
+        .exam-checkbox {
+            width: 22px;
+            height: 22px;
+            cursor: pointer;
+            accent-color: #e53e3e;
+        }
+
+        .exam-item-word {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2d3748;
+        }
+
+        .exam-item-sub {
+            font-size: 14px;
+            color: #718096;
+            margin-top: 2px;
+        }
+
+        .audio-play-btn {
+            border: none;
+            background: #edf2f7;
+            color: #4a5568;
+            padding: 6px 12px !important;
+            margin: 0 !important;
+            border-radius: 8px !important;
+            font-size: 14px !important;
+            cursor: pointer;
+            box-shadow: none !important;
+        }
+
+        .audio-play-btn:hover {
+            background: #e2e8f0 !important;
+            transform: none !important;
+        }
+
+        .modal-footer {
+            padding: 16px 24px;
+            border-top: 2px solid #edf2f7;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #f8fafc;
+            flex-wrap: wrap;
+        }
+
+        .btn-modal-sec {
+            background: #edf2f7 !important;
+            color: #4a5568 !important;
+            box-shadow: none !important;
+            padding: 10px 18px !important;
+            font-size: 15px !important;
+            border-radius: 10px !important;
+            margin: 0 !important;
+        }
+
+        .btn-modal-sec:hover {
+            background: #e2e8f0 !important;
+        }
+
+        .btn-modal-retest {
+            background: #e53e3e !important;
+            color: white !important;
+            box-shadow: 0 4px 12px rgba(229, 62, 62, 0.3) !important;
+            padding: 10px 22px !important;
+            font-size: 16px !important;
+            border-radius: 10px !important;
+            margin: 0 !important;
+            font-weight: bold;
+        }
+
+        .btn-modal-retest:hover {
+            background: #c53030 !important;
+        }
+
+        .btn-modal-allright {
+            background: #38a169 !important;
+            color: white !important;
+            box-shadow: 0 4px 12px rgba(56, 161, 105, 0.3) !important;
+            padding: 10px 20px !important;
+            font-size: 16px !important;
+            border-radius: 10px !important;
+            margin: 0 !important;
+            font-weight: bold;
+        }
+
+        .btn-modal-allright:hover {
+            background: #2f855a !important;
+        }
+    </style>
+</head>
+
+<body>
+    
+    <div class="student-bar">
+        <span class="student-label">👤 測驗學生：</span>
+        <div class="student-pills">
+            <button class="student-pill active" id="btnStudent_Anthony" onclick="setStudent('Anthony')">👦 Anthony</button>
+            <button class="student-pill" id="btnStudent_Barry" onclick="setStudent('Barry')">👦 Barry</button>
+            <button class="student-pill" id="btnStudent_Lilian" onclick="setStudent('Lilian')">👧 Lilian</button>
+        </div>
+        <button class="wrong-book-btn" onclick="openMistakeNotebook()">📖 錯題本 (<span id="totalMistakeBadge">0</span> 字)</button>
+    </div>
+    
+    <div class="back-nav">
+        <a href="../index.html" onclick="if(window.history.length>1){window.history.back();return false;}" class="back-link">← 回單字測驗列表</a>
+    </div>
+
+    <h1>單字小考 - 1.3 M6 L5 Hooray for Holidays Spelling List 1</h1>
+
+    <div class="tab-label">選擇練習範圍：</div>
+    <div class="word-set-tabs">
+        <button class="tab-btn active" id="tabAll" onclick="switchWordSet('all')">🎉 全部單字（15字）</button>
+        <button class="tab-btn" id="tabPart1" onclick="switchWordSet('part1')">📄 第 1~8 字（8字）</button>
+        <button class="tab-btn" id="tabPart2" onclick="switchWordSet('part2')">📄 第 9~15 字（7字）</button>
+    </div>
+
+    <p style="font-size: 18px; color: #555;">Press the button to hear a word. It will be spoken once.</p>
+    <div id="currentWordDisplay"></div>
+
+    <div id="selectedWordsDisplay" style="margin: 20px 0; min-height: 30px;">
+        <div style="font-size: 18px; color: #555; margin-bottom: 10px;">Selected Words:</div>
+        <div id="selectedWordsList" style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;"></div>
+    </div>
+
+    <button onclick="nextWord()">Next Word</button>
+    <button onclick="replayWord()">Replay Current Word</button>
+    <button onclick="showPhonics()" style="background: #2ecc71; box-shadow: 0 4px 10px rgba(46, 204, 113, 0.3);">Show Phonics</button>
+    
+    <button onclick="openExamReviewModal()" id="reviewExamBtn" class="review-exam-btn" style="display: inline-block;">📋 批改考卷 / 勾選錯題</button>
+    <button onclick="startHandwritingExam()" class="btn-handwriting-exam" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); color: white; box-shadow: 0 4px 10px rgba(2, 132, 199, 0.35); font-weight: bold; border-radius: 8px; padding: 10px 18px; border: none; cursor: pointer; font-size: 16px; margin: 4px;">✍️ 手寫測驗 (AI 評判)</button>
+
+    <button onclick="startAutoQuiz()" id="autoQuizBtn" style="background: #9b59b6; box-shadow: 0 4px 10px rgba(155, 89, 182, 0.3);">🎯 自動測驗模式</button>
+    <button onclick="stopAutoQuiz()" id="stopQuizBtn" style="background: #e74c3c; display: none; box-shadow: 0 4px 10px rgba(231, 76, 60, 0.3);">⏹ 停止測驗</button>
+
+    <div id="autoQuizStatus" style="margin-top: 15px; font-size: 24px; color: #9b59b6; font-weight: bold;"></div>
+
+    <div class="learn-controls">
+        <h3>📖 自動學習模式</h3>
+        <p style="font-size: 16px; color: #555;">按下播放，孩子只要坐著聽：唸單字 → 逐字拼讀 → 音節拆解 → 完整唸一次 → 停頓跟讀</p>
+        <div class="loop-selector">
+            <label for="loopCount">循環次數：</label>
+            <select id="loopCount">
+                <option value="1">1 輪</option>
+                <option value="2" selected>2 輪</option>
+                <option value="3">3 輪</option>
+                <option value="4">4 輪</option>
+                <option value="5">5 輪</option>
+            </select>
+        </div>
+        <div>
+            <button onclick="startAutoLearn()" id="autoLearnBtn" style="background: #43a047; box-shadow: 0 4px 10px rgba(67, 160, 71, 0.3);">▶️ 開始學習</button>
+            <button onclick="stopAutoLearn()" id="stopLearnBtn" style="background: #e74c3c; display: none; box-shadow: 0 4px 10px rgba(231, 76, 60, 0.3);">⏹ 停止學習</button>
+        </div>
+        <div id="learnProgress"></div>
+        <div id="learnWordDisplay"></div>
+        <div id="learnStepDisplay"></div>
+    </div>
+
+    <div style="margin-top: 20px;">
+        <label for="voiceSelector" style="font-size: 18px; margin-right: 10px;">選擇發音：</label>
+        <select id="voiceSelector" onchange="changeVoice()" style="padding: 8px; font-size: 16px; border-radius: 8px; border: 1px solid #ccc;">
+        </select>
+    </div>
+
+    <div class="container">
+        <div class="list-box">
+            <h2>Words To Study</h2>
+            <ul id="leftList" style="padding-left: 15px; margin: 0;"></ul>
+        </div>
+
+        <div class="list-box">
+            <h2>Words Tested</h2>
+            <ol id="rightList" style="padding-left: 25px; margin: 0;"></ol>
+        </div>
+    </div>
+
+    <div class="word-box" id="statusBox"></div>
+
+    <script>
+        // ============= 單字資料庫 =============
+        const holidayWords = [
+        {
+                "word": "celebrate",
+                "posType": "verb",
+                "breakdown": "cel - e - brate",
+                "ipa": "/ˌsɛləˈbreɪt/",
+                "phonicsSounds": [
+                        "sel",
+                        "uh",
+                        "brayt"
+                ],
+                "pos": "v. 動詞",
+                "translation": "慶祝",
+                "definition": "to do something fun to remember a special event, person, or day",
+                "sentence": "My family always celebrates Lunar New Year."
+        },
+        {
+                "word": "share",
+                "posType": "verb",
+                "breakdown": "share",
+                "ipa": "/ʃɛər/",
+                "phonicsSounds": [
+                        "sh",
+                        "air"
+                ],
+                "pos": "v. 動詞",
+                "translation": "分享、分擔",
+                "definition": "to use, split/divide, or enjoy with others",
+                "sentence": "I will share my snack with you!"
+        },
+        {
+                "word": "tradition",
+                "posType": "noun",
+                "breakdown": "tra - di - tion",
+                "ipa": "/trəˈdɪʃən/",
+                "phonicsSounds": [
+                        "truh",
+                        "dish",
+                        "un"
+                ],
+                "pos": "n. 名詞",
+                "translation": "傳統",
+                "definition": "a special way people have done something for many years",
+                "sentence": "Eating BBQ is my family’s Moon Festival tradition."
+        },
+        {
+                "word": "parade",
+                "posType": "noun",
+                "breakdown": "pa - rade",
+                "ipa": "/pəˈreɪd/",
+                "phonicsSounds": [
+                        "puh",
+                        "rayd"
+                ],
+                "pos": "n. 名詞",
+                "translation": "遊行",
+                "definition": "a group of people who march or ride down a street for an event",
+                "sentence": "Will there be a Dragon Boat Festival parade this year?"
+        },
+        {
+                "word": "constitution",
+                "posType": "noun",
+                "breakdown": "con - sti - tu - tion",
+                "ipa": "/ˌkɑːnstəˈtuːʃən/",
+                "phonicsSounds": [
+                        "kon",
+                        "stih",
+                        "too",
+                        "shun"
+                ],
+                "pos": "n. 名詞",
+                "translation": "憲法",
+                "definition": "a book of laws signed by a country’s leaders for people to follow",
+                "sentence": "We need to follow the rules in Taiwan’s constitution."
+        },
+        {
+                "word": "carry",
+                "posType": "verb",
+                "breakdown": "car - ry",
+                "ipa": "/ˈkæri/",
+                "phonicsSounds": [
+                        "kair",
+                        "ee"
+                ],
+                "pos": "v. 動詞",
+                "translation": "攜帶、提、拿",
+                "definition": "to hold something and take it to another place",
+                "sentence": "Can you carry the bags to the kitchen?"
+        },
+        {
+                "word": "draw",
+                "posType": "verb",
+                "breakdown": "draw",
+                "ipa": "/drɔː/",
+                "phonicsSounds": [
+                        "dr",
+                        "aw"
+                ],
+                "pos": "v. 動詞",
+                "translation": "繪畫、畫圖",
+                "definition": "to create a picture using pencils or crayons",
+                "sentence": "I like to draw pictures of cats."
+        },
+        {
+                "word": "eight",
+                "posType": "adjective",
+                "breakdown": "eight",
+                "ipa": "/eɪt/",
+                "phonicsSounds": [
+                        "ayt"
+                ],
+                "pos": "adj. 形容詞",
+                "translation": "八個的、八",
+                "definition": "the number after seven and before nine",
+                "sentence": "You might feel sick if you eat eight cookies."
+        },
+        {
+                "word": "even",
+                "posType": "adverb",
+                "breakdown": "e - ven",
+                "ipa": "/ˈiːvən/",
+                "phonicsSounds": [
+                        "ee",
+                        "vun"
+                ],
+                "pos": "adv. 副詞",
+                "translation": "甚至、更加",
+                "definition": "to a greater extent or amount",
+                "sentence": "I have even more homework than last week!"
+        },
+        {
+                "word": "goes",
+                "posType": "verb",
+                "breakdown": "goes",
+                "ipa": "/ɡoʊz/",
+                "phonicsSounds": [
+                        "g",
+                        "ohz"
+                ],
+                "pos": "v. 動詞",
+                "translation": "去 (第三人稱單數)",
+                "definition": "to move away from one point to another",
+                "sentence": "He goes to soccer club on Thursdays."
+        },
+        {
+                "word": "seven",
+                "posType": "adjective",
+                "breakdown": "sev - en",
+                "ipa": "/ˈsɛvən/",
+                "phonicsSounds": [
+                        "sev",
+                        "un"
+                ],
+                "pos": "adj. 形容詞",
+                "translation": "七個的、七",
+                "definition": "the number after six and before eight",
+                "sentence": "Snow White was friends with seven dwarves."
+        },
+        {
+                "word": "show",
+                "posType": "verb",
+                "breakdown": "show",
+                "ipa": "/ʃoʊ/",
+                "phonicsSounds": [
+                        "sh",
+                        "oh"
+                ],
+                "pos": "v. 動詞",
+                "translation": "展示、教導",
+                "definition": "to teach or demonstrate how to do something",
+                "sentence": "My friend shows me how to tie my shoes."
+        },
+        {
+                "word": "like",
+                "posType": "verb",
+                "breakdown": "like",
+                "ipa": "/laɪk/",
+                "phonicsSounds": [
+                        "l",
+                        "yke"
+                ],
+                "pos": "v. 動詞",
+                "translation": "喜歡",
+                "definition": "to enjoy something",
+                "sentence": "I like reading story books before bed."
+        },
+        {
+                "word": "drive",
+                "posType": "verb",
+                "breakdown": "drive",
+                "ipa": "/draɪv/",
+                "phonicsSounds": [
+                        "dr",
+                        "yve"
+                ],
+                "pos": "v. 動詞",
+                "translation": "開車、駕駛",
+                "definition": "to direct or move a vehicle on a course",
+                "sentence": "My aunt drives carefully on rainy days."
+        },
+        {
+                "word": "hole",
+                "posType": "noun",
+                "breakdown": "hole",
+                "ipa": "/hoʊl/",
+                "phonicsSounds": [
+                        "h",
+                        "ohl"
+                ],
+                "pos": "n. 名詞",
+                "translation": "洞、破洞",
+                "definition": "an opening into or through a thing",
+                "sentence": "There is a hole in my sock!"
+        }
+];
+
+        const wordsPart1 = holidayWords.slice(0, 8);
+        const wordsPart2 = holidayWords.slice(8);
+        const allWords = [...holidayWords];
+
+        let currentWordObj = null;
+        let selectedWords = [];
+        let testedWords = [];
+        let availableWords = [...holidayWords];
+        let currentWordSet = 'all';
+        let usVoice = null;
+
+        // 切換單字範圍
+        function switchWordSet(set) {
+            if (isModeRunning()) {
+                stopAutoQuiz();
+                stopAutoLearn();
+            }
+            currentWordSet = set;
+            selectedWords = [];
+            testedWords = [];
+            currentWordObj = null;
+            document.getElementById("currentWordDisplay").innerHTML = "";
+            document.getElementById("statusBox").innerText = "";
+            document.getElementById("autoQuizStatus").innerText = "";
+            document.getElementById("learnProgress").innerText = "";
+            document.getElementById("learnWordDisplay").innerText = "";
+            document.getElementById("learnStepDisplay").innerText = "";
+            document.body.style.background = "#fbf5fd";
+
+            // 載入對應單字組
+            if (set === 'part1') {
+                availableWords = [...wordsPart1];
+            } else if (set === 'part2') {
+                availableWords = [...wordsPart2];
+            } else {
+                availableWords = [...holidayWords];
+            }
+
+            // 更新 tab 狀態
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            const tabMap = { all: 'tabAll', part1: 'tabPart1', part2: 'tabPart2' };
+            if (tabMap[set] && document.getElementById(tabMap[set])) {
+                document.getElementById(tabMap[set]).classList.add('active');
+            }
+
+            refreshLists();
+        }
+
+        function loadVoices() {
+            const voices = speechSynthesis.getVoices();
+            const enUSVoices = voices.filter(v => v.lang === "en-US");
+
+            const selector = document.getElementById("voiceSelector");
+            selector.innerHTML = "";
+
+            enUSVoices.forEach((voice, index) => {
+                const option = document.createElement("option");
+                option.value = index;
+                option.textContent = voice.name + (voice.lang !== "en-US" ? " (" + voice.lang + ")" : "");
+                selector.appendChild(option);
+            });
+
+            let defaultVoice = enUSVoices.find(v => v.name === "Google US English");
+            if (!defaultVoice) defaultVoice = enUSVoices.find(v => v.name.includes("Google") && (v.lang === "en-US" || v.name.includes("US")));
+            if (!defaultVoice) defaultVoice = enUSVoices.find(v => v.name.includes("Google"));
+            if (!defaultVoice) defaultVoice = enUSVoices.find(v => v.name === "Samantha");
+            if (!defaultVoice) defaultVoice = enUSVoices.find(v => v.name === "Aaron");
+            if (!defaultVoice) defaultVoice = enUSVoices.find(v => v.name === "Alex");
+            if (!defaultVoice) defaultVoice = enUSVoices.find(v => v.name === "Flo");
+            if (!defaultVoice) defaultVoice = enUSVoices[0];
+
+            usVoice = defaultVoice;
+
+            const defaultIndex = enUSVoices.indexOf(defaultVoice);
+            if (defaultIndex !== -1) {
+                selector.selectedIndex = defaultIndex;
+            }
+
+            window.availableVoices = enUSVoices;
+        }
+
+        function changeVoice() {
+            const selector = document.getElementById("voiceSelector");
+            const selectedIndex = selector.value;
+            usVoice = window.availableVoices[selectedIndex];
+        }
+
+        speechSynthesis.onvoiceschanged = loadVoices;
+        loadVoices();
+
+        function toggleWordSelection(word) {
+            const wordObj = availableWords.find(w => w.word === word);
+            if (!wordObj) return;
+
+            selectedWords.push(wordObj);
+
+            const index = availableWords.findIndex(w => w.word === word);
+            if (index !== -1) {
+                availableWords.splice(index, 1);
+            }
+
+            refreshLists();
+        }
+
+        function removeFromSelected(word) {
+            const index = selectedWords.findIndex(w => w.word === word);
+            if (index !== -1) {
+                const wordObj = selectedWords[index];
+                selectedWords.splice(index, 1);
+                availableWords.push(wordObj);
+                refreshLists();
+            }
+        }
+
+        function refreshLists() {
+            const map = getStudentMistakesMap(currentStudent);
+
+            document.getElementById("leftList").innerHTML = availableWords
+                .map(w => {
+                    const count = map[w.word] || 0;
+                    const badge = count > 0 ? `<span class="mistake-badge">⚠️ ${count}</span>` : '';
+                    return `<li onclick="toggleWordSelection('${w.word}')"><span>${w.word}</span>${badge} <span class="pos-badge">${w.pos}</span></li>`;
+                })
+                .join("");
+
+            document.getElementById("rightList").innerHTML = testedWords
+                .map(w => {
+                    const count = map[w.word] || 0;
+                    const badge = count > 0 ? `<span class="mistake-badge">⚠️ ${count}</span>` : '';
+                    const markBtn = `<button class="mark-wrong-quick-btn" onclick="quickToggleMistake('${w.word}')">+錯題</button>`;
+                    return `<li class="tested"><span>${w.word}${badge}${markBtn}</span> <span class="pos-badge">${w.pos}</span></li>`;
+                })
+                .join("");
+
+            document.getElementById("selectedWordsList").innerHTML = selectedWords
+                .map(w => `<span class="selected-word-tag" onclick="removeFromSelected('${w.word}')">${w.word} <span style="font-size: 12px; opacity: 0.8;">${w.pos}</span> ✕</span>`)
+                .join("");
+
+            const reviewBtn = document.getElementById('reviewExamBtn');
+            if (reviewBtn) {
+                reviewBtn.style.display = testedWords.length > 0 ? 'inline-block' : 'none';
+            }
+        }
+
+        function speakOnce(text, rate = 0.8) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = "en-US";
+            utterance.rate = rate;
+            if (usVoice) utterance.voice = usVoice;
+            speechSynthesis.speak(utterance);
+        }
+
+        function nextWord() {
+            if (isModeRunning()) stopCurrentMode();
+
+            let pool = selectedWords.length > 0 ? selectedWords : availableWords;
+
+            if (pool.length === 0) {
+                document.getElementById("statusBox").innerText = "All words have been tested!";
+                document.getElementById("currentWordDisplay").innerHTML = "";
+                currentWordObj = null;
+                return;
+            }
+
+            const randomIndex = Math.floor(Math.random() * pool.length);
+            currentWordObj = pool[randomIndex];
+
+            pool.splice(randomIndex, 1);
+            testedWords.push(currentWordObj);
+
+            document.getElementById("currentWordDisplay").innerHTML = `
+                <div style="font-size: 20px; color: #8e24aa; margin-bottom: 8px;">Word #${testedWords.length}</div>
+                <div style="font-size: 32px; color: #2d3748;">🔊 Listening...</div>
+            `;
+            document.getElementById("statusBox").innerText = "";
+
+            speakOnce(currentWordObj.word);
+            refreshLists();
+        }
+
+        function showPhonics() {
+            if (!currentWordObj) {
+                document.getElementById("statusBox").innerText = "No word selected yet!";
+                return;
+            }
+
+            document.getElementById("statusBox").innerText = "Playing phonics breakdown...";
+
+            const parts = currentWordObj.phonicsSounds || currentWordObj.breakdown.split(" - ");
+
+            let delay = 0;
+
+            parts.forEach(part => {
+                setTimeout(() => speakOnce(part), delay);
+                delay += 1000;
+            });
+
+            setTimeout(() => speakOnce(currentWordObj.word), delay);
+        }
+
+        function replayWord() {
+            if (!currentWordObj) {
+                document.getElementById("statusBox").innerText = "No word to replay!";
+                return;
+            }
+            speakOnce(currentWordObj.word);
+        }
+
+        // ============= 自動測驗模式 =============
+        let isAutoQuizRunning = false;
+        let autoQuizTimer = null;
+
+        function isModeRunning() {
+            return isAutoQuizRunning || isAutoLearnRunning;
+        }
+
+        function speakWithPromise(text, rate = 0.8) {
+            return new Promise((resolve) => {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = "en-US";
+                utterance.rate = rate;
+                if (usVoice) utterance.voice = usVoice;
+                utterance.onend = () => resolve();
+                utterance.onerror = () => resolve();
+                speechSynthesis.speak(utterance);
+            });
+        }
+
+        function waitMs(ms) {
+            return new Promise((resolve) => {
+                autoQuizTimer = setTimeout(resolve, ms);
+            });
+        }
+
+        async function speakEnglish(text, rate = 0.8) {
+            await speakWithPromise(text, rate);
+        }
+
+        const wait = waitMs;
+
+        async function autoQuizWord(wordObj, index, total) {
+            const statusEl = document.getElementById("autoQuizStatus");
+            const displayEl = document.getElementById("currentWordDisplay");
+
+            currentWordObj = wordObj;
+            testedWords.push(wordObj);
+            refreshLists();
+
+            const rate = 0.8;
+
+            for (let round = 1; round <= 2; round++) {
+                if (!isAutoQuizRunning) return;
+
+                statusEl.innerText = `測驗中 (${index + 1}/${total}) - 第 ${round} 次播放`;
+                displayEl.innerHTML = `
+                    <div style="font-size: 20px; color: #8e24aa; margin-bottom: 8px;">第 ${index + 1} 題 / 共 ${total} 題</div>
+                    <div style="font-size: 32px; color: #2d3748;">🔊 仔細聽... (第 ${round} 次)</div>
+                `;
+
+                await speakEnglish(wordObj.word, rate);
+                if (!isAutoQuizRunning) return;
+                await wait(400);
+
+                const parts = wordObj.phonicsSounds || wordObj.breakdown.split(" - ");
+                for (const part of parts) {
+                    if (!isAutoQuizRunning) return;
+                    await speakEnglish(part, rate);
+                    await wait(300);
+                }
+
+                if (!isAutoQuizRunning) return;
+                await wait(400);
+
+                await speakEnglish(wordObj.word, rate);
+                if (!isAutoQuizRunning) return;
+
+                if (round === 1) {
+                    statusEl.innerText = `測驗中 (${index + 1}/${total}) - 請作答...`;
+                    displayEl.innerHTML = `
+                        <div style="font-size: 20px; color: #8e24aa; margin-bottom: 8px;">第 ${index + 1} 題 / 共 ${total} 題</div>
+                        <div style="font-size: 32px; color: #ff9f43;">✍️ 請在紙上拼寫單字...</div>
+                    `;
+                    await wait(8000);
+                }
+            }
+
+            if (!isAutoQuizRunning) return;
+
+            statusEl.innerText = `第 ${index + 1} 題完成，準備下一題...`;
+            await wait(2000);
+        }
+
+        function shuffleArray(array) {
+            const arr = [...array];
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        async function runAutoQuiz() {
+            let pool = selectedWords.length > 0 ? [...selectedWords] : [...availableWords];
+
+            if (pool.length === 0) {
+                document.getElementById("autoQuizStatus").innerText = "沒有單字可測驗！";
+                stopAutoQuiz();
+                return;
+            }
+
+            pool = shuffleArray(pool);
+            const total = pool.length;
+
+            selectedWords = [];
+            availableWords = [];
+            testedWords = [];
+            refreshLists();
+
+            for (let i = 0; i < total; i++) {
+                if (!isAutoQuizRunning) break;
+                await autoQuizWord(pool[i], i, total);
+            }
+
+            if (isAutoQuizRunning) {
+                document.getElementById("autoQuizStatus").innerText = "🎉 測驗完成！請核對答案。";
+                document.getElementById("currentWordDisplay").innerHTML = `
+                    <div style="font-size: 32px; color: #27ae60;">測驗結束！共 ${total} 題</div>
+                `;
+                stopAutoQuiz();
+                openExamReviewModal();
+            }
+        }
+
+        function startAutoQuiz() {
+            if (isModeRunning()) stopCurrentMode();
+
+            primeSpeech();
+
+            isAutoQuizRunning = true;
+            document.getElementById("autoQuizBtn").style.display = "none";
+            document.getElementById("stopQuizBtn").style.display = "inline-block";
+            document.getElementById("autoQuizStatus").innerText = "準備開始測驗...";
+            document.body.style.background = "#fff8e7";
+
+            runAutoQuiz();
+        }
+
+        function stopAutoQuiz() {
+            isAutoQuizRunning = false;
+            if (autoQuizTimer) {
+                clearTimeout(autoQuizTimer);
+                autoQuizTimer = null;
+            }
+            speechSynthesis.cancel();
+            document.getElementById("autoQuizBtn").style.display = "inline-block";
+            document.getElementById("stopQuizBtn").style.display = "none";
+            document.body.style.background = "#fbf5fd";
+        }
+
+        function primeSpeech() {
+            const silent = new SpeechSynthesisUtterance("");
+            silent.volume = 0;
+            speechSynthesis.speak(silent);
+        }
+
+        function stopCurrentMode() {
+            if (isAutoQuizRunning) stopAutoQuiz();
+            if (isAutoLearnRunning) stopAutoLearn();
+        }
+
+        // ============= 自動學習模式 =============
+        let isAutoLearnRunning = false;
+        let autoLearnTimer = null;
+
+        async function learnWord(wordObj, wordIndex, totalWords, currentLoop, totalLoops) {
+            const progress = document.getElementById("learnProgress");
+            const wordDisplay = document.getElementById("learnWordDisplay");
+            const stepDisplay = document.getElementById("learnStepDisplay");
+
+            progress.innerText = `第 ${currentLoop} / ${totalLoops} 輪 • 單字 ${wordIndex + 1} / ${totalWords}`;
+
+            wordDisplay.innerText = wordObj.word;
+            stepDisplay.innerText = "🔊 聽單字發音...";
+            await speakWithPromise(wordObj.word, 0.75);
+            if (!isAutoLearnRunning) return;
+            await waitMs(500);
+
+            stepDisplay.innerText = "🔤 逐字拼讀...";
+            const letters = wordObj.word.replace(/[^a-zA-Z]/g, '').toUpperCase().split("");
+            const spellingText = letters.join(", ");
+            await speakWithPromise(spellingText, 1.0);
+            if (!isAutoLearnRunning) return;
+            await waitMs(300);
+
+            const parts = wordObj.phonicsSounds || wordObj.breakdown.split(" - ");
+            stepDisplay.innerText = "📝 音節拆解：" + wordObj.breakdown;
+            for (const part of parts) {
+                if (!isAutoLearnRunning) return;
+                await speakWithPromise(part, 0.6);
+                await waitMs(400);
+            }
+            if (!isAutoLearnRunning) return;
+            await waitMs(400);
+
+            stepDisplay.innerText = "🔊 再次發音...";
+            await speakWithPromise(wordObj.word, 0.75);
+            if (!isAutoLearnRunning) return;
+
+            stepDisplay.innerText = "🗣️ 換你跟讀！(停頓 3 秒)";
+            await waitMs(3000);
+            if (!isAutoLearnRunning) return;
+
+            stepDisplay.innerText = "";
+            await waitMs(500);
+        }
+
+        async function runAutoLearn() {
+            const totalLoops = parseInt(document.getElementById("loopCount").value);
+            const pool = selectedWords.length > 0 ? selectedWords : availableWords;
+
+            if (pool.length === 0) {
+                document.getElementById("learnProgress").innerText = "沒有單字可學習！";
+                stopAutoLearn();
+                return;
+            }
+
+            const wordsToLearn = [...pool];
+
+            for (let loop = 1; loop <= totalLoops; loop++) {
+                if (!isAutoLearnRunning) break;
+
+                for (let i = 0; i < wordsToLearn.length; i++) {
+                    if (!isAutoLearnRunning) break;
+                    await learnWord(wordsToLearn[i], i, wordsToLearn.length, loop, totalLoops);
+                }
+            }
+
+            if (isAutoLearnRunning) {
+                document.getElementById("learnProgress").innerText = "🎉 學習完成！共完成 " + totalLoops + " 輪。";
+                document.getElementById("learnWordDisplay").innerText = "太棒了！";
+                document.getElementById("learnStepDisplay").innerText = "你已經完成所有單字的拼讀與發音練習。";
+                stopAutoLearn();
+            }
+        }
+
+        function startAutoLearn() {
+            if (isModeRunning()) stopCurrentMode();
+
+            primeSpeech();
+
+            isAutoLearnRunning = true;
+            document.getElementById("autoLearnBtn").style.display = "none";
+            document.getElementById("stopLearnBtn").style.display = "inline-block";
+            document.getElementById("learnProgress").innerText = "準備開始學習...";
+            document.body.style.background = "#f3e5f5";
+
+            runAutoLearn();
+        }
+
+        function stopAutoLearn() {
+            isAutoLearnRunning = false;
+            if (autoLearnTimer) {
+                clearTimeout(autoLearnTimer);
+                autoLearnTimer = null;
+            }
+            speechSynthesis.cancel();
+            document.getElementById("autoLearnBtn").style.display = "inline-block";
+            document.getElementById("stopLearnBtn").style.display = "none";
+            document.body.style.background = "#fbf5fd";
+        }
+
+        // ============= 學生狀態與本機記憶體 (LocalStorage) =============
+        const STUDENTS = ['Anthony', 'Barry', 'Lilian'];
+        let currentStudent = localStorage.getItem('spelling_current_student') || 'Anthony';
+        if (!STUDENTS.includes(currentStudent)) currentStudent = 'Anthony';
+
+        // 讀取該學生的錯題本字典 { "word": count }
+        function getStudentMistakesMap(student) {
+            const key = `spelling_mistakes_${student}`;
+            try {
+                const data = localStorage.getItem(key);
+                return data ? JSON.parse(data) : {};
+            } catch (e) {
+                return {};
+            }
+        }
+
+        // 儲存錯題字典
+        function saveStudentMistakesMap(student, map) {
+            const key = `spelling_mistakes_${student}`;
+            localStorage.setItem(key, JSON.stringify(map));
+            updateStudentUI();
+        }
+
+        // 記錄某個單字錯誤 (+1)
+        function incrementWordMistake(word, student = currentStudent) {
+            const map = getStudentMistakesMap(student);
+            map[word] = (map[word] || 0) + 1;
+            saveStudentMistakesMap(student, map);
+        }
+
+        // 取得單字錯誤次數
+        function getWordMistakeCount(word, student = currentStudent) {
+            const map = getStudentMistakesMap(student);
+            return map[word] || 0;
+        }
+
+        // 切換學生
+        function setStudent(student) {
+            if (!STUDENTS.includes(student)) return;
+            currentStudent = student;
+            localStorage.setItem('spelling_current_student', student);
+            updateStudentUI();
+            refreshLists();
+            playAudioTone(520, 'sine', 0.1);
+        }
+
+        // 更新學生 UI 與標籤
+        function updateStudentUI() {
+            STUDENTS.forEach(s => {
+                const btn = document.getElementById(`btnStudent_${s}`);
+                if (btn) btn.classList.toggle('active', s === currentStudent);
+            });
+
+            const map = getStudentMistakesMap(currentStudent);
+            const allLessonWords = getAllPossibleWords();
+            const mistakeWordsInLesson = allLessonWords.filter(w => (map[w.word] || 0) > 0);
+            const badgeEl = document.getElementById('totalMistakeBadge');
+            if (badgeEl) badgeEl.textContent = mistakeWordsInLesson.length;
+
+            const modalStudent = document.getElementById('modalStudentName');
+            if (modalStudent) modalStudent.textContent = currentStudent;
+
+            const notebookStudent = document.getElementById('notebookStudentName');
+            if (notebookStudent) notebookStudent.textContent = currentStudent;
+        }
+
+        // 取得本課全部單字池
+        function getAllPossibleWords() {
+            const set = new Map();
+            if (typeof holidayWords !== 'undefined') holidayWords.forEach(w => set.set(w.word, w));
+            if (typeof allWords !== 'undefined') allWords.forEach(w => set.set(w.word, w));
+            return Array.from(set.values());
+        }
+
+        // Web Audio 音效產生器
+        function playAudioTone(freq, type = 'sine', duration = 0.15) {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, ctx.currentTime);
+                gain.gain.setValueAtTime(0.12, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + duration);
+            } catch (e) {}
+        }
+
+        function playSuccessChime() {
+            playAudioTone(523.25, 'sine', 0.12);
+            setTimeout(() => playAudioTone(659.25, 'sine', 0.12), 100);
+            setTimeout(() => playAudioTone(783.99, 'sine', 0.25), 200);
+        }
+
+        // ============= 考卷核對與錯題勾選 Modal =============
+        let checkedMistakeWords = new Set();
+
+        function openExamReviewModal() {
+            if (testedWords.length === 0) {
+                alert("目前尚未有任何測驗過的單字！請先進行測驗。");
+                return;
+            }
+
+            checkedMistakeWords.clear();
+            const modal = document.getElementById('examReviewModal');
+            const listEl = document.getElementById('modalWordList');
+            const map = getStudentMistakesMap(currentStudent);
+
+            listEl.innerHTML = testedWords.map((w, idx) => {
+                const count = map[w.word] || 0;
+                const badgeHtml = count > 0 ? `<span class="mistake-badge">⚠️ 歷史錯過 ${count} 次</span>` : '';
+                return `
+                    <div class="exam-review-item" id="reviewRow_${idx}">
+                        <div class="exam-item-left">
+                            <input type="checkbox" class="exam-checkbox" id="chk_${idx}" onchange="toggleMistakeCheckbox('${w.word}', ${idx}, this.checked)">
+                            <div>
+                                <div class="exam-item-word">
+                                    ${idx + 1}. ${w.word} ${badgeHtml}
+                                </div>
+                                <div class="exam-item-sub">
+                                    ${w.pos} • ${w.translation}
+                                </div>
+                            </div>
+                        </div>
+                        <button class="audio-play-btn" onclick="speakOnce('${w.word}')">🔊 發音</button>
+                    </div>
+                `;
+            }).join('');
+
+            updateCheckedWrongCount();
+            modal.style.display = 'flex';
+        }
+
+        function closeExamModal() {
+            document.getElementById('examReviewModal').style.display = 'none';
+        }
+
+        function toggleMistakeCheckbox(word, idx, isChecked) {
+            const row = document.getElementById(`reviewRow_${idx}`);
+            if (isChecked) {
+                checkedMistakeWords.add(word);
+                if (row) row.classList.add('is-wrong');
+                playAudioTone(280, 'sawtooth', 0.08);
+            } else {
+                checkedMistakeWords.delete(word);
+                if (row) row.classList.remove('is-wrong');
+                playAudioTone(440, 'sine', 0.05);
+            }
+            updateCheckedWrongCount();
+        }
+
+        function setAllCheckboxes(state) {
+            testedWords.forEach((w, idx) => {
+                const chk = document.getElementById(`chk_${idx}`);
+                if (chk) {
+                    chk.checked = state;
+                    toggleMistakeCheckbox(w.word, idx, state);
+                }
+            });
+        }
+
+        function updateCheckedWrongCount() {
+            const el = document.getElementById('checkedWrongCount');
+            if (el) el.textContent = checkedMistakeWords.size;
+            const retestBtn = document.getElementById('retestWrongBtn');
+            if (retestBtn) {
+                retestBtn.style.display = checkedMistakeWords.size > 0 ? 'inline-block' : 'none';
+            }
+        }
+
+        // 記錄並重考勾選錯題
+        function retestCheckedWrongWords() {
+            if (checkedMistakeWords.size === 0) {
+                alert("請至少勾選一個寫錯的單字！");
+                return;
+            }
+
+            checkedMistakeWords.forEach(word => {
+                incrementWordMistake(word, currentStudent);
+            });
+
+            const allWords = getAllPossibleWords();
+            const wrongWordObjs = allWords.filter(w => checkedMistakeWords.has(w.word));
+
+            closeExamModal();
+
+            testedWords = [];
+            selectedWords = [];
+            availableWords = [...wrongWordObjs];
+            currentWordObj = null;
+
+            document.getElementById("currentWordDisplay").innerHTML = "";
+            document.getElementById("statusBox").innerText = `⚠️ 已載入 ${wrongWordObjs.length} 題錯題，準備重練！`;
+            document.body.style.background = "#fff0f0";
+
+            refreshLists();
+            playAudioTone(600, 'triangle', 0.2);
+        }
+
+        // 確認全部正確
+        function confirmAllCorrect() {
+            closeExamModal();
+            playSuccessChime();
+            document.getElementById("statusBox").innerText = `🌟 太棒了！${currentStudent} 此次測驗全部答對！🎉`;
+            document.body.style.background = "#e8f5e9";
+        }
+
+        // 單獨在 Words Tested 列表快速標為錯題
+        function quickToggleMistake(word) {
+            incrementWordMistake(word, currentStudent);
+            playAudioTone(400, 'sawtooth', 0.1);
+            refreshLists();
+        }
+
+        // ============= 歷史錯題本 Modal =============
+        function openMistakeNotebook() {
+            const modal = document.getElementById('mistakeNotebookModal');
+            const listEl = document.getElementById('notebookWordList');
+            const map = getStudentMistakesMap(currentStudent);
+            const allWords = getAllPossibleWords();
+
+            const mistakeWords = allWords
+                .filter(w => (map[w.word] || 0) > 0)
+                .sort((a, b) => (map[b.word] || 0) - (map[a.word] || 0));
+
+            const totalEl = document.getElementById('notebookTotalCount');
+            if (totalEl) totalEl.textContent = mistakeWords.length;
+
+            if (mistakeWords.length === 0) {
+                listEl.innerHTML = `
+                    <div style="text-align:center; padding: 40px; color:#718096; font-size:18px;">
+                        🎉 太厲害了！${currentStudent} 目前沒有任何錯題紀錄！
+                    </div>
+                `;
+            } else {
+                listEl.innerHTML = mistakeWords.map((w, idx) => {
+                    const count = map[w.word];
+                    return `
+                        <div class="exam-review-item is-wrong">
+                            <div class="exam-item-left">
+                                <div style="font-size:20px; font-weight:bold; color:#c53030; min-width:28px;">#${idx + 1}</div>
+                                <div>
+                                    <div class="exam-item-word">
+                                        ${w.word} <span class="mistake-badge">⚠️ 累計錯 ${count} 次</span>
+                                    </div>
+                                    <div class="exam-item-sub">
+                                        ${w.pos} • ${w.translation}
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="display:flex; gap:8px;">
+                                <button class="audio-play-btn" onclick="speakOnce('${w.word}')">🔊 發音</button>
+                                <button class="audio-play-btn" style="color:#e53e3e;" onclick="removeSingleWordMistake('${w.word}')">✕ 移除</button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            modal.style.display = 'flex';
+        }
+
+        function closeMistakeNotebook() {
+            document.getElementById('mistakeNotebookModal').style.display = 'none';
+        }
+
+        // 移除單一單字錯誤紀錄
+        function removeSingleWordMistake(word) {
+            const map = getStudentMistakesMap(currentStudent);
+            delete map[word];
+            saveStudentMistakesMap(currentStudent, map);
+            openMistakeNotebook();
+            refreshLists();
+        }
+
+        // 清空該學生全部錯題
+        function clearCurrentStudentMistakes() {
+            if (confirm(`確定要清空 ${currentStudent} 的所有錯題紀錄嗎？`)) {
+                saveStudentMistakesMap(currentStudent, {});
+                openMistakeNotebook();
+                refreshLists();
+            }
+        }
+
+        // 重考錯題本裡的所有單字
+        function retestAllNotebookMistakes() {
+            const map = getStudentMistakesMap(currentStudent);
+            const allWords = getAllPossibleWords();
+            const mistakeWords = allWords.filter(w => (map[w.word] || 0) > 0);
+
+            if (mistakeWords.length === 0) {
+                alert("目前沒有錯題可以測驗！");
+                return;
+            }
+
+            closeMistakeNotebook();
+
+            testedWords = [];
+            selectedWords = [];
+            availableWords = [...mistakeWords];
+            currentWordObj = null;
+
+            document.getElementById("currentWordDisplay").innerHTML = "";
+            document.getElementById("statusBox").innerText = `⚠️ 已載入 ${mistakeWords.length} 題歷史錯題，全力攻克！`;
+            document.body.style.background = "#fff0f0";
+
+            refreshLists();
+            playAudioTone(650, 'triangle', 0.2);
+        }
+
+        updateStudentUI();
+        refreshLists();
+    
+        // ============= 手寫測驗 (連動 English/Handwriting_Practice.html) =============
+        function startHandwritingExam() {
+            let words = [];
+            if (typeof selectedWords !== 'undefined' && selectedWords && selectedWords.length > 0) {
+                words = selectedWords;
+            } else if (typeof availableWords !== 'undefined' && availableWords && availableWords.length > 0) {
+                words = availableWords;
+            } else if (typeof testedWords !== 'undefined' && testedWords && testedWords.length > 0) {
+                words = testedWords;
+            }
+            
+            if (!words || words.length === 0) {
+                if (typeof holidayWords !== 'undefined') words = holidayWords;
+                else if (typeof allWords !== 'undefined') words = allWords;
+            }
+
+            const h1El = document.querySelector('h1');
+            const pageTitle = (h1El ? h1El.innerText : document.title)
+                .replace('單字小考 - ', '').replace('Spelling Quiz - ', '').trim();
+
+            let student = 'Anthony';
+            if (typeof currentStudent !== 'undefined' && currentStudent) {
+                student = currentStudent;
+            }
+
+            const payload = {
+                title: pageTitle,
+                words: words,
+                student: student,
+                returnUrl: window.location.href
+            };
+
+            sessionStorage.setItem('handwriting_active_exam', JSON.stringify(payload));
+
+            const path = window.location.pathname;
+            let target = '../English/Handwriting_Practice.html?from=exam';
+            if (path.includes('/g1 sem1/') || path.includes('/G1 sem1/') || path.includes('/g3 sem1/') || 
+                path.includes('/G2_Spelling_Bee/') || path.includes('/g2 sem1/') ||
+                path.includes('/G5期中/') || path.includes('/G4 sem2/') || path.includes('/G4_Spelling_Bee/') || 
+                path.includes('/g4 sem1/') || path.includes('/G4_Spelling_Bee_for_word/')) {
+                target = '../../English/Handwriting_Practice.html?from=exam';
+            }
+            window.location.href = target;
+        }
+
+    </script>
+
+    <!-- ============= 考卷批改與錯題勾選 Modal ============= -->
+    <div id="examReviewModal" class="spelling-modal-overlay" style="display: none;">
+        <div class="spelling-modal-card">
+            <div class="modal-header">
+                <h2>📝 考卷核對與錯題標記</h2>
+                <button class="modal-close-btn" onclick="closeExamModal()">×</button>
+            </div>
+            <div class="modal-subtitle">
+                當前學生：<strong id="modalStudentName" style="color:#7b1fa2; font-size:16px;">Anthony</strong>｜請勾選寫錯的題目（可複選），系統會自動累加本機錯題次數，並可直接重考：
+            </div>
+            <div class="modal-body" id="modalWordList">
+                <!-- 動態注入已考單字列表 -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn-modal-sec" onclick="setAllCheckboxes(true)">全選錯題</button>
+                <button class="btn-modal-sec" onclick="setAllCheckboxes(false)">取消全選</button>
+                <div style="flex:1;"></div>
+                <button class="btn-modal-allright" onclick="confirmAllCorrect()">✅ 全部正確！</button>
+                <button class="btn-modal-retest" id="retestWrongBtn" onclick="retestCheckedWrongWords()">🔄 記錄並重考勾選錯題 (<span id="checkedWrongCount">0</span> 題)</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============= 歷史錯題本 Modal ============= -->
+    <div id="mistakeNotebookModal" class="spelling-modal-overlay" style="display: none;">
+        <div class="spelling-modal-card">
+            <div class="modal-header">
+                <h2>📖 <span id="notebookStudentName">Anthony</span> 的歷史錯題本</h2>
+                <button class="modal-close-btn" onclick="closeMistakeNotebook()">×</button>
+            </div>
+            <div class="modal-subtitle">
+                以下列出本單元中曾經寫錯的單字與累積錯誤次數，點擊可直接重練所有錯題：
+            </div>
+            <div class="modal-body" id="notebookWordList">
+                <!-- 動態注入歷史錯題 -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn-modal-sec" onclick="clearCurrentStudentMistakes()">🗑️ 清空此學生錯題紀錄</button>
+                <div style="flex:1;"></div>
+                <button class="btn-modal-sec" onclick="closeMistakeNotebook()">關閉</button>
+                <button class="btn-modal-retest" id="retestAllMistakesBtn" onclick="retestAllNotebookMistakes()">🎯 測驗所有錯題 (<span id="notebookTotalCount">0</span> 題)</button>
+            </div>
+        </div>
+    </div>
+    
+</body>
+
+</html>
