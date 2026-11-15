@@ -111,6 +111,8 @@
     <button onclick="nextWord()">Next Word</button>
     <button onclick="replayWord()">Replay Current Word</button>
     <button onclick="showPhonics()" style="background: #2ecc71;">Show Phonics</button>
+    <button onclick="startHandwritingExam()" class="btn-handwriting-exam" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); color: white; box-shadow: 0 4px 10px rgba(2, 132, 199, 0.35); font-weight: bold; border-radius: 8px; padding: 10px 18px; border: none; cursor: pointer; font-size: 16px; margin: 4px;">✍️ 手寫測驗 (AI 評判)</button>
+
 
     <div style="margin-top: 20px;">
         <label for="voiceSelector" style="font-size: 18px; margin-right: 10px;">選擇發音：</label>
@@ -305,6 +307,59 @@
         }
 
         refreshLists();
+    
+        // ============= 手寫測驗 (連動 English/Handwriting_Practice.html) =============
+        function startHandwritingExam() {
+            let words = [];
+            if (typeof selectedWords !== 'undefined' && selectedWords && selectedWords.length > 0) {
+                words = selectedWords;
+            } else if (typeof availableWords !== 'undefined' && availableWords && availableWords.length > 0) {
+                words = availableWords;
+            } else if (typeof testedWords !== 'undefined' && testedWords && testedWords.length > 0) {
+                words = testedWords;
+            } else if (typeof wordsToStudy !== 'undefined' && wordsToStudy && wordsToStudy.length > 0) {
+                words = wordsToStudy;
+            }
+            
+            if (!words || words.length === 0) {
+                if (typeof dragonWords !== 'undefined') words = dragonWords;
+                else if (typeof primoWords !== 'undefined') words = primoWords;
+                else if (typeof eruptionWords !== 'undefined') words = eruptionWords;
+                else if (typeof miracleWords !== 'undefined') words = miracleWords;
+                else if (typeof arsenioWords !== 'undefined') words = arsenioWords;
+                else if (typeof allWords !== 'undefined') words = allWords;
+            }
+
+            const h1El = document.querySelector('h1');
+            const pageTitle = (h1El ? h1El.innerText : document.title)
+                .replace('單字小考 - ', '').replace('Spelling Quiz - ', '').trim();
+
+            let student = 'Barry';
+            if (typeof currentStudent !== 'undefined' && currentStudent) {
+                student = currentStudent;
+            } else if (window.location.pathname.toLowerCase().includes('lilian')) {
+                student = 'Lilian';
+            }
+
+            const payload = {
+                title: pageTitle,
+                words: words,
+                student: student,
+                returnUrl: window.location.href
+            };
+
+            sessionStorage.setItem('handwriting_active_exam', JSON.stringify(payload));
+
+            const path = window.location.pathname;
+            let target = '../English/Handwriting_Practice.html?from=exam';
+            if (path.includes('/G3 sem1/') || path.includes('/G2_Spelling_Bee/') || path.includes('/g2 sem1/') ||
+                path.includes('/G5期中/') || path.includes('/G4 sem2/') || path.includes('/G4_Spelling_Bee/') || 
+                path.includes('/g4 sem1/') || path.includes('/G4_Spelling_Bee_for_word/')) {
+                target = '../../English/Handwriting_Practice.html?from=exam';
+            }
+            window.location.href = target;
+        }
+
     </script>
 </body>
 
