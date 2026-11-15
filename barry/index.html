@@ -15,10 +15,10 @@
         }
 
         .container {
-            max-width: 800px;
+            max-width: 860px;
             margin: 0 auto;
             background: white;
-            border-radius: 20px;
+            border-radius: 24px;
             padding: 40px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
         }
@@ -26,101 +26,227 @@
         h1 {
             text-align: center;
             color: #0072ff;
-            margin-bottom: 10px;
-            font-size: 36px;
+            margin-bottom: 8px;
+            font-size: 38px;
+            font-weight: 800;
         }
 
         .subtitle {
             text-align: center;
-            color: #888;
-            margin-bottom: 40px;
+            color: #718096;
+            margin-bottom: 32px;
             font-size: 18px;
+            font-weight: 500;
+        }
+
+        .category-title {
+            font-size: 21px;
+            font-weight: 800;
+            color: #2d3748;
+            margin: 30px 0 14px 4px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .category-title:first-of-type {
+            margin-top: 10px;
+        }
+
+        .badge-count {
+            font-size: 13px;
+            background: #e0f2fe;
+            color: #0369a1;
+            padding: 3px 10px;
+            border-radius: 999px;
+            font-weight: 700;
         }
 
         .test-list {
             list-style: none;
             padding: 0;
+            margin: 0 0 20px 0;
         }
 
         .test-item {
-            background: #f8f9fa;
-            margin-bottom: 15px;
-            border-radius: 12px;
-            transition: all 0.3s;
+            background: #f8fafc;
+            margin-bottom: 14px;
+            border-radius: 14px;
+            transition: all 0.25s ease;
             overflow: hidden;
-            border-left: 5px solid #00c6ff;
+            border: 1px solid #e2e8f0;
         }
 
         .test-item:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0, 198, 255, 0.3);
+            box-shadow: 0 8px 20px rgba(0, 198, 255, 0.25);
+            border-color: #7dd3fc;
         }
 
         .test-link {
-            display: block;
-            padding: 20px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 24px;
             text-decoration: none;
-            color: #333;
-            font-size: 18px;
-            font-weight: 500;
+            color: #1e293b;
+            font-size: 17px;
+            font-weight: 600;
         }
 
         .test-date {
-            color: #0072ff;
-            font-weight: bold;
-            margin-right: 15px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            line-height: 1.4;
+        }
+
+        .test-tag {
+            font-size: 13px;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-weight: 600;
+            background: #e0f2fe;
+            color: #0284c7;
         }
 
         .test-arrow {
-            float: right;
             color: #0072ff;
             font-size: 20px;
+            font-weight: bold;
+            transition: transform 0.2s;
         }
 
-        .no-tests {
-            text-align: center;
-            color: #999;
-            padding: 40px;
-            font-size: 18px;
-        }
-
-        .add-button {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 60px;
-            height: 60px;
-            background: #0072ff;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 30px;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0, 114, 255, 0.4);
-            transition: all 0.3s;
-        }
-
-        .add-button:hover {
-            transform: scale(1.1);
-            background: #00c6ff;
+        .test-item:hover .test-arrow {
+            transform: translateX(4px);
         }
     </style>
 </head>
 
 <body>
     <div class="container">
-        <h1>� Barry's Vocabulary Tests</h1>
-        <div class="subtitle">Select a test date to begin</div>
-        <ul class="test-list" id="testList"></ul>
+        <h1>🚀 Barry's Vocabulary Tests</h1>
+        <div class="subtitle">三年級單字小考與練習清單 • 選擇單元開始複習</div>
+
+        <!-- 1. G3 Dear Primo -->
+        <div class="category-title">
+            📮 G3 Reading — Dear Primo
+            <span class="badge-count">最新進度 • 3 回</span>
+        </div>
+        <ul class="test-list">
+            <li class="test-item" style="border-left: 6px solid #0072ff;">
+                <a href="3.1 M2 L3 Dear Primo Spelling List 1.html" class="test-link">
+                    <span class="test-date" style="color: #0072ff;">
+                        📮 3.1 M2 L3 Dear Primo — Spelling List 1
+                        <span class="test-tag">Week 1 • 15字</span>
+                    </span>
+                    <span class="test-arrow">→</span>
+                </a>
+            </li>
+            <li class="test-item" style="border-left: 6px solid #0072ff;">
+                <a href="3.1 M2 L3 Dear Primo Spelling List 2.html" class="test-link">
+                    <span class="test-date" style="color: #0072ff;">
+                        📮 3.1 M2 L3 Dear Primo — Spelling List 2
+                        <span class="test-tag">Week 2 • 15字 ＋ Week 10 教室生活單字 10字</span>
+                    </span>
+                    <span class="test-arrow">→</span>
+                </a>
+            </li>
+            <li class="test-item" style="border-left: 6px solid #0072ff;">
+                <a href="3.1 M2 L3 Dear Primo Spelling List 3.html" class="test-link">
+                    <span class="test-date" style="color: #0072ff;">
+                        📮 3.1 M2 L3 Dear Primo — Spelling List 3
+                        <span class="test-tag">Week 3 • 15字 ＋ Week 11 配件生活單字 10字</span>
+                    </span>
+                    <span class="test-arrow">→</span>
+                </a>
+            </li>
+        </ul>
+
+        <!-- 2. G3 Verb Conjugation -->
+        <div class="category-title">
+            🌱 G3 動詞三態專區
+            <span class="badge-count">互動遊戲</span>
+        </div>
+        <ul class="test-list">
+            <li class="test-item" style="border-left: 6px solid #10b981;">
+                <a href="../English/G3_Verb_Conjugation.html" class="test-link">
+                    <span class="test-date" style="color: #10b981;">
+                        🚂 G3 不規則動詞變化三態火車組裝
+                        <span class="test-tag">全 84 字 • 10題一組自由選擇 • Barry 專屬</span>
+                    </span>
+                    <span class="test-arrow">→</span>
+                </a>
+            </li>
+            <li class="test-item" style="border-left: 6px solid #10b981;">
+                <a href="../English/index.html" class="test-link">
+                    <span class="test-date" style="color: #10b981;">
+                        🎮 English Learning Hub 首頁
+                        <span class="test-tag">Barry • Lilian • Anthony 星星與錯題紀錄</span>
+                    </span>
+                    <span class="test-arrow">→</span>
+                </a>
+            </li>
+        </ul>
+
+        <!-- 3. G3 週考記錄 -->
+        <div class="category-title">
+            📅 G3 Sem 1 週考記錄
+            <span class="badge-count">存檔</span>
+        </div>
+        <ul class="test-list">
+            <li class="test-item" style="border-left: 6px solid #8b5cf6;">
+                <a href="G3%20sem1/2026-03-02.html" class="test-link">
+                    <span class="test-date" style="color: #8b5cf6;">
+                        📝 2026-03-02 單字小考
+                    </span>
+                    <span class="test-arrow">→</span>
+                </a>
+            </li>
+            <li class="test-item" style="border-left: 6px solid #8b5cf6;">
+                <a href="G3%20sem1/2026-02-23.html" class="test-link">
+                    <span class="test-date" style="color: #8b5cf6;">
+                        📝 2026-02-23 單字小考
+                    </span>
+                    <span class="test-arrow">→</span>
+                </a>
+            </li>
+        </ul>
+
+        <!-- 4. G2 二年級專區 -->
+        <div class="category-title">
+            📂 G2 二年級複習專區
+            <span class="badge-count">歷年累積</span>
+        </div>
+        <ul class="test-list">
+            <li class="test-item" style="border-left: 6px solid #ff9f43;">
+                <a href="G2_Spelling_Bee/index.html" class="test-link">
+                    <span class="test-date" style="color: #ff9f43;">📂 G2 Spelling Bee</span>
+                    <span class="test-arrow">→</span>
+                </a>
+            </li>
+            <li class="test-item" style="border-left: 6px solid #a855f7;">
+                <a href="g2%20sem1/" class="test-link">
+                    <span class="test-date" style="color: #a855f7;">📁 G2 Sem 1 資料夾</span>
+                    <span class="test-arrow">→</span>
+                </a>
+            </li>
+        </ul>
+
+        <!-- 動態偵測其他日期小考（若未來有新增） -->
+        <div id="dynamicSection" style="display: none;">
+            <div class="category-title">
+                🗓️ 其他日期小考
+            </div>
+            <ul class="test-list" id="dynamicTestList"></ul>
+        </div>
     </div>
 
     <script>
-        // GitHub 倉庫資訊（請根據您的倉庫修改）
-        const GITHUB_USER = 'ChenWeiLiu';  // 您的 GitHub 使用者名稱
-        const GITHUB_REPO = 'ChenWeiLiu.github.io';  // 您的倉庫名稱
-        const FOLDER_PATH = 'barry';  // 當前資料夾路徑
+        const GITHUB_USER = 'ChenWeiLiu';
+        const GITHUB_REPO = 'ChenWeiLiu.github.io';
+        const FOLDER_PATH = 'barry';
 
         function formatDate(dateStr) {
             const date = new Date(dateStr);
@@ -128,60 +254,35 @@
             return date.toLocaleDateString('zh-TW', options);
         }
 
-        async function loadTestsFromGitHub() {
-            const testList = document.getElementById('testList');
-            testList.innerHTML = '<div class="no-tests">Loading tests...</div>';
-
+        async function checkAdditionalTests() {
             try {
-                // 使用 GitHub API 獲取資料夾內容
                 const apiUrl = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${FOLDER_PATH}`;
                 const response = await fetch(apiUrl);
-
-                if (!response.ok) {
-                    throw new Error('Failed to fetch from GitHub API');
-                }
+                if (!response.ok) return;
 
                 const files = await response.json();
-
-                // 過濾出 HTML 檔案，排除 index.html，並且檔名符合日期格式
                 const datePattern = /^\d{4}-\d{2}-\d{2}\.html$/;
                 const testFiles = files
                     .filter(file => file.type === 'file' && datePattern.test(file.name))
                     .map(file => file.name.replace('.html', ''));
 
-                if (testFiles.length === 0) {
-                    testList.innerHTML = '<div class="no-tests">No tests available yet.</div>';
-                    return;
+                if (testFiles.length > 0) {
+                    const sortedDates = testFiles.sort((a, b) => new Date(b) - new Date(a));
+                    const dynamicList = document.getElementById('dynamicTestList');
+                    dynamicList.innerHTML = sortedDates.map(date => `
+                        <li class="test-item" style="border-left: 6px solid #0072ff;">
+                            <a href="${date}.html" class="test-link">
+                                <span class="test-date" style="color:#0072ff;">📅 ${formatDate(date)}</span>
+                                <span class="test-arrow">→</span>
+                            </a>
+                        </li>
+                    `).join('');
+                    document.getElementById('dynamicSection').style.display = 'block';
                 }
-
-                // 按日期排序（最新的在前）
-                const sortedDates = testFiles.sort((a, b) => new Date(b) - new Date(a));
-
-                const g2Link = `
-                    <li class="test-item" style="border-left: 5px solid #ff9f43;">
-                        <a href="G2_Spelling_Bee/index.html" class="test-link">
-                            <span class="test-date" style="color: #ff9f43;">📂 G2 Spelling Bee</span>
-                            <span class="test-arrow">→</span>
-                        </a>
-                    </li>
-                `;
-
-                testList.innerHTML = g2Link + sortedDates.map(date => `
-                    <li class="test-item">
-                        <a href="${date}.html" class="test-link">
-                            <span class="test-date">${formatDate(date)}</span>
-                            <span class="test-arrow">→</span>
-                        </a>
-                    </li>
-                `).join('');
-
-            } catch (error) {
-                console.error('Error loading tests:', error);
-                testList.innerHTML = '<div class="no-tests">Error loading tests. Please try again later.</div>';
-            }
+            } catch (e) { }
         }
 
-        loadTestsFromGitHub();
+        checkAdditionalTests();
     </script>
 </body>
 
