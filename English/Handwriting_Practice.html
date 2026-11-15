@@ -1034,10 +1034,18 @@
         }
 
         // ============= 防誤觸與手掌過濾系統 (Palm Rejection Engine) =============
+        // ============= 高速 120FPS 零延遲繪圖與防誤觸引擎 =============
         let palmRejectionEnabled = true;
         let activePointerId = null;
         let penDeviceDetected = false;
-        let strokeTouchStartTime = 0;
+        let canvasRect = null;
+
+        function updateCanvasRect() {
+            canvasRect = canvas.getBoundingClientRect();
+        }
+
+        window.addEventListener('resize', updateCanvasRect);
+        window.addEventListener('scroll', updateCanvasRect, { passive: true });
 
         function togglePalmRejection() {
             palmRejectionEnabled = !palmRejectionEnabled;
@@ -1060,12 +1068,12 @@
         function isPalmOrAccidentalContact(e) {
             if (!palmRejectionEnabled) return false;
 
-            // 1. 若曾檢測到 Apple Pencil，自動鎖定僅限觸控筆，全面忽略手指與手掌觸摸
+            // 若已使用 Apple Pencil，忽略手指與手掌觸摸
             if (penDeviceDetected && e.pointerType !== 'pen') {
                 return true;
             }
 
-            // 2. 檢測到 Apple Pencil (pen)
+            // 檢測到 Apple Pencil
             if (e.pointerType === 'pen') {
                 if (!penDeviceDetected) {
                     penDeviceDetected = true;
@@ -1079,14 +1087,8 @@
                 return false;
             }
 
-            // 3. 手掌與手腕大接觸面積過濾 (Palm geometry detection)
-            // 一般 Apple Pencil 寬度 <= 1，正常指尖書寫約 8~18px；手掌接觸面積常大於 25px
-            if ((e.width && e.width > 25) || (e.height && e.height > 25)) {
-                return true;
-            }
-
-            // 4. 多指非主觸控點一律視為手掌誤觸
-            if (e.isPrimary === false && activePointerId !== null) {
+            // 手掌大接觸面積過濾 (e.width/height > 30px)
+            if ((e.width && e.width > 30) || (e.height && e.height > 30)) {
                 return true;
             }
 
@@ -1106,37 +1108,33 @@
 
         canvas.addEventListener('pointerdown', startDrawing);
         canvas.addEventListener('pointermove', drawMove);
-        canvas.addEventListener('pointerup', stopDrawing);
-        canvas.addEventListener('pointercancel', stopDrawing);
+        window.addEventListener('pointerup', stopDrawing);
+        window.addEventListener('pointercancel', stopDrawing);
         canvas.addEventListener('contextmenu', e => e.preventDefault());
 
         function getCanvasPos(e) {
-            const rect = canvas.getBoundingClientRect();
+            if (!canvasRect) updateCanvasRect();
             return {
-                x: e.clientX - rect.left,
-                y: e.clientY - rect.top,
-                pressure: e.pressure || 0.5
+                x: e.clientX - canvasRect.left,
+                y: e.clientY - canvasRect.top,
+                pressure: (e.pressure && e.pressure > 0) ? e.pressure : 0.5
             };
         }
 
         let strokeStartTime = 0;
 
         function startDrawing(e) {
-            e.preventDefault();
+            // 更新畫布座標快取（極速響應，避免 move 時重排）
+            updateCanvasRect();
 
-            // 鎖定單一觸控點：若已在書寫，拒絕第二個觸碰點（手掌或雜訊）
-            if (activePointerId !== null) return;
+            // 若已有書寫點且是不同觸控 ID，拒絕次要觸控
+            if (activePointerId !== null && e.pointerId !== activePointerId) return;
 
-            // 執行手掌或誤觸檢驗
+            // 執行防手掌誤觸檢查
             if (isPalmOrAccidentalContact(e)) return;
 
             activePointerId = e.pointerId;
             isDrawing = true;
-            strokeTouchStartTime = Date.now();
-
-            try {
-                canvas.setPointerCapture(e.pointerId);
-            } catch(err) {}
 
             const pos = getCanvasPos(e);
             if (!strokeStartTime) strokeStartTime = Date.now();
@@ -1153,52 +1151,36 @@
                 inkY: [Math.round(pos.y)],
                 inkT: [relTime]
             };
-            playStrokeTone();
         }
 
         function drawMove(e) {
             if (!isDrawing) return;
-            // 嚴格確保只響應當前正鎖定的 pointerId，徹底杜絕手掌移動造成的干擾
             if (e.pointerId !== activePointerId) return;
 
-            e.preventDefault();
-            const pos = getCanvasPos(e);
+            // 直接讀取座標（零延遲，不觸發 getBoundingClientRect DOM reflow）
+            const x = e.clientX - canvasRect.left;
+            const y = e.clientY - canvasRect.top;
+            const pos = { x, y, pressure: e.pressure || 0.5 };
             const relTime = Date.now() - strokeStartTime;
 
             currentStroke.points.push(pos);
-            currentStroke.inkX.push(Math.round(pos.x));
-            currentStroke.inkY.push(Math.round(pos.y));
+            currentStroke.inkX.push(Math.round(x));
+            currentStroke.inkY.push(Math.round(y));
             currentStroke.inkT.push(relTime);
 
             drawCurrentSegment();
         }
 
         function stopDrawing(e) {
-            if (!isDrawing || e.pointerId !== activePointerId) return;
-            e.preventDefault();
+            if (!isDrawing) return;
+            if (e.pointerId && activePointerId && e.pointerId !== activePointerId) return;
+
             isDrawing = false;
             activePointerId = null;
 
-            try {
-                canvas.releasePointerCapture(e.pointerId);
-            } catch(err) {}
-
-            if (!currentStroke || currentStroke.points.length === 0) {
-                currentStroke = null;
-                return;
-            }
-
-            // 誤觸微痕過濾：排除停留時間極短 (< 55ms) 且幾乎無位移 (< 2.5px) 的手掌無意擦觸點
-            const duration = Date.now() - strokeTouchStartTime;
-            const dist = getStrokeTotalDistance(currentStroke.points);
-            const isAccidentalMicroTouch = (duration < 55 && dist < 2.5);
-
-            if (!isAccidentalMicroTouch) {
+            if (currentStroke && currentStroke.points && currentStroke.points.length > 0) {
                 strokeHistory.push(currentStroke);
-            } else {
-                redrawCanvas(); // 擦除此微弱誤觸雜痕
             }
-
             currentStroke = null;
         }
 
@@ -1594,7 +1576,7 @@
                         alert(`🎉 恭喜 ${currentStudent} 完成本單元手寫練習！太厲害了！`);
                         loadUnitQuestions();
                     }
-                }, 1800);
+                }, 450);
 
             } else {
                 // 自動判定：未完全吻合，提供具體反饋並支援人工覆核給分
@@ -1837,6 +1819,20 @@
                 document.getElementById('unitPicker').value = currentUnitKey;
             }
         }
+
+
+        // 鍵盤快速捷徑 (Enter / Space 立即 AI 評判或跳下一題)
+        window.addEventListener('keydown', (e) => {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT' || e.target.tagName === 'TEXTAREA') return;
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                if (!isChecked) {
+                    autoRecognizeAndJudge();
+                } else {
+                    skipNextWord();
+                }
+            }
+        });
 
         checkActiveExamOrUrlParams();
         switchStudent(currentStudent);
