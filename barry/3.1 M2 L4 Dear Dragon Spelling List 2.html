@@ -584,9 +584,11 @@
 
     <h1>單字小考 - 3.1 M2 L4 Dear Dragon Spelling List 2</h1>
 
-    <div class="tab-label">單字範圍：</div>
+    <div class="tab-label">選擇考試範圍：</div>
     <div class="word-set-tabs">
         <button class="tab-btn active" id="tabDragon" onclick="switchWordSet('dragon')">🐉 3.1 M2 L4 Dear Dragon Week 2 單字（15字）</button>
+        <button class="tab-btn" id="tabOrgans" onclick="switchWordSet('organs')">🫀 生活器官構造 Week 13（10字）</button>
+        <button class="tab-btn" id="tabAll" onclick="switchWordSet('all')">🔀 全部混合（25字）</button>
     </div>
 
     <p style="font-size: 18px; color: #555;">Press the button to hear a word. It will be spoken once.</p>
@@ -861,11 +863,162 @@
 ];
         const miracleWords = dragonWords;
 
+const organWords = [
+        {
+                "word": "abdomen",
+                "posType": "noun",
+                "breakdown": "ab - do - men",
+                "ipa": "/ˈæbdəmən/",
+                "phonicsSounds": [
+                        "ab",
+                        "duh",
+                        "mun"
+                ],
+                "pos": "n. 名詞",
+                "translation": "腹部",
+                "definition": "the part of the body between the chest and the hips, containing the stomach and intestines",
+                "sentence": "Doing sit-ups regularly helps strengthen your abdomen muscles."
+        },
+        {
+                "word": "kidney",
+                "posType": "noun",
+                "breakdown": "kid - ney",
+                "ipa": "/ˈkɪdni/",
+                "phonicsSounds": [
+                        "kid",
+                        "nee"
+                ],
+                "pos": "n. 名詞",
+                "translation": "腎臟",
+                "definition": "one of a pair of organs in the body that filter waste products from the blood",
+                "sentence": "Drinking plenty of water helps your kidneys work properly."
+        },
+        {
+                "word": "liver",
+                "posType": "noun",
+                "breakdown": "liv - er",
+                "ipa": "/ˈlɪvər/",
+                "phonicsSounds": [
+                        "liv",
+                        "er"
+                ],
+                "pos": "n. 名詞",
+                "translation": "肝臟",
+                "definition": "a large organ in the body that cleans the blood and produces bile",
+                "sentence": "The liver is one of the largest and most vital internal organs."
+        },
+        {
+                "word": "lungs",
+                "posType": "noun",
+                "breakdown": "lungs",
+                "ipa": "/lʌŋz/",
+                "phonicsSounds": [
+                        "lungz"
+                ],
+                "pos": "n. 名詞",
+                "translation": "肺臟",
+                "definition": "the two organs in the chest with which people and animals breathe",
+                "sentence": "She took a deep breath, filling her lungs with fresh morning air."
+        },
+        {
+                "word": "stomach",
+                "posType": "noun",
+                "breakdown": "stom - ach",
+                "ipa": "/ˈstʌmək/",
+                "phonicsSounds": [
+                        "stum",
+                        "uk"
+                ],
+                "pos": "n. 名詞",
+                "translation": "胃",
+                "definition": "the organ inside the body where food goes and begins to be digested",
+                "sentence": "He had an empty stomach because he skipped breakfast."
+        },
+        {
+                "word": "small intestine",
+                "posType": "noun",
+                "breakdown": "small in - tes - tine",
+                "ipa": "/smɔːl ɪnˈtɛstɪn/",
+                "phonicsSounds": [
+                        "smawl",
+                        "in",
+                        "tes",
+                        "tin"
+                ],
+                "pos": "n. 名詞",
+                "translation": "小腸",
+                "definition": "the long narrow part of the intestine between the stomach and large intestine where most food is absorbed",
+                "sentence": "Nutrients from our food are absorbed into the bloodstream through the small intestine."
+        },
+        {
+                "word": "large intestine",
+                "posType": "noun",
+                "breakdown": "large in - tes - tine",
+                "ipa": "/lɑːrdʒ ɪnˈtɛstɪn/",
+                "phonicsSounds": [
+                        "larj",
+                        "in",
+                        "tes",
+                        "tin"
+                ],
+                "pos": "n. 名詞",
+                "translation": "大腸",
+                "definition": "the wide lower part of the intestine that absorbs water and forms waste",
+                "sentence": "The large intestine absorbs remaining water from digested matter before waste is eliminated."
+        },
+        {
+                "word": "cranium",
+                "posType": "noun",
+                "breakdown": "cra - ni - um",
+                "ipa": "/ˈkreɪniəm/",
+                "phonicsSounds": [
+                        "kray",
+                        "nee",
+                        "um"
+                ],
+                "pos": "n. 名詞",
+                "translation": "頭蓋骨",
+                "definition": "the skull, especially the part enclosing and protecting the brain",
+                "sentence": "Wearing a bicycle helmet helps protect your cranium from head injuries."
+        },
+        {
+                "word": "cerebellum",
+                "posType": "noun",
+                "breakdown": "cer - e - bel - lum",
+                "ipa": "/ˌsɛrɪˈbɛləm/",
+                "phonicsSounds": [
+                        "sehr",
+                        "uh",
+                        "bel",
+                        "um"
+                ],
+                "pos": "n. 名詞",
+                "translation": "小腦",
+                "definition": "the part of the brain at the back of the skull that coordinates movement and balance",
+                "sentence": "Your cerebellum controls physical balance and coordination when you ride a bike."
+        },
+        {
+                "word": "cerebrum",
+                "posType": "noun",
+                "breakdown": "cer - e - brum",
+                "ipa": "/ˈsɛrɪbrəm/",
+                "phonicsSounds": [
+                        "sehr",
+                        "uh",
+                        "brum"
+                ],
+                "pos": "n. 名詞",
+                "translation": "大腦",
+                "definition": "the principal and most front part of the brain that controls thinking, learning, and emotions",
+                "sentence": "The cerebrum is the largest part of the human brain responsible for speech and memory."
+        }
+];
+
         let currentWordObj = null;
         let selectedWords = [];
         let testedWords = [];
-        let availableWords = [...miracleWords];
-        let currentWordSet = 'miracle';
+        let availableWords = [...dragonWords];
+        let currentWordSet = 'dragon';
         let usVoice = null;
 
         // 切換單字範圍
@@ -880,14 +1033,27 @@
             currentWordObj = null;
             document.getElementById("currentWordDisplay").innerHTML = "";
             document.getElementById("statusBox").innerText = "";
+            document.getElementById("autoQuizStatus").innerText = "";
+            document.getElementById("learnProgress").innerText = "";
+            document.getElementById("learnWordDisplay").innerText = "";
+            document.getElementById("learnStepDisplay").innerText = "";
             document.body.style.background = "#f0f8ff";
 
-            availableWords = [...miracleWords];
+            // 載入對應單字組
+            if (set === 'dragon') {
+                availableWords = [...dragonWords];
+            } else if (set === 'organs') {
+                availableWords = [...organWords];
+            } else {
+                availableWords = [...dragonWords, ...organWords];
+            }
 
             // 更新 tab 狀態
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            const tabBtn = document.getElementById('tabDragon');
-            if (tabBtn) tabBtn.classList.add('active');
+            const tabMap = { dragon: 'tabDragon', organs: 'tabOrgans', all: 'tabAll' };
+            if (tabMap[set] && document.getElementById(tabMap[set])) {
+                document.getElementById(tabMap[set]).classList.add('active');
+            }
 
             refreshLists();
         }
@@ -1472,6 +1638,7 @@
         function getAllPossibleWords() {
             const set = new Map();
             if (typeof dragonWords !== 'undefined') dragonWords.forEach(w => set.set(w.word, w));
+            if (typeof organWords !== 'undefined') organWords.forEach(w => set.set(w.word, w));
             if (typeof miracleWords !== 'undefined') miracleWords.forEach(w => set.set(w.word, w));
             if (typeof classroomWords !== 'undefined') classroomWords.forEach(w => set.set(w.word, w));
             if (typeof arsenioWords !== 'undefined') arsenioWords.forEach(w => set.set(w.word, w));
