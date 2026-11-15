@@ -872,7 +872,7 @@
                 </div>
 
                 <div class="tool-group">
-                    <button class="tool-btn" id="palmRejectionBtn" onclick="togglePalmRejection()" title="切換防手掌誤觸模式" style="background:#f0fdf4; color:#15803d; border-color:#86efac; font-weight:700;">🛡️ 防手掌誤觸：開啟</button>
+                    <button class="tool-btn" id="inputModeBtn" onclick="toggleInputMode()" style="background:#f0fdf4; color:#15803d; border-color:#86efac; font-weight:800;">✏️ 觸控筆專用 (手掌隨意靠)</button>
                     <button class="tool-btn" onclick="undoLastStroke()">↩️ 上一步</button>
                     <button class="tool-btn" onclick="clearCanvasBoard()">🗑️ 清空重寫</button>
                 </div>
@@ -1033,10 +1033,9 @@
             ctx.restore();
         }
 
-        // ============= 專業級極速繪圖引擎 (Professional Responsive Inking) =============
-        let palmRejectionEnabled = true;
+        // ============= 專業級 Apple Pencil 專用與極速繪圖引擎 =============
+        let inputMode = localStorage.getItem('handwriting_input_mode') || 'pen'; // 'pen' (預設 Apple Pencil 專用) 或 'all' (手指通用)
         let activePointerId = null;
-        let penDeviceDetected = false;
         let canvasRect = null;
         let strokeStartTime = 0;
 
@@ -1047,48 +1046,28 @@
         window.addEventListener('resize', updateCanvasRect);
         window.addEventListener('scroll', updateCanvasRect, { passive: true });
 
-        function togglePalmRejection() {
-            palmRejectionEnabled = !palmRejectionEnabled;
-            const btn = document.getElementById('palmRejectionBtn');
-            if (btn) {
-                if (palmRejectionEnabled) {
-                    btn.innerHTML = `🛡️ 防誤觸：開啟`;
-                    btn.style.background = '#f0fdf4';
-                    btn.style.color = '#15803d';
-                    btn.style.borderColor = '#86efac';
-                } else {
-                    btn.innerHTML = `🛡️ 防誤觸：關閉`;
-                    btn.style.background = '#f8fafc';
-                    btn.style.color = '#64748b';
-                    btn.style.borderColor = '#cbd5e1';
-                }
+        function updateInputModeUI() {
+            const btn = document.getElementById('inputModeBtn');
+            if (!btn) return;
+            if (inputMode === 'pen') {
+                btn.innerHTML = `✏️ 觸控筆專用 (手掌隨意靠)`;
+                btn.style.background = '#f0fdf4';
+                btn.style.color = '#15803d';
+                btn.style.borderColor = '#86efac';
+                btn.title = '【已開啟手掌免疫】僅響應 Apple Pencil 筆尖，手掌、手腕靠在螢幕上完全不會誤觸或卡住！點擊可切換手指模式';
+            } else {
+                btn.innerHTML = `👆 手指 / 通用觸控模式`;
+                btn.style.background = '#f8fafc';
+                btn.style.color = '#475569';
+                btn.style.borderColor = '#cbd5e1';
+                btn.title = '【通用模式】支援手指或一般電容筆書寫。若您有 Apple Pencil，強烈推薦切換為觸控筆專用模式！';
             }
         }
 
-        function isPalmNoise(e) {
-            if (!palmRejectionEnabled) return false;
-
-            // 1. 如果是觸控筆 (Apple Pencil)，永遠暢行無阻！
-            if (e.pointerType === 'pen') {
-                if (!penDeviceDetected) {
-                    penDeviceDetected = true;
-                    const btn = document.getElementById('palmRejectionBtn');
-                    if (btn) btn.innerHTML = `✏️ 觸控筆鎖定防誤觸`;
-                }
-                return false;
-            }
-
-            // 2. 如果已偵測到觸控筆，過濾手指/手掌觸摸
-            if (penDeviceDetected && e.pointerType !== 'pen') {
-                return true;
-            }
-
-            // 3. 手掌巨大接觸面積過濾 (e.width/height > 35px)
-            if ((e.width && e.width > 35) || (e.height && e.height > 35)) {
-                return true;
-            }
-
-            return false;
+        function toggleInputMode() {
+            inputMode = (inputMode === 'pen') ? 'all' : 'pen';
+            localStorage.setItem('handwriting_input_mode', inputMode);
+            updateInputModeUI();
         }
 
         function getCanvasPos(e) {
@@ -1103,10 +1082,20 @@
         function startDrawing(e) {
             e.preventDefault();
 
-            // 若為手掌雜訊則忽略
-            if (isPalmNoise(e)) return;
+            // 1. 觸控筆專用模式：徹底忽視任何非觸控筆輸入 (手指、手掌、手腕)！
+            // 永遠不會建立繪圖狀態，永遠不會佔用 activePointerId，就算手掌一直靠在螢幕上也不會被 lock！
+            if (inputMode === 'pen' && e.pointerType !== 'pen') {
+                return;
+            }
 
-            // 若已有正在繪製的筆劃，立即結束前一筆，毫秒級無縫開啟新筆畫！
+            // 2. 通用模式：手掌大面積接觸排除
+            if (inputMode === 'all' && e.pointerType === 'touch') {
+                if ((e.width && e.width > 32) || (e.height && e.height > 32)) {
+                    return;
+                }
+            }
+
+            // 3. 毫秒級無縫接筆：若前一畫尚未結束，立即結算存入歷史，絕不丟失新筆畫
             if (isDrawing && currentStroke && currentStroke.points && currentStroke.points.length > 0) {
                 strokeHistory.push(currentStroke);
             }
@@ -1134,7 +1123,8 @@
 
         function drawMove(e) {
             if (!isDrawing) return;
-            // 如果不是當前運筆的指針，忽略該 move 事件（避免手掌壓著移動干擾運筆）
+            // 觸控筆模式下，絕對忽略任何手指或手掌的滑動干擾
+            if (inputMode === 'pen' && e.pointerType !== 'pen') return;
             if (activePointerId !== null && e.pointerId !== activePointerId) return;
 
             e.preventDefault();
@@ -1155,7 +1145,7 @@
         function stopDrawing(e) {
             if (!isDrawing) return;
 
-            // 如果有指定 pointerId 且不匹配，忽略（保護當前運筆）
+            // 若有 pointerId 且不是當前繪圖指針，忽略（避免手掌離開觸發誤停）
             if (e && e.pointerId && activePointerId !== null && e.pointerId !== activePointerId) {
                 return;
             }
@@ -1828,6 +1818,7 @@
             }
         });
 
+updateInputModeUI();
         checkActiveExamOrUrlParams();
         switchStudent(currentStudent);
         setTimeout(resizeCanvas, 100);
