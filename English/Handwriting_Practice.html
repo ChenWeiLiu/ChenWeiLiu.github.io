@@ -1033,8 +1033,8 @@
             ctx.restore();
         }
 
-        // ============= 專業級 Apple Pencil 專用與極速繪圖引擎 =============
-        let inputMode = localStorage.getItem('handwriting_input_mode') || 'pen'; // 'pen' (預設 Apple Pencil 專用) 或 'all' (手指通用)
+        // ============= 專業級智慧防誤觸與極速繪圖引擎 =============
+        let inputMode = localStorage.getItem('handwriting_input_mode_v2') || 'auto'; // 'auto' (智能防誤觸，手指/筆/滑鼠通用) 或 'pen' (Apple Pencil 專用)
         let activePointerId = null;
         let canvasRect = null;
         let strokeStartTime = 0;
@@ -1049,24 +1049,24 @@
         function updateInputModeUI() {
             const btn = document.getElementById('inputModeBtn');
             if (!btn) return;
-            if (inputMode === 'pen') {
-                btn.innerHTML = `✏️ 觸控筆專用 (手掌隨意靠)`;
+            if (inputMode === 'auto') {
+                btn.innerHTML = `🛡️ 智能防誤觸 (通用雙支援)`;
                 btn.style.background = '#f0fdf4';
                 btn.style.color = '#15803d';
                 btn.style.borderColor = '#86efac';
-                btn.title = '【已開啟手掌免疫】僅響應 Apple Pencil 筆尖，手掌、手腕靠在螢幕上完全不會誤觸或卡住！點擊可切換手指模式';
+                btn.title = '【智能防誤觸模式】支援手指、滑鼠、電容筆與 Apple Pencil，智慧過濾手掌大面積接觸。點擊可切換為 Apple Pencil 專用模式';
             } else {
-                btn.innerHTML = `👆 手指 / 通用觸控模式`;
-                btn.style.background = '#f8fafc';
-                btn.style.color = '#475569';
-                btn.style.borderColor = '#cbd5e1';
-                btn.title = '【通用模式】支援手指或一般電容筆書寫。若您有 Apple Pencil，強烈推薦切換為觸控筆專用模式！';
+                btn.innerHTML = `✏️ Apple Pencil 專用 (忽視手掌)`;
+                btn.style.background = '#eff6ff';
+                btn.style.color = '#1d4ed8';
+                btn.style.borderColor = '#93c5fd';
+                btn.title = '【Apple Pencil 專用模式】僅響應觸控筆尖與滑鼠，手掌、手腕靠在螢幕上完全不會誤觸或卡頓！點擊可切換為通用模式';
             }
         }
 
         function toggleInputMode() {
-            inputMode = (inputMode === 'pen') ? 'all' : 'pen';
-            localStorage.setItem('handwriting_input_mode', inputMode);
+            inputMode = (inputMode === 'auto') ? 'pen' : 'auto';
+            localStorage.setItem('handwriting_input_mode_v2', inputMode);
             updateInputModeUI();
         }
 
@@ -1082,20 +1082,73 @@
         function startDrawing(e) {
             e.preventDefault();
 
-            // 1. 觸控筆專用模式：徹底忽視任何非觸控筆輸入 (手指、手掌、手腕)！
-            // 永遠不會建立繪圖狀態，永遠不會佔用 activePointerId，就算手掌一直靠在螢幕上也不會被 lock！
-            if (inputMode === 'pen' && e.pointerType !== 'pen') {
+            // 1. Apple Pencil (pen) 具備最高優先權：立即接管繪圖，毫秒級開筆，手掌靠在螢幕上也完全不卡頓
+            if (e.pointerType === 'pen') {
+                if (isDrawing && currentStroke && currentStroke.points && currentStroke.points.length > 0) {
+                    strokeHistory.push(currentStroke);
+                }
+                updateCanvasRect();
+                activePointerId = e.pointerId;
+                isDrawing = true;
+
+                const pos = getCanvasPos(e);
+                if (!strokeStartTime) strokeStartTime = Date.now();
+                const relTime = Date.now() - strokeStartTime;
+
+                currentStroke = {
+                    pointerId: e.pointerId,
+                    pointerType: e.pointerType,
+                    tool: currentTool,
+                    color: currentTool === 'eraser' ? '#ffffff' : currentColor,
+                    size: getStrokeSize(currentTool, pos.pressure),
+                    points: [pos],
+                    inkX: [Math.round(pos.x)],
+                    inkY: [Math.round(pos.y)],
+                    inkT: [relTime]
+                };
                 return;
             }
 
-            // 2. 通用模式：手掌大面積接觸排除
-            if (inputMode === 'all' && e.pointerType === 'touch') {
-                if ((e.width && e.width > 32) || (e.height && e.height > 32)) {
+            // 2. 滑鼠 (mouse)：永遠允許繪製（供電腦、筆電測試與教學操作）
+            if (e.pointerType === 'mouse') {
+                if (isDrawing && currentStroke && currentStroke.points && currentStroke.points.length > 0) {
+                    strokeHistory.push(currentStroke);
+                }
+                updateCanvasRect();
+                activePointerId = e.pointerId;
+                isDrawing = true;
+
+                const pos = getCanvasPos(e);
+                if (!strokeStartTime) strokeStartTime = Date.now();
+                const relTime = Date.now() - strokeStartTime;
+
+                currentStroke = {
+                    pointerId: e.pointerId,
+                    pointerType: e.pointerType,
+                    tool: currentTool,
+                    color: currentTool === 'eraser' ? '#ffffff' : currentColor,
+                    size: getStrokeSize(currentTool, pos.pressure),
+                    points: [pos],
+                    inkX: [Math.round(pos.x)],
+                    inkY: [Math.round(pos.y)],
+                    inkT: [relTime]
+                };
+                return;
+            }
+
+            // 3. Apple Pencil 專用模式 (pen mode) 下，忽略一般 touch (忽視手掌與手指干擾)
+            if (inputMode === 'pen') {
+                return;
+            }
+
+            // 4. 智能通用模式 (auto mode)：過濾巨大手掌接觸面積 (palm noise, width/height > 35)
+            if (e.pointerType === 'touch') {
+                if ((e.width && e.width > 35) || (e.height && e.height > 35)) {
                     return;
                 }
             }
 
-            // 3. 毫秒級無縫接筆：若前一畫尚未結束，立即結算存入歷史，絕不丟失新筆畫
+            // 5. 手指或一般觸控筆正常開始繪圖
             if (isDrawing && currentStroke && currentStroke.points && currentStroke.points.length > 0) {
                 strokeHistory.push(currentStroke);
             }
@@ -1123,8 +1176,7 @@
 
         function drawMove(e) {
             if (!isDrawing) return;
-            // 觸控筆模式下，絕對忽略任何手指或手掌的滑動干擾
-            if (inputMode === 'pen' && e.pointerType !== 'pen') return;
+            // 忽略非當前指針的移動（避免手掌壓著滑動干擾）
             if (activePointerId !== null && e.pointerId !== activePointerId) return;
 
             e.preventDefault();
@@ -1145,7 +1197,7 @@
         function stopDrawing(e) {
             if (!isDrawing) return;
 
-            // 若有 pointerId 且不是當前繪圖指針，忽略（避免手掌離開觸發誤停）
+            // 若有 pointerId 且不是當前繪圖指針，忽略（避免手掌隨意抬起或移動誤關閉繪圖）
             if (e && e.pointerId && activePointerId !== null && e.pointerId !== activePointerId) {
                 return;
             }
@@ -1437,12 +1489,11 @@
         async function autoRecognizeAndJudge() {
             if (isChecked) return;
 
-            // 檢查是否有有效筆畫 (排除純橡皮擦與極微小雜訊)
+            // 檢查是否有有效筆畫 (排除純橡皮擦)
             const validStrokes = strokeHistory.filter(s => {
                 if (s.tool === 'eraser') return false;
                 if (!s.inkX || s.inkX.length === 0) return false;
-                const dist = getStrokeTotalDistance(s.points);
-                return dist >= 2.0 || s.points.length >= 3;
+                return s.points && s.points.length > 0;
             });
             if (validStrokes.length === 0) {
                 alert('✏️ 請先在四線格上手寫單字，再點擊「AI 自動評判」喔！');
