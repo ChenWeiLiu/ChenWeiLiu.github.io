@@ -588,11 +588,11 @@
 
     <h1>單字小考 - 1.3 M6 L5 Hooray for Holidays Spelling List 2</h1>
 
-    <div class="tab-label">選擇練習範圍：</div>
+    <div class="tab-label">選擇考試範圍：</div>
     <div class="word-set-tabs">
-        <button class="tab-btn active" id="tabAll" onclick="switchWordSet('all')">🎉 全部單字（15字）</button>
-        <button class="tab-btn" id="tabPart1" onclick="switchWordSet('part1')">📄 第 1~8 字（8字）</button>
-        <button class="tab-btn" id="tabPart2" onclick="switchWordSet('part2')">📄 第 9~15 字（7字）</button>
+        <button class="tab-btn active" id="tabHolidays" onclick="switchWordSet('holidays')">🎉 1.3 M6 L5 Hooray for Holidays Week 2 單字（15字）</button>
+        <button class="tab-btn" id="tabBody" onclick="switchWordSet('body')">👤 生活身體部位 Week 12（6字）</button>
+        <button class="tab-btn" id="tabAll" onclick="switchWordSet('all')">🔀 全部混合（21字）</button>
     </div>
 
     <p style="font-size: 18px; color: #555;">Press the button to hear a word. It will be spoken once.</p>
@@ -872,15 +872,100 @@
         }
 ];
 
-        const wordsPart1 = holidayWords.slice(0, 8);
-        const wordsPart2 = holidayWords.slice(8);
-        const allWords = [...holidayWords];
+        const bodyWords = [
+        {
+                "word": "neck",
+                "posType": "noun",
+                "breakdown": "neck",
+                "ipa": "/nɛk/",
+                "phonicsSounds": [
+                        "n",
+                        "ek"
+                ],
+                "pos": "n. 名詞",
+                "translation": "脖子、頸部",
+                "definition": "the part of the body between the head and the shoulders",
+                "sentence": "The giraffe has a very long neck."
+        },
+        {
+                "word": "lip",
+                "posType": "noun",
+                "breakdown": "lip",
+                "ipa": "/lɪp/",
+                "phonicsSounds": [
+                        "l",
+                        "ip"
+                ],
+                "pos": "n. 名詞",
+                "translation": "唇、嘴唇",
+                "definition": "either of the two soft edges of the mouth",
+                "sentence": "Put on some lip balm if your lips feel dry."
+        },
+        {
+                "word": "chin",
+                "posType": "noun",
+                "breakdown": "chin",
+                "ipa": "/tʃɪn/",
+                "phonicsSounds": [
+                        "ch",
+                        "in"
+                ],
+                "pos": "n. 名詞",
+                "translation": "下巴",
+                "definition": "the bottom part of the face below the mouth",
+                "sentence": "He rested his chin in his hands while thinking."
+        },
+        {
+                "word": "chest",
+                "posType": "noun",
+                "breakdown": "chest",
+                "ipa": "/tʃɛst/",
+                "phonicsSounds": [
+                        "ch",
+                        "est"
+                ],
+                "pos": "n. 名詞",
+                "translation": "胸、胸膛",
+                "definition": "the front part of the body between the neck and stomach",
+                "sentence": "He crossed his arms over his chest."
+        },
+        {
+                "word": "foot",
+                "posType": "noun",
+                "breakdown": "foot",
+                "ipa": "/fʊt/",
+                "phonicsSounds": [
+                        "f",
+                        "oot"
+                ],
+                "pos": "n. 名詞",
+                "translation": "腳 (單數: 1 foot)",
+                "definition": "the part of the leg below the ankle on which a person stands (singular)",
+                "sentence": "I have a sore foot after walking all day."
+        },
+        {
+                "word": "feet",
+                "posType": "noun",
+                "breakdown": "feet",
+                "ipa": "/fiːt/",
+                "phonicsSounds": [
+                        "f",
+                        "eet"
+                ],
+                "pos": "pl. n. 複數名詞",
+                "translation": "腳 (複數: 2 feet)",
+                "definition": "the plural form of foot; both parts on which a person stands",
+                "sentence": "Wash your dirty feet before getting into bed."
+        }
+];
+
+        const allWords = [...holidayWords, ...bodyWords];
 
         let currentWordObj = null;
         let selectedWords = [];
         let testedWords = [];
         let availableWords = [...holidayWords];
-        let currentWordSet = 'all';
+        let currentWordSet = 'holidays';
         let usVoice = null;
 
         // 切換單字範圍
@@ -902,17 +987,17 @@
             document.body.style.background = "#fbf5fd";
 
             // 載入對應單字組
-            if (set === 'part1') {
-                availableWords = [...wordsPart1];
-            } else if (set === 'part2') {
-                availableWords = [...wordsPart2];
-            } else {
+            if (set === 'holidays') {
                 availableWords = [...holidayWords];
+            } else if (set === 'body') {
+                availableWords = [...bodyWords];
+            } else {
+                availableWords = [...holidayWords, ...bodyWords];
             }
 
             // 更新 tab 狀態
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            const tabMap = { all: 'tabAll', part1: 'tabPart1', part2: 'tabPart2' };
+            const tabMap = { holidays: 'tabHolidays', body: 'tabBody', all: 'tabAll' };
             if (tabMap[set] && document.getElementById(tabMap[set])) {
                 document.getElementById(tabMap[set]).classList.add('active');
             }
@@ -1413,6 +1498,7 @@
         function getAllPossibleWords() {
             const set = new Map();
             if (typeof holidayWords !== 'undefined') holidayWords.forEach(w => set.set(w.word, w));
+            if (typeof bodyWords !== 'undefined') bodyWords.forEach(w => set.set(w.word, w));
             if (typeof allWords !== 'undefined') allWords.forEach(w => set.set(w.word, w));
             return Array.from(set.values());
         }
