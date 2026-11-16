@@ -221,6 +221,34 @@
             color: var(--theme-primary);
         }
 
+        .btn-shuffle {
+            background: #f8fafc;
+            border: 2px solid #cbd5e1;
+            color: #334155;
+            padding: 8px 14px;
+            border-radius: 12px;
+            font-weight: 800;
+            font-size: 15px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+            user-select: none;
+        }
+
+        .btn-shuffle:hover {
+            border-color: var(--theme-primary);
+            color: var(--theme-primary);
+        }
+
+        .btn-shuffle.active {
+            background: #f0fdf4 !important;
+            border-color: #22c55e !important;
+            color: #15803d !important;
+            box-shadow: 0 2px 8px rgba(34, 197, 94, 0.2);
+        }
+
         /* Practice Card */
         .practice-card {
             background: white;
@@ -806,6 +834,12 @@
                         <option value="g5_arsenio_2">📚 G5 5.1 M1 L2 Captain Arsenio — List 2 (25字)</option>
                         <option value="g5_arsenio_3">📚 G5 5.1 M1 L2 Captain Arsenio — List 3 (25字)</option>
                     </optgroup>
+                    <optgroup label="⚡ Anthony (G1) 學校單字小考">
+                        <option value="g1_monument_1">🏛️ G1 1.3 M6 L4 Monument City — List 1 (15字)</option>
+                        <option value="g1_monument_2">🏛️ G1 1.3 M6 L4 Monument City — List 2 (15字)</option>
+                        <option value="g1_holidays_1">🎉 G1 1.3 M6 L5 Hooray for Holidays! — List 1 (15字)</option>
+                        <option value="g1_holidays_2">🎉 G1 1.3 M6 L5 Hooray for Holidays! — List 2 (含生活單字 21字)</option>
+                    </optgroup>
                     <optgroup label="🚂 動詞三態手寫大挑戰">
                         <option value="g3_verbs">🚂 G3 不規則動詞三態 — 寫過去式 (#1–84)</option>
                         <option value="g5_verbs">📚 G5 不規則動詞三態 — 寫過去分詞 (#1–50)</option>
@@ -817,6 +851,7 @@
             </div>
 
             <div class="stats-badge-group">
+                <button class="btn-shuffle" id="shuffleModeBtn" onclick="toggleShuffleMode()" title="點擊切換隨機出題或順序出題">🔀 隨機出題：關</button>
                 <div class="stat-badge" id="starBadge">⭐ 0 Stars</div>
                 <div class="stat-badge" style="background:#fff7ed; color:#c2410c;" id="troubleBadge">⚠️ 錯題: 0</div>
                 <button class="btn-print-view" onclick="togglePrintView()">🖨️ A4 紙本練習卷</button>
@@ -1079,76 +1114,40 @@
             };
         }
 
+        function drawDot(x, y, radius, color) {
+            ctx.save();
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.arc(x, y, radius, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+        }
+
+        function getStrokeLength(points) {
+            if (!points || points.length <= 1) return 0;
+            let len = 0;
+            for (let i = 1; i < points.length; i++) {
+                len += Math.hypot(points[i].x - points[i - 1].x, points[i].y - points[i - 1].y);
+            }
+            return len;
+        }
+
         function startDrawing(e) {
             e.preventDefault();
 
-            // 1. Apple Pencil (pen) 具備最高優先權：立即接管繪圖，毫秒級開筆，手掌靠在螢幕上也完全不卡頓
-            if (e.pointerType === 'pen') {
-                if (isDrawing && currentStroke && currentStroke.points && currentStroke.points.length > 0) {
-                    strokeHistory.push(currentStroke);
-                }
-                updateCanvasRect();
-                activePointerId = e.pointerId;
-                isDrawing = true;
-
-                const pos = getCanvasPos(e);
-                if (!strokeStartTime) strokeStartTime = Date.now();
-                const relTime = Date.now() - strokeStartTime;
-
-                currentStroke = {
-                    pointerId: e.pointerId,
-                    pointerType: e.pointerType,
-                    tool: currentTool,
-                    color: currentTool === 'eraser' ? '#ffffff' : currentColor,
-                    size: getStrokeSize(currentTool, pos.pressure),
-                    points: [pos],
-                    inkX: [Math.round(pos.x)],
-                    inkY: [Math.round(pos.y)],
-                    inkT: [relTime]
-                };
+            // 1. Apple Pencil 專用模式 (pen mode) 下，忽略一般 touch (忽視手掌與手指干擾)
+            if (inputMode === 'pen' && e.pointerType === 'touch') {
                 return;
             }
 
-            // 2. 滑鼠 (mouse)：永遠允許繪製（供電腦、筆電測試與教學操作）
-            if (e.pointerType === 'mouse') {
-                if (isDrawing && currentStroke && currentStroke.points && currentStroke.points.length > 0) {
-                    strokeHistory.push(currentStroke);
-                }
-                updateCanvasRect();
-                activePointerId = e.pointerId;
-                isDrawing = true;
-
-                const pos = getCanvasPos(e);
-                if (!strokeStartTime) strokeStartTime = Date.now();
-                const relTime = Date.now() - strokeStartTime;
-
-                currentStroke = {
-                    pointerId: e.pointerId,
-                    pointerType: e.pointerType,
-                    tool: currentTool,
-                    color: currentTool === 'eraser' ? '#ffffff' : currentColor,
-                    size: getStrokeSize(currentTool, pos.pressure),
-                    points: [pos],
-                    inkX: [Math.round(pos.x)],
-                    inkY: [Math.round(pos.y)],
-                    inkT: [relTime]
-                };
-                return;
-            }
-
-            // 3. Apple Pencil 專用模式 (pen mode) 下，忽略一般 touch (忽視手掌與手指干擾)
-            if (inputMode === 'pen') {
-                return;
-            }
-
-            // 4. 智能通用模式 (auto mode)：過濾巨大手掌接觸面積 (palm noise, width/height > 35)
+            // 2. 智能通用模式 (auto mode)：過濾巨大手掌接觸面積 (palm noise, width/height > 35)
             if (e.pointerType === 'touch') {
                 if ((e.width && e.width > 35) || (e.height && e.height > 35)) {
                     return;
                 }
             }
 
-            // 5. 手指或一般觸控筆正常開始繪圖
+            // 3. 若已有正在繪製的筆畫（例如先前觸控未釋放，或 Apple Pencil 強行搶佔手掌），先行歸檔
             if (isDrawing && currentStroke && currentStroke.points && currentStroke.points.length > 0) {
                 strokeHistory.push(currentStroke);
             }
@@ -1172,6 +1171,11 @@
                 inkY: [Math.round(pos.y)],
                 inkT: [relTime]
             };
+
+            // 關鍵修復：落筆當下立即繪製圓點！
+            // 寫字母 i、j 的上方點號或標點符號時，即便筆尖點一下立刻移開（零滑動位移），也能 100% 瞬間呈現在畫布上！
+            const dotRadius = currentStroke.tool === 'eraser' ? (currentStroke.size / 2) : Math.max(currentStroke.size / 2, 2.5);
+            drawDot(pos.x, pos.y, dotRadius, currentStroke.color);
         }
 
         function drawMove(e) {
@@ -1206,6 +1210,15 @@
             activePointerId = null;
 
             if (currentStroke && currentStroke.points && currentStroke.points.length > 0) {
+                // 若為單點或極短點擊（如寫 i、j 的點），標記為圓點並補齊第二組座標，確保 Google AI 辨識引擎不會將單點視為雜訊濾除
+                if (currentStroke.points.length === 1 || getStrokeLength(currentStroke.points) < 2) {
+                    currentStroke.isDot = true;
+                    if (currentStroke.inkX.length === 1) {
+                        currentStroke.inkX.push(currentStroke.inkX[0] + 1);
+                        currentStroke.inkY.push(currentStroke.inkY[0] + 1);
+                        currentStroke.inkT.push(currentStroke.inkT[0] + 20);
+                    }
+                }
                 strokeHistory.push(currentStroke);
             }
             currentStroke = null;
@@ -1253,7 +1266,14 @@
             ctx.lineJoin = 'round';
 
             strokeHistory.forEach(stroke => {
-                if (stroke.points.length === 0) return;
+                if (!stroke.points || stroke.points.length === 0) return;
+                const dotRadius = stroke.tool === 'eraser' ? (stroke.size / 2) : Math.max(stroke.size / 2, 2.5);
+
+                if (stroke.isDot || stroke.points.length === 1 || getStrokeLength(stroke.points) < 1.5) {
+                    drawDot(stroke.points[0].x, stroke.points[0].y, dotRadius, stroke.color);
+                    return;
+                }
+
                 ctx.strokeStyle = stroke.color;
                 ctx.lineWidth = stroke.size;
                 ctx.beginPath();
@@ -1379,6 +1399,41 @@
             localStorage.setItem(`spelling_mistakes_${student}`, JSON.stringify(map));
         }
 
+        // ============= 隨機出題模式 (Shuffle Mode) =============
+        let isShuffleMode = localStorage.getItem('handwriting_shuffle_mode') === 'true';
+
+        function shuffleArray(arr) {
+            const copy = [...arr];
+            for (let i = copy.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                const temp = copy[i];
+                copy[i] = copy[j];
+                copy[j] = temp;
+            }
+            return copy;
+        }
+
+        function updateShuffleBtnUI() {
+            const btn = document.getElementById('shuffleModeBtn');
+            if (!btn) return;
+            if (isShuffleMode) {
+                btn.classList.add('active');
+                btn.innerHTML = '🔀 隨機出題：開';
+                btn.title = '【隨機出題模式】已開啟：每輪練習單字順序將隨機打亂。點擊可切換為順序出題';
+            } else {
+                btn.classList.remove('active');
+                btn.innerHTML = '🔀 隨機出題：關';
+                btn.title = '【順序出題模式】依原單字表順序出題。點擊可切換為隨機打亂出題';
+            }
+        }
+
+        function toggleShuffleMode() {
+            isShuffleMode = !isShuffleMode;
+            localStorage.setItem('handwriting_shuffle_mode', isShuffleMode);
+            updateShuffleBtnUI();
+            loadUnitQuestions();
+        }
+
         function loadUnitQuestions() {
             if (currentUnitKey === 'mistakes') {
                 const map = getStudentMistakesMap(currentStudent);
@@ -1399,11 +1454,11 @@
                     loadUnitQuestions();
                     return;
                 }
-                currentWordsQueue = pool;
+                currentWordsQueue = isShuffleMode ? shuffleArray(pool) : pool;
             } else {
                 const unit = ALL_UNITS[currentUnitKey];
                 if (!unit || unit.words.length === 0) return;
-                currentWordsQueue = [...unit.words];
+                currentWordsQueue = isShuffleMode ? shuffleArray(unit.words) : [...unit.words];
             }
 
             currentIndex = 0;
@@ -1872,7 +1927,8 @@
             }
         });
 
-updateInputModeUI();
+        updateInputModeUI();
+        updateShuffleBtnUI();
         checkActiveExamOrUrlParams();
         switchStudent(currentStudent);
         setTimeout(resizeCanvas, 100);
