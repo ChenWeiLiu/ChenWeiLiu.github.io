@@ -37,12 +37,18 @@
             --theme-accent: #f97316;
         }
 
-        * {
+        *, *::before, *::after {
             box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
+            -webkit-user-select: none !important;
+            -moz-user-select: none !important;
+            -ms-user-select: none !important;
+            user-select: none !important;
+            -webkit-touch-callout: none !important;
+            -webkit-user-drag: none !important;
         }
 
-        body {
+        html, body {
             margin: 0;
             font-family: 'Segoe UI', 'PingFang TC', 'Microsoft JhengHei', system-ui, -apple-system, sans-serif;
             background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-secondary) 100%);
@@ -50,6 +56,10 @@
             color: var(--text-main);
             padding: 16px;
             transition: background 0.4s ease;
+            -webkit-user-select: none !important;
+            user-select: none !important;
+            -webkit-touch-callout: none !important;
+            overscroll-behavior: none;
         }
 
         .app-shell {
@@ -383,7 +393,7 @@
             border-radius: 18px;
             overflow: hidden;
             box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.04);
-            margin-bottom: 14px;
+            margin-bottom: 22px;
             touch-action: none;
             -webkit-touch-callout: none;
             -webkit-user-select: none;
@@ -436,7 +446,11 @@
             padding: 8px 14px;
             background: #f1f5f9;
             border-radius: 14px;
-            margin-bottom: 18px;
+            margin-bottom: 12px;
+            touch-action: manipulation;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
         }
 
         .tool-group {
@@ -458,6 +472,10 @@
             display: inline-flex;
             align-items: center;
             gap: 5px;
+            touch-action: manipulation;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
         }
 
         .tool-btn:hover {
@@ -881,16 +899,7 @@
                 <div class="letter-boxes-display" id="letterSlots"></div>
             </div>
 
-            <!-- Canvas Section (四線三格手寫板) -->
-            <div class="canvas-section">
-                <canvas id="hwCanvas"></canvas>
-                <!-- 半透明標準字疊合圖層 -->
-                <div class="overlay-text-layer" id="overlayLayer">
-                    <span class="overlay-word" id="overlayWordText">assign</span>
-                </div>
-            </div>
-
-            <!-- Canvas Toolbar -->
+            <!-- Canvas Toolbar (移至手寫板上方，徹底避免手掌靠在下方時誤觸工具列或觸發 iOS 拷貝選單) -->
             <div class="canvas-toolbar">
                 <div class="tool-group">
                     <button class="tool-btn active" id="toolPencil" onclick="setTool('pencil')">✏️ 鉛筆</button>
@@ -910,6 +919,15 @@
                     <button class="tool-btn" id="inputModeBtn" onclick="toggleInputMode()" style="background:#f0fdf4; color:#15803d; border-color:#86efac; font-weight:800;">✏️ 觸控筆專用 (手掌隨意靠)</button>
                     <button class="tool-btn" onclick="undoLastStroke()">↩️ 上一步</button>
                     <button class="tool-btn" onclick="clearCanvasBoard()">🗑️ 清空重寫</button>
+                </div>
+            </div>
+
+            <!-- Canvas Section (四線三格手寫板) -->
+            <div class="canvas-section">
+                <canvas id="hwCanvas"></canvas>
+                <!-- 半透明標準字疊合圖層 -->
+                <div class="overlay-text-layer" id="overlayLayer">
+                    <span class="overlay-word" id="overlayWordText">assign</span>
                 </div>
             </div>
 
@@ -1068,11 +1086,24 @@
             ctx.restore();
         }
 
-        // ============= 專業級智慧防誤觸與極速繪圖引擎 =============
+        // ============= 專業級智慧防誤觸與極速並發繪圖引擎 (Multi-Pointer Non-Blocking Engine) =============
         let inputMode = localStorage.getItem('handwriting_input_mode_v2') || 'auto'; // 'auto' (智能防誤觸，手指/筆/滑鼠通用) 或 'pen' (Apple Pencil 專用)
-        let activePointerId = null;
+        let activeStrokes = new Map(); // pointerId -> stroke 物件（多指獨立追蹤，手掌絕不鎖死筆尖！）
+        let lastPenTimestamp = 0;      // 最近一次偵測到觸控筆 (pointerType === 'pen') 的時間戳
+        let largeTouchIds = new Set(); // 記錄 iOS TouchEvent 偵測到大面積手掌的 identifier
         let canvasRect = null;
         let strokeStartTime = 0;
+
+        // 全域防選取、防 iOS 長按「拷貝 / 查詢 / 翻譯」選單干擾手寫
+        document.addEventListener('selectstart', e => e.preventDefault(), { passive: false });
+        document.addEventListener('contextmenu', e => e.preventDefault(), { passive: false });
+        document.addEventListener('dragstart', e => e.preventDefault(), { passive: false });
+        document.addEventListener('selectionchange', () => {
+            try {
+                const sel = window.getSelection();
+                if (sel && sel.rangeCount > 0) sel.removeAllRanges();
+            } catch (err) {}
+        });
 
         function updateCanvasRect() {
             canvasRect = canvas.getBoundingClientRect();
@@ -1089,7 +1120,7 @@
                 btn.style.background = '#f0fdf4';
                 btn.style.color = '#15803d';
                 btn.style.borderColor = '#86efac';
-                btn.title = '【智能防誤觸模式】支援手指、滑鼠、電容筆與 Apple Pencil，智慧過濾手掌大面積接觸。點擊可切換為 Apple Pencil 專用模式';
+                btn.title = '【智能防誤觸模式】支援手指、滑鼠、電容筆與 Apple Pencil，智慧過濾手掌接觸且絕不鎖死筆尖。點擊可切換為 Apple Pencil 專用模式';
             } else {
                 btn.innerHTML = `✏️ Apple Pencil 專用 (忽視手掌)`;
                 btn.style.background = '#eff6ff';
@@ -1101,6 +1132,9 @@
 
         function toggleInputMode() {
             inputMode = (inputMode === 'auto') ? 'pen' : 'auto';
+            if (inputMode === 'auto') {
+                lastPenTimestamp = 0; // 重置筆鎖定，允許立即使用手指
+            }
             localStorage.setItem('handwriting_input_mode_v2', inputMode);
             updateInputModeUI();
         }
@@ -1132,35 +1166,59 @@
             return len;
         }
 
-        function startDrawing(e) {
-            e.preventDefault();
+        function isPalmTouchEvent(e) {
+            if (e.pointerType !== 'touch') return false;
+            // 1. Apple Pencil 專用模式，或剛使用過觸控筆 (12秒內)，所有 touch 100% 視為手掌誤觸
+            if (inputMode === 'pen' || (Date.now() - lastPenTimestamp < 12000)) {
+                return true;
+            }
+            // 2. 檢查 PointerEvent 接觸面積 (width / height)
+            if ((e.width && e.width > 28) || (e.height && e.height > 28)) {
+                return true;
+            }
+            return false;
+        }
 
-            // 1. Apple Pencil 專用模式 (pen mode) 下，忽略一般 touch (忽視手掌與手指干擾)
-            if (inputMode === 'pen' && e.pointerType === 'touch') {
+        function purgeRecentPalmTouches() {
+            let needRedraw = false;
+            for (const [pid, st] of activeStrokes.entries()) {
+                if (st.pointerType === 'touch') {
+                    activeStrokes.delete(pid);
+                    needRedraw = true;
+                }
+            }
+            const now = Date.now();
+            const beforeLen = strokeHistory.length;
+            strokeHistory = strokeHistory.filter(st => {
+                if (st.pointerType === 'touch' && st.createdAt && (now - st.createdAt < 800) && getStrokeLength(st.points) < 25) {
+                    return false;
+                }
+                return true;
+            });
+            if (strokeHistory.length !== beforeLen) needRedraw = true;
+            if (needRedraw) redrawCanvas();
+        }
+
+        function startDrawing(e) {
+            if (e.cancelable) e.preventDefault();
+
+            // 若偵測到觸控筆 (pen)，立即標記時間戳並清除任何殘留的手掌 touch 雜訊
+            if (e.pointerType === 'pen') {
+                lastPenTimestamp = Date.now();
+                purgeRecentPalmTouches();
+            }
+
+            // 過濾手掌觸控
+            if (isPalmTouchEvent(e)) {
                 return;
             }
 
-            // 2. 智能通用模式 (auto mode)：過濾巨大手掌接觸面積 (palm noise, width/height > 35)
-            if (e.pointerType === 'touch') {
-                if ((e.width && e.width > 35) || (e.height && e.height > 35)) {
-                    return;
-                }
-            }
-
-            // 3. 若已有正在繪製的筆畫（例如先前觸控未釋放，或 Apple Pencil 強行搶佔手掌），先行歸檔
-            if (isDrawing && currentStroke && currentStroke.points && currentStroke.points.length > 0) {
-                strokeHistory.push(currentStroke);
-            }
-
             updateCanvasRect();
-            activePointerId = e.pointerId;
-            isDrawing = true;
-
             const pos = getCanvasPos(e);
             if (!strokeStartTime) strokeStartTime = Date.now();
             const relTime = Date.now() - strokeStartTime;
 
-            currentStroke = {
+            const stroke = {
                 pointerId: e.pointerId,
                 pointerType: e.pointerType,
                 tool: currentTool,
@@ -1169,66 +1227,119 @@
                 points: [pos],
                 inkX: [Math.round(pos.x)],
                 inkY: [Math.round(pos.y)],
-                inkT: [relTime]
+                inkT: [relTime],
+                createdAt: Date.now()
             };
 
+            activeStrokes.set(e.pointerId, stroke);
+            isDrawing = activeStrokes.size > 0;
+            currentStroke = stroke;
+
             // 關鍵修復：落筆當下立即繪製圓點！
-            // 寫字母 i、j 的上方點號或標點符號時，即便筆尖點一下立刻移開（零滑動位移），也能 100% 瞬間呈現在畫布上！
-            const dotRadius = currentStroke.tool === 'eraser' ? (currentStroke.size / 2) : Math.max(currentStroke.size / 2, 2.5);
-            drawDot(pos.x, pos.y, dotRadius, currentStroke.color);
+            // 寫字母 i、j 的上方點號或 t 的橫槓起筆時，即便筆尖點一下立刻移開，也能 100% 瞬間呈現在畫布上！
+            const dotRadius = stroke.tool === 'eraser' ? (stroke.size / 2) : Math.max(stroke.size / 2, 2.5);
+            drawDot(pos.x, pos.y, dotRadius, stroke.color);
         }
 
         function drawMove(e) {
-            if (!isDrawing) return;
-            // 忽略非當前指針的移動（避免手掌壓著滑動干擾）
-            if (activePointerId !== null && e.pointerId !== activePointerId) return;
+            if (e.pointerType === 'pen') {
+                lastPenTimestamp = Date.now();
+            }
 
-            e.preventDefault();
-            if (!canvasRect) updateCanvasRect();
-            const x = e.clientX - canvasRect.left;
-            const y = e.clientY - canvasRect.top;
-            const pos = { x, y, pressure: (e.pressure && e.pressure > 0) ? e.pressure : 0.5 };
-            const relTime = Date.now() - strokeStartTime;
-
-            currentStroke.points.push(pos);
-            currentStroke.inkX.push(Math.round(x));
-            currentStroke.inkY.push(Math.round(y));
-            currentStroke.inkT.push(relTime);
-
-            drawCurrentSegment();
-        }
-
-        function stopDrawing(e) {
-            if (!isDrawing) return;
-
-            // 若有 pointerId 且不是當前繪圖指針，忽略（避免手掌隨意抬起或移動誤關閉繪圖）
-            if (e && e.pointerId && activePointerId !== null && e.pointerId !== activePointerId) {
+            // 若手掌在移動過程中接觸面積擴大 (iPad 手掌壓下時常見)，立即撤銷該手掌筆畫並重繪
+            if (e.pointerType === 'touch' && ((e.width && e.width > 30) || (e.height && e.height > 30) || (Date.now() - lastPenTimestamp < 12000))) {
+                if (activeStrokes.has(e.pointerId)) {
+                    activeStrokes.delete(e.pointerId);
+                    isDrawing = activeStrokes.size > 0;
+                    redrawCanvas();
+                }
                 return;
             }
 
-            isDrawing = false;
-            activePointerId = null;
+            let stroke = activeStrokes.get(e.pointerId);
 
-            if (currentStroke && currentStroke.points && currentStroke.points.length > 0) {
+            // 自癒機制 (Self-Healing)：若 iPad 因手掌靠著螢幕而吞掉 pointerdown 或誤發 pointercancel，
+            // 只要筆尖仍在螢幕上滑動 (pressure > 0 或 buttons > 0 或有效 touch)，立即自動補開筆！
+            if (!stroke) {
+                const isPressing = (e.pointerType === 'pen' && (e.pressure > 0 || e.buttons > 0)) ||
+                                   (e.pointerType === 'mouse' && e.buttons === 1) ||
+                                   (e.pointerType === 'touch' && !isPalmTouchEvent(e));
+                if (isPressing) {
+                    startDrawing(e);
+                    stroke = activeStrokes.get(e.pointerId);
+                }
+                if (!stroke) return;
+            }
+
+            if (e.cancelable) e.preventDefault();
+            if (!canvasRect) updateCanvasRect();
+
+            // 支援 getCoalescedEvents 讓快速書寫（如 t 橫線、連寫）曲線極致平滑不掉點
+            const events = (typeof e.getCoalescedEvents === 'function') ? e.getCoalescedEvents() : [e];
+            const list = (events && events.length > 0) ? events : [e];
+
+            for (const ev of list) {
+                const x = ev.clientX - canvasRect.left;
+                const y = ev.clientY - canvasRect.top;
+                const pos = { x, y, pressure: (ev.pressure && ev.pressure > 0) ? ev.pressure : 0.5 };
+                const relTime = Date.now() - strokeStartTime;
+
+                stroke.points.push(pos);
+                stroke.inkX.push(Math.round(x));
+                stroke.inkY.push(Math.round(y));
+                stroke.inkT.push(relTime);
+
+                drawSegmentForStroke(stroke);
+            }
+        }
+
+        function stopDrawing(e) {
+            if (!e || e.pointerId === undefined) return;
+            const stroke = activeStrokes.get(e.pointerId);
+            if (!stroke) return;
+
+            activeStrokes.delete(e.pointerId);
+            isDrawing = activeStrokes.size > 0;
+
+            // 若是系統因多指手勢發出的 pointercancel，且為短距離 touch（手掌誤觸被系統取消），直接丟棄並清除雜訊點
+            if (e.type === 'pointercancel' && stroke.pointerType === 'touch' && getStrokeLength(stroke.points) < 15) {
+                redrawCanvas();
+                return;
+            }
+
+            if (stroke.points && stroke.points.length > 0) {
                 // 若為單點或極短點擊（如寫 i、j 的點），標記為圓點並補齊第二組座標，確保 Google AI 辨識引擎不會將單點視為雜訊濾除
-                if (currentStroke.points.length === 1 || getStrokeLength(currentStroke.points) < 2) {
-                    currentStroke.isDot = true;
-                    if (currentStroke.inkX.length === 1) {
-                        currentStroke.inkX.push(currentStroke.inkX[0] + 1);
-                        currentStroke.inkY.push(currentStroke.inkY[0] + 1);
-                        currentStroke.inkT.push(currentStroke.inkT[0] + 20);
+                if (stroke.points.length === 1 || getStrokeLength(stroke.points) < 2) {
+                    stroke.isDot = true;
+                    if (stroke.inkX.length === 1) {
+                        stroke.inkX.push(stroke.inkX[0] + 1);
+                        stroke.inkY.push(stroke.inkY[0] + 1);
+                        stroke.inkT.push(stroke.inkT[0] + 20);
                     }
                 }
-                strokeHistory.push(currentStroke);
+                strokeHistory.push(stroke);
             }
             currentStroke = null;
         }
 
-        canvas.addEventListener('pointerdown', startDrawing);
-        canvas.addEventListener('pointermove', drawMove);
+        // 底層阻斷 iOS WebKit 手勢、放大鏡、雙擊延遲與長按選字選單 (必須為 passive: false)
+        canvas.addEventListener('touchstart', e => {
+            if (e.cancelable) e.preventDefault();
+        }, { passive: false });
+        canvas.addEventListener('touchmove', e => {
+            if (e.cancelable) e.preventDefault();
+        }, { passive: false });
+        canvas.addEventListener('touchend', e => {
+            if (e.cancelable) e.preventDefault();
+        }, { passive: false });
+        canvas.addEventListener('touchcancel', e => {
+            if (e.cancelable) e.preventDefault();
+        }, { passive: false });
+
+        canvas.addEventListener('pointerdown', startDrawing, { passive: false });
+        canvas.addEventListener('pointermove', drawMove, { passive: false });
         canvas.addEventListener('pointerup', stopDrawing);
         canvas.addEventListener('pointercancel', stopDrawing);
-        canvas.addEventListener('pointerleave', stopDrawing);
         window.addEventListener('pointerup', stopDrawing);
         window.addEventListener('pointercancel', stopDrawing);
         canvas.addEventListener('contextmenu', e => e.preventDefault());
@@ -1240,17 +1351,17 @@
             return 4;
         }
 
-        function drawCurrentSegment() {
-            if (!currentStroke || currentStroke.points.length < 2) return;
-            const pts = currentStroke.points;
+        function drawSegmentForStroke(stroke) {
+            if (!stroke || stroke.points.length < 2) return;
+            const pts = stroke.points;
             const p1 = pts[pts.length - 2];
             const p2 = pts[pts.length - 1];
 
             ctx.save();
             ctx.lineCap = 'round';
             ctx.lineJoin = 'round';
-            ctx.strokeStyle = currentStroke.color;
-            ctx.lineWidth = currentStroke.size;
+            ctx.strokeStyle = stroke.color;
+            ctx.lineWidth = stroke.size;
 
             ctx.beginPath();
             ctx.moveTo(p1.x, p1.y);
@@ -1259,13 +1370,20 @@
             ctx.restore();
         }
 
+        function drawCurrentSegment() {
+            if (currentStroke) drawSegmentForStroke(currentStroke);
+        }
+
         function redrawCanvas() {
             drawFourLines();
             ctx.save();
             ctx.lineCap = 'round';
             ctx.lineJoin = 'round';
 
-            strokeHistory.forEach(stroke => {
+            // 同時渲染已完成的筆畫與正在進行中的筆畫（確保清除手掌雜訊重繪時，正在寫的筆畫絕不中斷消失）
+            const allStrokesToRender = [...strokeHistory, ...activeStrokes.values()];
+
+            allStrokesToRender.forEach(stroke => {
                 if (!stroke.points || stroke.points.length === 0) return;
                 const dotRadius = stroke.tool === 'eraser' ? (stroke.size / 2) : Math.max(stroke.size / 2, 2.5);
 
@@ -1279,7 +1397,6 @@
                 ctx.beginPath();
                 ctx.moveTo(stroke.points[0].x, stroke.points[0].y);
                 for (let i = 1; i < stroke.points.length; i++) {
-                    const p1 = stroke.points[i - 1];
                     const p2 = stroke.points[i];
                     ctx.lineTo(p2.x, p2.y);
                 }
@@ -1317,9 +1434,10 @@
 
         function clearCanvasBoard() {
             strokeHistory = [];
+            activeStrokes.clear();
             strokeStartTime = 0;
-            activePointerId = null;
             isDrawing = false;
+            currentStroke = null;
             redrawCanvas();
             hideOverlayWord();
             const aiBanner = document.getElementById('aiStatusBanner');
