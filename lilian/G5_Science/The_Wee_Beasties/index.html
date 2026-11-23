@@ -1,0 +1,3051 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lesson 5: The Wee Beasties（細小微生物）— Lilian G5 Science</title>
+    <meta name="description" content="Grade 5 Science Lesson 5: The Wee Beasties bilingual review cards, 100-point interactive English practice, and parent answer key." />
+    <style>
+        :root {
+            --bg-page: #f4f7fb;
+            --bg-card: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #475569;
+            --border-soft: #e2e8f0;
+
+            --teal: #0f766e;
+            --teal-bg: #f0fdfa;
+            --teal-border: #5eead4;
+
+            --blue: #1d4ed8;
+            --blue-bg: #eff6ff;
+            --blue-border: #93c5fd;
+
+            --purple: #6d28d9;
+            --purple-bg: #f5f3ff;
+            --purple-border: #c4b5fd;
+
+            --emerald: #047857;
+            --emerald-bg: #ecfdf5;
+            --emerald-border: #6ee7b7;
+
+            --amber: #b45309;
+            --amber-bg: #fffbeb;
+            --amber-border: #fcd34d;
+
+            --rose: #be123c;
+            --rose-bg: #fff1f2;
+            --rose-border: #fda4af;
+
+            --indigo: #4338ca;
+            --indigo-bg: #eef2ff;
+            --indigo-border: #a5b4fc;
+
+            --radius-lg: 20px;
+            --radius-md: 14px;
+            --shadow-card: 0 6px 20px rgba(15, 23, 42, 0.06);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', 'PingFang TC', 'Microsoft JhengHei', system-ui, -apple-system, sans-serif;
+            background: var(--bg-page);
+            color: var(--text-main);
+            font-size: 18px;
+            line-height: 1.75;
+            padding: 20px 16px 64px;
+        }
+
+        .app-shell {
+            max-width: 920px;
+            margin: 0 auto;
+        }
+
+        /* Top Navigation */
+        .top-nav {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            background: #ffffff;
+            color: var(--indigo);
+            font-weight: 800;
+            font-size: 16px;
+            padding: 10px 18px;
+            border-radius: 14px;
+            border: 2px solid var(--indigo-border);
+            box-shadow: 0 3px 10px rgba(67, 56, 202, 0.08);
+            transition: transform 0.15s ease, background 0.15s ease;
+        }
+
+        .back-btn:hover {
+            background: var(--indigo-bg);
+            transform: translateY(-1px);
+        }
+
+        .badge-grade {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--teal-bg);
+            color: var(--teal);
+            border: 2px solid var(--teal-border);
+            font-weight: 800;
+            font-size: 15px;
+            padding: 8px 16px;
+            border-radius: 999px;
+        }
+
+        /* Hero Banner */
+        .hero {
+            background: linear-gradient(135deg, #0f766e 0%, #0284c7 55%, #4f46e5 100%);
+            color: #ffffff;
+            border-radius: 24px;
+            padding: 30px 28px;
+            margin-bottom: 22px;
+            box-shadow: 0 14px 32px rgba(15, 118, 110, 0.22);
+        }
+
+        .hero-kicker {
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            opacity: 0.92;
+            margin-bottom: 6px;
+        }
+
+        .hero h1 {
+            margin: 0 0 8px;
+            font-size: clamp(26px, 4.2vw, 36px);
+            line-height: 1.25;
+            font-weight: 900;
+        }
+
+        .hero-sub {
+            margin: 0;
+            font-size: 17px;
+            opacity: 0.95;
+            line-height: 1.6;
+        }
+
+        /* Sticky Mode Tabs */
+        .mode-tabs-wrap {
+            position: sticky;
+            top: 10px;
+            z-index: 40;
+            margin-bottom: 26px;
+        }
+
+        .mode-tabs {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(10px);
+            padding: 10px;
+            border-radius: 20px;
+            border: 2px solid var(--border-soft);
+            box-shadow: 0 10px 26px rgba(15, 23, 42, 0.1);
+        }
+
+        .mode-tab {
+            border: 2px solid transparent;
+            background: #f8fafc;
+            color: var(--text-muted);
+            font-size: 16px;
+            font-weight: 800;
+            padding: 13px 12px;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-align: center;
+        }
+
+        .mode-tab:hover {
+            background: #eef2ff;
+            color: var(--indigo);
+        }
+
+        .mode-tab.active[data-tab="study"] {
+            background: var(--teal);
+            color: #ffffff;
+            box-shadow: 0 6px 16px rgba(15, 118, 110, 0.28);
+        }
+
+        .mode-tab.active[data-tab="practice"] {
+            background: var(--blue);
+            color: #ffffff;
+            box-shadow: 0 6px 16px rgba(29, 78, 216, 0.28);
+        }
+
+        .mode-tab.active[data-tab="answers"] {
+            background: var(--purple);
+            color: #ffffff;
+            box-shadow: 0 6px 16px rgba(109, 40, 217, 0.28);
+        }
+
+        .tab-panel {
+            display: none;
+        }
+
+        .tab-panel.active {
+            display: block;
+        }
+
+        /* Quick Jump Pills */
+        .jump-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 24px;
+            background: #ffffff;
+            padding: 14px 16px;
+            border-radius: 16px;
+            border: 1.5px solid var(--border-soft);
+        }
+
+        .jump-pill {
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--teal);
+            background: var(--teal-bg);
+            border: 1.5px solid var(--teal-border);
+            padding: 6px 14px;
+            border-radius: 999px;
+            transition: all 0.15s ease;
+        }
+
+        .jump-pill:hover {
+            background: var(--teal);
+            color: #ffffff;
+        }
+
+        /* Action Row */
+        .action-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            border: none;
+            border-radius: 14px;
+            padding: 11px 20px;
+            font-size: 16px;
+            font-weight: 800;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .btn-teal {
+            background: var(--teal);
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(15, 118, 110, 0.24);
+        }
+
+        .btn-blue {
+            background: var(--blue);
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(29, 78, 216, 0.24);
+        }
+
+        .btn-purple {
+            background: var(--purple);
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(109, 40, 217, 0.24);
+        }
+
+        .btn-outline {
+            background: #ffffff;
+            color: var(--text-main);
+            border: 2px solid #cbd5e1;
+        }
+
+        .btn-outline:hover {
+            border-color: var(--blue);
+            color: var(--blue);
+        }
+
+        .btn-speak {
+            background: var(--emerald-bg);
+            color: var(--emerald);
+            border: 1.5px solid var(--emerald-border);
+            border-radius: 999px;
+            padding: 5px 12px;
+            font-size: 14px;
+            font-weight: 800;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            flex-shrink: 0;
+        }
+
+        .btn-speak:hover {
+            background: var(--emerald);
+            color: #ffffff;
+        }
+
+        .btn-hint {
+            background: var(--amber-bg);
+            color: var(--amber);
+            border: 1.5px solid var(--amber-border);
+            border-radius: 999px;
+            padding: 5px 13px;
+            font-size: 14px;
+            font-weight: 800;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            flex-shrink: 0;
+            transition: all 0.15s ease;
+        }
+
+        .btn-hint:hover {
+            background: var(--amber);
+            color: #ffffff;
+        }
+
+        .hint-box {
+            display: none;
+            margin-top: 10px;
+            background: var(--amber-bg);
+            border: 1.5px solid var(--amber-border);
+            border-left: 5px solid var(--amber);
+            border-radius: 10px;
+            padding: 10px 14px;
+            font-size: 15.5px;
+            color: #78350f;
+            font-weight: 600;
+        }
+
+        .hint-box.show {
+            display: block;
+        }
+
+        /* Practice Mode Selector Bar */
+        .practice-mode-bar {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .pmode-btn {
+            border: 2px solid var(--border-soft);
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 14px 16px;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.18s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .pmode-btn:hover {
+            border-color: var(--blue-border);
+        }
+
+        .pmode-btn.active {
+            background: var(--blue-bg);
+            border-color: var(--blue);
+            box-shadow: 0 6px 16px rgba(29, 78, 216, 0.12);
+        }
+
+        .pmode-title {
+            font-size: 16.5px;
+            font-weight: 900;
+            color: var(--blue);
+        }
+
+        .pmode-desc {
+            font-size: 14.5px;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        /* Section Banner Heading */
+        .section-block {
+            margin-bottom: 34px;
+            scroll-margin-top: 96px;
+        }
+
+        .section-heading {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 14px 20px;
+            border-radius: 16px;
+            margin-bottom: 18px;
+            font-size: 21px;
+            font-weight: 900;
+        }
+
+        .heading-teal {
+            background: var(--teal-bg);
+            color: var(--teal);
+            border-left: 7px solid var(--teal);
+        }
+
+        .heading-blue {
+            background: var(--blue-bg);
+            color: var(--blue);
+            border-left: 7px solid var(--blue);
+        }
+
+        .heading-purple {
+            background: var(--purple-bg);
+            color: var(--purple);
+            border-left: 7px solid var(--purple);
+        }
+
+        .heading-amber {
+            background: var(--amber-bg);
+            color: var(--amber);
+            border-left: 7px solid var(--amber);
+        }
+
+        .heading-rose {
+            background: var(--rose-bg);
+            color: var(--rose);
+            border-left: 7px solid var(--rose);
+        }
+
+        .heading-emerald {
+            background: var(--emerald-bg);
+            color: var(--emerald);
+            border-left: 7px solid var(--emerald);
+        }
+
+        /* Concept Cards */
+        .cards-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .concept-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: 22px 24px;
+            border: 1.5px solid var(--border-soft);
+            border-left: 8px solid var(--teal);
+            box-shadow: var(--shadow-card);
+        }
+
+        .concept-card.tone-teal { border-left-color: var(--teal); }
+        .concept-card.tone-blue { border-left-color: var(--blue); }
+        .concept-card.tone-purple { border-left-color: var(--purple); }
+        .concept-card.tone-emerald { border-left-color: var(--emerald); }
+        .concept-card.tone-amber { border-left-color: var(--amber); }
+        .concept-card.tone-rose { border-left-color: var(--rose); }
+        .concept-card.tone-indigo { border-left-color: var(--indigo); }
+
+        .concept-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .concept-title {
+            margin: 0;
+            font-size: 20px;
+            font-weight: 900;
+            color: #0f172a;
+            line-height: 1.4;
+        }
+
+        .concept-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+            background: #e2e8f0;
+            color: #0f172a;
+            font-size: 16px;
+            font-weight: 900;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        .tone-teal .concept-num { background: var(--teal-bg); color: var(--teal); }
+        .tone-blue .concept-num { background: var(--blue-bg); color: var(--blue); }
+        .tone-purple .concept-num { background: var(--purple-bg); color: var(--purple); }
+        .tone-emerald .concept-num { background: var(--emerald-bg); color: var(--emerald); }
+        .tone-amber .concept-num { background: var(--amber-bg); color: var(--amber); }
+        .tone-rose .concept-num { background: var(--rose-bg); color: var(--rose); }
+        .tone-indigo .concept-num { background: var(--indigo-bg); color: var(--indigo); }
+
+        .bullet-list {
+            margin: 0;
+            padding-left: 22px;
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+        }
+
+        .bullet-list li {
+            margin: 0;
+        }
+
+        .sub-list {
+            margin: 8px 0 4px;
+            padding-left: 22px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        /* Keyword Highlight Spans */
+        .kw {
+            font-weight: 800;
+            color: var(--teal);
+            background: var(--teal-bg);
+            padding: 1px 7px;
+            border-radius: 7px;
+        }
+
+        .kw-blue {
+            font-weight: 800;
+            color: var(--blue);
+            background: var(--blue-bg);
+            padding: 1px 7px;
+            border-radius: 7px;
+        }
+
+        .kw-purple {
+            font-weight: 800;
+            color: var(--purple);
+            background: var(--purple-bg);
+            padding: 1px 7px;
+            border-radius: 7px;
+        }
+
+        .kw-warn {
+            font-weight: 900;
+            color: var(--rose);
+            background: var(--rose-bg);
+            padding: 1px 7px;
+            border-radius: 7px;
+        }
+
+        .kw-amber {
+            font-weight: 800;
+            color: var(--amber);
+            background: var(--amber-bg);
+            padding: 1px 7px;
+            border-radius: 7px;
+        }
+
+        /* Highlight Callout Box */
+        .summary-box {
+            background: linear-gradient(135deg, #f0fdfa 0%, #eff6ff 100%);
+            border: 2.5px solid var(--teal-border);
+            border-radius: var(--radius-lg);
+            padding: 24px 26px;
+            font-size: 19px;
+            line-height: 1.85;
+            box-shadow: var(--shadow-card);
+        }
+
+        /* Mind Map Card */
+        .mindmap-card {
+            background: #ffffff;
+            border: 2px solid var(--indigo-border);
+            border-radius: 22px;
+            padding: 18px;
+            box-shadow: var(--shadow-card);
+            overflow-x: auto;
+        }
+
+        .mindmap-svg {
+            width: 100%;
+            min-width: 720px;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .mm-branch {
+            cursor: pointer;
+            transition: opacity 0.15s ease;
+        }
+
+        .mm-branch:hover {
+            opacity: 0.88;
+        }
+
+        .mindmap-tip {
+            text-align: center;
+            font-size: 14.5px;
+            font-weight: 700;
+            color: var(--text-muted);
+            margin-top: 10px;
+        }
+
+        .mindmap-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 999;
+            background: rgba(15, 23, 42, 0.78);
+            backdrop-filter: blur(4px);
+            padding: 20px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mindmap-modal.open {
+            display: flex;
+        }
+
+        .mindmap-modal-inner {
+            background: #ffffff;
+            border-radius: 22px;
+            padding: 18px;
+            max-width: 1240px;
+            width: 100%;
+            max-height: 92vh;
+            overflow: auto;
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+        }
+
+        /* Vocabulary Flip Cards (No Table!) */
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+            gap: 16px;
+        }
+
+        .vocab-card {
+            background: #ffffff;
+            border: 2px solid var(--blue-border);
+            border-top: 6px solid var(--blue);
+            border-radius: 18px;
+            padding: 18px 20px;
+            box-shadow: var(--shadow-card);
+            cursor: pointer;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .vocab-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 24px rgba(29, 78, 216, 0.12);
+        }
+
+        .vocab-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .vocab-word {
+            font-size: 20px;
+            font-weight: 900;
+            color: var(--blue);
+            line-height: 1.3;
+        }
+
+        .vocab-meaning {
+            border-top: 1.5px dashed #cbd5e1;
+            padding-top: 10px;
+            font-size: 16.5px;
+            color: var(--text-main);
+        }
+
+        .vocab-card.hidden-meaning .vocab-meaning {
+            display: none;
+        }
+
+        .vocab-tap-hint {
+            display: none;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--indigo);
+            background: var(--indigo-bg);
+            padding: 6px 12px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .vocab-card.hidden-meaning .vocab-tap-hint {
+            display: block;
+        }
+
+        /* Five Kingdoms Cards (No Table!) */
+        .kingdom-card {
+            background: #ffffff;
+            border-radius: 18px;
+            padding: 18px 22px;
+            border: 2px solid var(--border-soft);
+            border-left: 8px solid var(--purple);
+            box-shadow: var(--shadow-card);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .kingdom-top {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .kingdom-name {
+            font-size: 20px;
+            font-weight: 900;
+            color: #0f172a;
+        }
+
+        .pill {
+            display: inline-block;
+            font-size: 14px;
+            font-weight: 800;
+            padding: 4px 12px;
+            border-radius: 999px;
+        }
+
+        .pill-single { background: var(--teal-bg); color: var(--teal); border: 1.5px solid var(--teal-border); }
+        .pill-both { background: var(--purple-bg); color: var(--purple); border: 1.5px solid var(--purple-border); }
+        .pill-multi { background: var(--amber-bg); color: var(--amber); border: 1.5px solid var(--amber-border); }
+        .pill-microbe-yes { background: var(--emerald-bg); color: var(--emerald); }
+        .pill-microbe-no { background: var(--rose-bg); color: var(--rose); }
+
+        /* Trap Alert Cards */
+        .trap-card {
+            background: var(--rose-bg);
+            border: 2px solid var(--rose-border);
+            border-left: 8px solid var(--rose);
+            border-radius: 16px;
+            padding: 16px 20px;
+            font-size: 17.5px;
+        }
+
+        /* Self-Check Checklist */
+        .progress-wrap {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 16px 20px;
+            border: 2px solid var(--emerald-border);
+            margin-bottom: 16px;
+        }
+
+        .progress-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 800;
+            color: var(--emerald);
+            margin-bottom: 8px;
+        }
+
+        .progress-track {
+            height: 14px;
+            background: #e2e8f0;
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #10b981, #0f766e);
+            border-radius: 999px;
+            transition: width 0.25s ease;
+        }
+
+        .check-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            background: #ffffff;
+            border: 2px solid var(--border-soft);
+            border-radius: 16px;
+            padding: 16px 20px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .check-item:hover {
+            border-color: var(--emerald-border);
+        }
+
+        .check-item.checked {
+            background: var(--emerald-bg);
+            border-color: var(--emerald-border);
+        }
+
+        .check-item input[type="checkbox"] {
+            width: 24px;
+            height: 24px;
+            margin-top: 4px;
+            accent-color: var(--emerald);
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+
+        /* ================= PRACTICE TAB ================= */
+        .practice-banner {
+            background: var(--blue-bg);
+            border: 2px solid var(--blue-border);
+            border-radius: 18px;
+            padding: 20px 24px;
+            margin-bottom: 18px;
+        }
+
+        .practice-banner h2 {
+            margin: 0 0 6px;
+            color: var(--blue);
+            font-size: 24px;
+        }
+
+        .practice-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            font-weight: 700;
+            color: var(--text-muted);
+            font-size: 16px;
+        }
+
+        .part-card {
+            background: #ffffff;
+            border: 2px solid var(--border-soft);
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-card);
+        }
+
+        .part-title {
+            margin: 0 0 6px;
+            font-size: 21px;
+            font-weight: 900;
+            color: var(--blue);
+        }
+
+        .part-instruction {
+            margin: 0 0 18px;
+            color: var(--text-muted);
+            font-size: 16.5px;
+        }
+
+        /* Part I: tap a word, then tap its meaning */
+        .print-only { display: none; }
+
+        .match-sticky {
+            position: sticky;
+            top: 8px;
+            z-index: 4;
+            background: var(--blue);
+            color: #ffffff;
+            border-radius: 14px;
+            padding: 12px 16px;
+            font-weight: 800;
+            font-size: 16.5px;
+            margin-bottom: 14px;
+            box-shadow: 0 8px 18px rgba(29, 78, 216, 0.22);
+        }
+
+        .match-board {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 18px;
+        }
+
+        @media (min-width: 840px) {
+            .match-board { grid-template-columns: 0.85fr 1.15fr; align-items: start; }
+        }
+
+        .bank-title {
+            font-weight: 900;
+            color: var(--indigo);
+            margin-bottom: 10px;
+            font-size: 17px;
+        }
+
+        .term-block { margin-bottom: 10px; }
+
+        .term-btn, .def-btn, .fill-slot, .chip-btn {
+            font-family: inherit;
+            text-align: left;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .term-btn {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            background: #ffffff;
+            border: 2.5px solid var(--border-soft);
+            border-radius: 16px;
+            padding: 12px 14px;
+        }
+
+        .term-btn.is-picked {
+            border-color: var(--blue);
+            background: var(--blue-bg);
+            box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.18);
+        }
+
+        .term-btn.is-paired { border-color: var(--indigo-border); }
+        .term-btn.is-correct { background: var(--emerald-bg); border-color: var(--emerald); }
+        .term-btn.is-wrong { background: var(--rose-bg); border-color: var(--rose); }
+
+        .term-name {
+            font-size: 18.5px;
+            font-weight: 900;
+            color: #0f172a;
+        }
+
+        .term-paired {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text-muted);
+            line-height: 1.45;
+        }
+
+        .term-btn.is-paired .term-paired { color: var(--indigo); }
+
+        .def-btn {
+            display: block;
+            background: var(--indigo-bg);
+            border: 2.5px solid transparent;
+            border-left: 6px solid var(--indigo);
+            border-radius: 14px;
+            padding: 12px 14px;
+            margin-bottom: 10px;
+            font-size: 16.5px;
+            font-weight: 700;
+            color: #1e1b4b;
+            line-height: 1.45;
+        }
+
+        .def-btn.is-picked-target { outline: 3px solid var(--blue); }
+        .def-btn.is-used { opacity: 0.42; }
+        .def-btn:hover { border-color: var(--indigo-border); }
+
+        .desc-bank { display: flex; flex-direction: column; gap: 10px; margin-top: 8px; }
+        .desc-item {
+            background: #eef2ff;
+            border-left: 6px solid var(--indigo);
+            border-radius: 12px;
+            padding: 12px 16px;
+            font-size: 16.5px;
+        }
+        .desc-letter {
+            display: inline-block;
+            background: var(--indigo);
+            color: #ffffff;
+            font-weight: 900;
+            width: 28px;
+            height: 28px;
+            line-height: 28px;
+            text-align: center;
+            border-radius: 8px;
+            margin-right: 10px;
+        }
+
+        /* Part IV: tap a button to drop its text into a slot */
+        .fill-slots {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+
+        .fill-slot {
+            background: #ffffff;
+            border: 2.5px dashed #94a3b8;
+            border-radius: 16px;
+            padding: 12px 14px;
+            min-height: 72px;
+        }
+
+        .fill-slot.is-picked {
+            border-style: solid;
+            border-color: var(--blue);
+            box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.16);
+        }
+
+        .fill-slot.is-filled {
+            border-style: solid;
+            border-color: var(--purple-border);
+            background: var(--purple-bg);
+        }
+
+        .fill-slot.is-correct { background: var(--emerald-bg); border-color: var(--emerald); }
+        .fill-slot.is-wrong { background: var(--rose-bg); border-color: var(--rose); }
+
+        .fill-slot-label {
+            display: block;
+            font-size: 13.5px;
+            font-weight: 800;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .fill-slot-value {
+            display: block;
+            font-size: 17px;
+            font-weight: 800;
+            color: #0f172a;
+            line-height: 1.45;
+        }
+
+        .chip-group { margin-bottom: 12px; }
+
+        .chip-bank {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .chip-btn {
+            width: auto;
+            max-width: 100%;
+            background: #ffffff;
+            border: 2px solid var(--blue-border);
+            color: var(--blue);
+            border-radius: 999px;
+            padding: 10px 14px;
+            font-size: 16px;
+            font-weight: 800;
+            line-height: 1.35;
+        }
+
+        .chip-btn.chip-long {
+            border-radius: 16px;
+            width: 100%;
+            text-align: left;
+        }
+
+        .chip-btn.is-used {
+            opacity: 0.35;
+            text-decoration: line-through;
+        }
+
+        .sa-note {
+            min-height: 1.4em;
+            font-size: 15px;
+            font-weight: 800;
+            color: var(--amber);
+            margin: 4px 0 8px;
+        }
+
+        /* Question Card (MC / TF / SA) */
+        .q-card {
+            background: #f8fafc;
+            border: 2px solid var(--border-soft);
+            border-radius: 16px;
+            padding: 18px 20px;
+            margin-bottom: 16px;
+        }
+
+        .q-card:last-child {
+            margin-bottom: 0;
+        }
+
+        .q-card.is-correct { background: var(--emerald-bg); border-color: var(--emerald-border); }
+        .q-card.is-wrong { background: var(--rose-bg); border-color: var(--rose-border); }
+
+        .q-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .q-prompt {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 0;
+            color: #0f172a;
+        }
+
+        .options-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            background: #ffffff;
+            border: 2px solid var(--border-soft);
+            border-radius: 12px;
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: border-color 0.15s ease, background 0.15s ease;
+            font-size: 17px;
+        }
+
+        .option-label:hover {
+            border-color: var(--blue-border);
+            background: var(--blue-bg);
+        }
+
+        .option-label input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            margin-top: 5px;
+            accent-color: var(--blue);
+            flex-shrink: 0;
+        }
+
+        .tf-buttons {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .tf-btn {
+            flex: 1;
+            min-width: 130px;
+            padding: 12px 18px;
+            border-radius: 12px;
+            border: 2px solid #cbd5e1;
+            background: #ffffff;
+            font-size: 17px;
+            font-weight: 800;
+            color: var(--text-main);
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .tf-btn.selected-t {
+            background: var(--emerald);
+            border-color: var(--emerald);
+            color: #ffffff;
+        }
+
+        .tf-btn.selected-f {
+            background: var(--rose);
+            border-color: var(--rose);
+            color: #ffffff;
+        }
+
+        .sa-input {
+            width: 100%;
+            min-height: 92px;
+            padding: 14px 16px;
+            border-radius: 12px;
+            border: 2px solid #cbd5e1;
+            font-family: inherit;
+            font-size: 17px;
+            line-height: 1.6;
+            resize: vertical;
+            background: #ffffff;
+        }
+
+        .sa-input:focus {
+            outline: none;
+            border-color: var(--blue);
+        }
+
+        .print-lines {
+            display: none;
+        }
+
+        .q-feedback {
+            display: none;
+            margin-top: 12px;
+            padding: 11px 15px;
+            border-radius: 10px;
+            font-size: 15.5px;
+            font-weight: 700;
+            line-height: 1.6;
+        }
+
+        .q-feedback.show {
+            display: block;
+        }
+
+        .q-feedback.ok {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .q-feedback.bad {
+            background: #ffe4e6;
+            color: #9f1239;
+        }
+
+        /* Short Answer Sample + Rubric (Hidden until submitted or checked) */
+        .sa-rubric {
+            display: none;
+            margin-top: 14px;
+            background: var(--purple-bg);
+            border: 1.5px solid var(--purple-border);
+            border-radius: 14px;
+            padding: 16px 18px;
+            font-size: 15.5px;
+        }
+
+        .sa-rubric.show {
+            display: block;
+        }
+
+        .sa-sample-box {
+            background: #ffffff;
+            border-left: 5px solid var(--teal);
+            border-radius: 10px;
+            padding: 12px 14px;
+            margin-bottom: 12px;
+            color: var(--text-main);
+        }
+
+        .sa-auto-tag {
+            display: inline-block;
+            font-size: 13.5px;
+            font-weight: 800;
+            padding: 3px 10px;
+            border-radius: 999px;
+            margin-left: 6px;
+            background: var(--emerald-bg);
+            color: var(--emerald);
+        }
+
+        .rubric-check {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-top: 8px;
+            cursor: pointer;
+        }
+
+        .rubric-check input {
+            width: 20px;
+            height: 20px;
+            margin-top: 3px;
+            accent-color: var(--purple);
+            flex-shrink: 0;
+        }
+
+        /* Unanswered gentle notice */
+        .unanswered-alert {
+            display: none;
+            background: var(--amber-bg);
+            border: 2px solid var(--amber-border);
+            color: #78350f;
+            border-radius: 14px;
+            padding: 14px 18px;
+            margin-top: 16px;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .unanswered-alert.show {
+            display: block;
+        }
+
+        /* Score Summary Card */
+        .score-box {
+            display: none;
+            background: linear-gradient(135deg, #eff6ff 0%, #f5f3ff 100%);
+            border: 3px solid var(--blue-border);
+            border-radius: 20px;
+            padding: 24px;
+            margin-top: 22px;
+            text-align: center;
+        }
+
+        .score-box.show {
+            display: block;
+        }
+
+        .score-big {
+            font-size: 42px;
+            font-weight: 900;
+            color: var(--blue);
+            margin: 6px 0;
+        }
+
+        /* ================= PARENT ANSWER KEY TAB ================= */
+        .lock-card {
+            background: #ffffff;
+            border: 2.5px dashed var(--purple-border);
+            border-radius: 22px;
+            padding: 40px 26px;
+            text-align: center;
+            box-shadow: var(--shadow-card);
+        }
+
+        .lock-icon {
+            font-size: 52px;
+            margin-bottom: 10px;
+        }
+
+        .lock-card h2 {
+            margin: 0 0 10px;
+            color: var(--purple);
+            font-size: 24px;
+        }
+
+        .lock-card p {
+            margin: 0 auto 22px;
+            max-width: 560px;
+            color: var(--text-muted);
+        }
+
+        .answers-content {
+            display: none;
+        }
+
+        .answers-content.unlocked {
+            display: block;
+        }
+
+        .ans-card {
+            background: #ffffff;
+            border: 1.5px solid var(--border-soft);
+            border-left: 7px solid var(--purple);
+            border-radius: 16px;
+            padding: 16px 20px;
+            margin-bottom: 14px;
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
+        }
+
+        .ans-badge {
+            display: inline-block;
+            background: var(--purple);
+            color: #ffffff;
+            font-weight: 900;
+            padding: 2px 12px;
+            border-radius: 999px;
+            margin-right: 8px;
+            font-size: 16px;
+        }
+
+        .ans-badge.true-b { background: var(--emerald); }
+        .ans-badge.false-b { background: var(--rose); }
+
+        @media (max-width: 680px) {
+            body {
+                font-size: 17px;
+                padding: 14px 12px 48px;
+            }
+            .mode-tabs,
+            .practice-mode-bar {
+                grid-template-columns: 1fr;
+            }
+            .hero {
+                padding: 22px 20px;
+            }
+            .concept-card, .part-card {
+                padding: 18px 16px;
+            }
+        }
+
+        /* ================= PRINT STYLES ================= */
+        @media print {
+            body {
+                background: #ffffff !important;
+                padding: 0 !important;
+                font-size: 12.5pt !important;
+                line-height: 1.6 !important;
+                color: #000000 !important;
+            }
+
+            .no-print,
+            .top-nav,
+            .mode-tabs-wrap,
+            .jump-bar,
+            .action-row,
+            .practice-mode-bar,
+            .btn-speak,
+            .btn-hint,
+            .hint-box,
+            .unanswered-alert,
+            .score-box,
+            .lock-card {
+                display: none !important;
+            }
+
+            .hero {
+                background: #f0fdfa !important;
+                color: #0f172a !important;
+                border: 2px solid #0f766e !important;
+                box-shadow: none !important;
+                padding: 14px 18px !important;
+                margin-bottom: 14px !important;
+            }
+
+            .tab-panel {
+                display: none !important;
+            }
+
+            body.print-study #panel-study,
+            body.print-practice #panel-practice,
+            body.print-answers #panel-answers {
+                display: block !important;
+            }
+
+            body.print-answers .answers-content {
+                display: block !important;
+            }
+
+            body.print-study .vocab-card.hidden-meaning .vocab-meaning {
+                display: block !important;
+            }
+
+            body.print-study .vocab-tap-hint {
+                display: none !important;
+            }
+
+            .concept-card,
+            .vocab-card,
+            .kingdom-card,
+            .trap-card,
+            .part-card,
+            .q-card,
+            .ans-card,
+            .term-btn,
+            .def-btn,
+            .fill-slot,
+            .mindmap-card {
+                box-shadow: none !important;
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+
+            .mindmap-svg {
+                min-width: 0 !important;
+                width: 100% !important;
+            }
+
+            .mindmap-modal {
+                display: none !important;
+            }
+
+            body.print-practice .q-feedback,
+            body.print-practice .sa-rubric {
+                display: none !important;
+            }
+
+            body.print-practice .sa-input,
+            body.print-practice .fill-slots,
+            body.print-practice .chip-group,
+            body.print-practice .match-board,
+            body.print-practice .match-sticky,
+            body.print-practice .sa-note {
+                display: none !important;
+            }
+
+            body.print-practice .print-only {
+                display: block !important;
+            }
+
+            body.print-practice .print-lines {
+                display: block !important;
+                margin-top: 10px;
+            }
+
+            .print-line {
+                border-bottom: 1.5px solid #94a3b8;
+                height: 30px;
+            }
+        }
+    </style>
+</head>
+
+<body class="print-study">
+    <div class="app-shell">
+        <nav class="top-nav no-print">
+            <a href="../../index.html" class="back-btn">← 返回 Lilian 學習清單</a>
+            <span class="badge-grade">🔬 Grade 5 Science • Lilian 專屬複習</span>
+        </nav>
+
+        <header class="hero">
+            <div class="hero-kicker">GRADE 5 SCIENCE • LESSON 5</div>
+            <h1>🦠 Lesson 5: The Wee Beasties（細小微生物）</h1>
+            <p class="hero-sub">雙語核心卡片複習 • 100 分全英文互動練習卷（含提示與自動給答案）• 家長獨立解答</p>
+        </header>
+
+        <div class="mode-tabs-wrap no-print">
+            <div class="mode-tabs" role="tablist">
+                <button type="button" class="mode-tab active" data-tab="study" onclick="switchTab('study')">
+                    📘 重點複習卡片
+                </button>
+                <button type="button" class="mode-tab" data-tab="practice" onclick="switchTab('practice')">
+                    ✍️ 互動練習卷 (100 分)
+                </button>
+                <button type="button" class="mode-tab" data-tab="answers" onclick="switchTab('answers')">
+                    🔑 家長答案與解析
+                </button>
+            </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- TAB 1: STUDY GUIDE (BILINGUAL ADHD-FRIENDLY CARDS)        -->
+        <!-- ========================================================= -->
+        <section id="panel-study" class="tab-panel active">
+            <div class="jump-bar no-print">
+                <a class="jump-pill" href="#sec-mindmap">🧠 心智圖總覽</a>
+                <a class="jump-pill" href="#sec-concepts">1️⃣ 核心觀念 (9)</a>
+                <a class="jump-pill" href="#sec-summary">2️⃣ 一句話總整理</a>
+                <a class="jump-pill" href="#sec-vocab">3️⃣ 必背單字 (12)</a>
+                <a class="jump-pill" href="#sec-kingdoms">4️⃣ 五大生物界</a>
+                <a class="jump-pill" href="#sec-traps">5️⃣ 易錯提醒</a>
+                <a class="jump-pill" href="#sec-checklist">6️⃣ 自我檢查</a>
+            </div>
+
+            <div class="action-row no-print">
+                <span style="color: var(--text-muted); font-weight: 700; font-size: 15.5px;">💡 先看心智圖掌握全貌，再讀卡片並點單字翻面自測！</span>
+                <button type="button" class="btn btn-teal" onclick="printSection('study')">🖨️ 列印重點複習講義</button>
+            </div>
+
+            <!-- 零、心智圖總覽 -->
+            <div id="sec-mindmap" class="section-block">
+                <div class="section-heading heading-purple">
+                    <span>🧠 本課心智圖總覽（Lesson 5 Mind Map）</span>
+                    <button type="button" class="btn btn-outline no-print" onclick="openMindMapModal()">🔍 放大全螢幕</button>
+                </div>
+                <div class="mindmap-card">
+                    <div id="mindmapHost">
+                        <svg class="mindmap-svg" viewBox="0 0 1120 740" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Lesson 5 The Wee Beasties Mind Map">
+                            <defs>
+                                <linearGradient id="mmCenterGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#0f766e" />
+                                    <stop offset="55%" stop-color="#0284c7" />
+                                    <stop offset="100%" stop-color="#4f46e5" />
+                                </linearGradient>
+                                <filter id="mmShadow" x="-10%" y="-10%" width="120%" height="125%">
+                                    <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#0f172a" flood-opacity="0.12" />
+                                </filter>
+                            </defs>
+
+                            <!-- Background Canvas -->
+                            <rect x="0" y="0" width="1120" height="740" rx="18" fill="#f8fafc" />
+
+                            <!-- Curved Connectors from Center (560, 370) -->
+                            <!-- Left 3 branches -->
+                            <path d="M 440 345 C 395 345, 395 125, 348 125" fill="none" stroke="#0f766e" stroke-width="5" stroke-linecap="round" />
+                            <path d="M 435 370 C 390 370, 390 370, 348 370" fill="none" stroke="#047857" stroke-width="5" stroke-linecap="round" />
+                            <path d="M 440 395 C 395 395, 395 615, 348 615" fill="none" stroke="#b45309" stroke-width="5" stroke-linecap="round" />
+
+                            <!-- Right 3 branches -->
+                            <path d="M 680 345 C 725 345, 725 125, 772 125" fill="none" stroke="#6d28d9" stroke-width="5" stroke-linecap="round" />
+                            <path d="M 685 370 C 730 370, 730 370, 772 370" fill="none" stroke="#be123c" stroke-width="5" stroke-linecap="round" />
+                            <path d="M 680 395 C 725 395, 725 615, 772 615" fill="none" stroke="#1d4ed8" stroke-width="5" stroke-linecap="round" />
+
+                            <!-- CENTER NODE -->
+                            <g filter="url(#mmShadow)">
+                                <rect x="435" y="305" width="250" height="130" rx="26" fill="url(#mmCenterGrad)" />
+                                <text x="560" y="348" text-anchor="middle" fill="#ffffff" font-size="22" font-weight="900">🦠 The Wee Beasties</text>
+                                <text x="560" y="380" text-anchor="middle" fill="#e0f2fe" font-size="18" font-weight="800">細小微生物</text>
+                                <text x="560" y="410" text-anchor="middle" fill="#ccfbf1" font-size="14" font-weight="700">Lesson 5 核心結構圖</text>
+                            </g>
+
+                            <!-- LEFT TOP: 1. Microbe & Kingdoms (Teal) -->
+                            <g class="mm-branch" onclick="jumpToConcept('concept-1')" filter="url(#mmShadow)">
+                                <rect x="20" y="24" width="328" height="202" rx="18" fill="#f0fdfa" stroke="#0f766e" stroke-width="3" />
+                                <rect x="20" y="24" width="328" height="44" rx="16" fill="#0f766e" />
+                                <rect x="20" y="52" width="328" height="16" fill="#0f766e" />
+                                <text x="38" y="53" fill="#ffffff" font-size="17" font-weight="900">1. Microbe 微生物與生物界</text>
+                                <text x="36" y="96" fill="#0f172a" font-size="14.5" font-weight="700">• microscopic + organism（需顯微鏡）</text>
+                                <text x="36" y="124" fill="#0f172a" font-size="14.5" font-weight="700">• 最古老生命；&gt;95% 有益或無害</text>
+                                <text x="36" y="152" fill="#0f766e" font-size="14.5" font-weight="800">• 僅 3 界有：Bacteria / Protist / Fungus</text>
+                                <rect x="34" y="170" width="298" height="36" rx="10" fill="#ffe4e6" />
+                                <text x="46" y="193" fill="#be123c" font-size="14" font-weight="900">⚠️ 動物界與植物界沒有微生物！</text>
+                            </g>
+
+                            <!-- LEFT MIDDLE: 2. Single vs Multi (Emerald) -->
+                            <g class="mm-branch" onclick="jumpToConcept('concept-3')" filter="url(#mmShadow)">
+                                <rect x="20" y="269" width="328" height="202" rx="18" fill="#ecfdf5" stroke="#047857" stroke-width="3" />
+                                <rect x="20" y="269" width="328" height="44" rx="16" fill="#047857" />
+                                <rect x="20" y="297" width="328" height="16" fill="#047857" />
+                                <text x="38" y="298" fill="#ffffff" font-size="17" font-weight="900">2. 單細胞 vs. 多細胞</text>
+                                <text x="36" y="341" fill="#065f46" font-size="14.5" font-weight="800">• Single-cellular（1 細胞）</text>
+                                <text x="48" y="365" fill="#1e293b" font-size="14" font-weight="600">bacteria、diatoms、yeast</text>
+                                <text x="36" y="396" fill="#1d4ed8" font-size="14.5" font-weight="800">• Multicellular（多細胞合作）</text>
+                                <text x="48" y="420" fill="#1e293b" font-size="14" font-weight="600">plants、animals、mushrooms、seaweed</text>
+                                <rect x="34" y="431" width="298" height="28" rx="8" fill="#fef3c7" />
+                                <text x="46" y="450" fill="#b45309" font-size="13.5" font-weight="900">⚠️ Insects 昆蟲是多細胞動物！</text>
+                            </g>
+
+                            <!-- LEFT BOTTOM: 3. Other Common Microbes (Amber) -->
+                            <g class="mm-branch" onclick="jumpToConcept('concept-9')" filter="url(#mmShadow)">
+                                <rect x="20" y="514" width="328" height="202" rx="18" fill="#fffbeb" stroke="#b45309" stroke-width="3" />
+                                <rect x="20" y="514" width="328" height="44" rx="16" fill="#b45309" />
+                                <rect x="20" y="542" width="328" height="16" fill="#b45309" />
+                                <text x="38" y="543" fill="#ffffff" font-size="17" font-weight="900">3. 其他常見微生物</text>
+                                <text x="36" y="586" fill="#0f172a" font-size="14.5" font-weight="700">• Bacteria：全單細胞，桿/球/螺旋狀</text>
+                                <text x="36" y="616" fill="#0f172a" font-size="14.5" font-weight="700">• Fungi：分解者（yeast / mold 菌絲）</text>
+                                <text x="36" y="646" fill="#0f172a" font-size="14.5" font-weight="700">• Protozoa：小動物（纖毛/鞭毛/變形蟲）</text>
+                                <text x="36" y="676" fill="#be123c" font-size="14.5" font-weight="800">• Viruses：須寄生宿主細胞才能複製</text>
+                            </g>
+
+                            <!-- RIGHT TOP: 4. Protist Kingdom (Purple) -->
+                            <g class="mm-branch" onclick="jumpToConcept('concept-4')" filter="url(#mmShadow)">
+                                <rect x="772" y="24" width="328" height="202" rx="18" fill="#f5f3ff" stroke="#6d28d9" stroke-width="3" />
+                                <rect x="772" y="24" width="328" height="44" rx="16" fill="#6d28d9" />
+                                <rect x="772" y="52" width="328" height="16" fill="#6d28d9" />
+                                <text x="790" y="53" fill="#ffffff" font-size="17" font-weight="900">4. Protist 原生生物界</text>
+                                <text x="788" y="96" fill="#6d28d9" font-size="14.5" font-weight="800">• “Junk Drawer” 雜物抽屜（難歸類）</text>
+                                <text x="788" y="124" fill="#0f172a" font-size="14.5" font-weight="700">• 像植物 / 像動物 / 像真菌 / 動植兼具</text>
+                                <text x="788" y="152" fill="#0f172a" font-size="14.5" font-weight="700">• 單細胞＋多細胞皆有（Both）</text>
+                                <text x="788" y="182" fill="#4338ca" font-size="14" font-weight="800">📍 棲地：淡水、海洋、潮濕土壤、</text>
+                                <text x="812" y="204" fill="#4338ca" font-size="14" font-weight="800">其他生物體內或體表</text>
+                            </g>
+
+                            <!-- RIGHT MIDDLE: 5. Algae & Diatoms (Rose) -->
+                            <g class="mm-branch" onclick="jumpToConcept('concept-6')" filter="url(#mmShadow)">
+                                <rect x="772" y="269" width="328" height="202" rx="18" fill="#fff1f2" stroke="#be123c" stroke-width="3" />
+                                <rect x="772" y="269" width="328" height="44" rx="16" fill="#be123c" />
+                                <rect x="772" y="297" width="328" height="16" fill="#be123c" />
+                                <text x="790" y="298" fill="#ffffff" font-size="17" font-weight="900">5. Algae 藻類 ＆ Diatoms 矽藻</text>
+                                <text x="788" y="340" fill="#be123c" font-size="14.5" font-weight="900">• ⚠️ Algae 不是植物！（類植物原生生物）</text>
+                                <text x="788" y="366" fill="#0f172a" font-size="14" font-weight="700">• 有葉綠素，行光合作用自製養分</text>
+                                <text x="788" y="392" fill="#0f766e" font-size="14" font-weight="800">• 單細胞：Diatoms（玻璃狀細胞壁）</text>
+                                <text x="788" y="418" fill="#1d4ed8" font-size="14" font-weight="800">• 多細胞：Seaweed / Giant Kelp (70m)</text>
+                                <rect x="786" y="429" width="300" height="30" rx="8" fill="#fef3c7" />
+                                <text x="796" y="449" fill="#b45309" font-size="13.5" font-weight="900">⭐ 矽藻：50% 氧氣＋海洋食物鏈起點</text>
+                            </g>
+
+                            <!-- RIGHT BOTTOM: 6. Plankton (Blue) -->
+                            <g class="mm-branch" onclick="jumpToConcept('concept-8')" filter="url(#mmShadow)">
+                                <rect x="772" y="514" width="328" height="202" rx="18" fill="#eff6ff" stroke="#1d4ed8" stroke-width="3" />
+                                <rect x="772" y="514" width="328" height="44" rx="16" fill="#1d4ed8" />
+                                <rect x="772" y="542" width="328" height="16" fill="#1d4ed8" />
+                                <text x="790" y="543" fill="#ffffff" font-size="17" font-weight="900">6. Plankton 浮游生物</text>
+                                <text x="788" y="586" fill="#0f172a" font-size="14.5" font-weight="700">• 漂浮於海洋表層的微小生物</text>
+                                <text x="788" y="614" fill="#1d4ed8" font-size="14.5" font-weight="800">• 支撐 99% 海洋食物鏈起點</text>
+                                <text x="788" y="642" fill="#0f172a" font-size="14" font-weight="700">• 最常見 Diatoms（也含非顯微 krill）</text>
+                                <text x="788" y="670" fill="#0f766e" font-size="14" font-weight="800">• Phytoplankton（浮游植物・光合）</text>
+                                <text x="788" y="695" fill="#6d28d9" font-size="14" font-weight="800">• Zooplankton（浮游動物・捕食）</text>
+                            </g>
+                        </svg>
+                    </div>
+                    <div class="mindmap-tip no-print">👆 點擊心智圖中任一張分支卡片，會直接跳到下方詳細雙語觀念卡！</div>
+                </div>
+            </div>
+
+            <!-- Mind Map Fullscreen Modal -->
+            <div id="mindmapModal" class="mindmap-modal no-print" onclick="if(event.target === this) closeMindMapModal()">
+                <div class="mindmap-modal-inner">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                        <strong style="font-size: 20px; color: var(--purple);">🧠 Lesson 5: The Wee Beasties 完整心智圖</strong>
+                        <button type="button" class="btn btn-outline" onclick="closeMindMapModal()">✖ 關閉放大</button>
+                    </div>
+                    <div id="mindmapModalSlot"></div>
+                </div>
+            </div>
+
+            <!-- 一、核心觀念卡片 -->
+            <div id="sec-concepts" class="section-block">
+                <div class="section-heading heading-teal">
+                    <span>一、核心觀念卡片（雙語重點）</span>
+                    <span style="font-size: 15px; font-weight: 700;">共 9 張重點卡</span>
+                </div>
+
+                <div class="cards-stack">
+                    <article id="concept-1" class="concept-card tone-teal">
+                        <div class="concept-header">
+                            <h3 class="concept-title"><span class="concept-num">1</span>What is a microbe?｜什麼是微生物？</h3>
+                            <button type="button" class="btn-speak no-print" onclick="speakText('Microbe. A living thing so tiny you need a microscope to see it. Microbes are the oldest form of life on Earth. Over ninety-five percent of microbes are helpful or harmless.')">🔊 朗讀</button>
+                        </div>
+                        <ul class="bullet-list">
+                            <li><span class="kw">Microbe</span> = <span class="kw">microscopic</span>（顯微的）＋ <span class="kw">organism</span>（生物）。</li>
+                            <li>A living thing so tiny you need a <span class="kw-blue">microscope</span> to see it.（肉眼看不見，必須用<strong>顯微鏡</strong>觀察的微小生物。）</li>
+                            <li>Microbes are the <span class="kw-purple">oldest form of life</span> on Earth.（地球上最古老的生命形式。）</li>
+                            <li>Over <span class="kw-amber">95%</span> of microbes are <span class="kw">helpful or harmless</span>.（超過 <strong>95%</strong> 的微生物對人類有益或無害。）</li>
+                        </ul>
+                    </article>
+
+                    <article class="concept-card tone-blue">
+                        <div class="concept-header">
+                            <h3 class="concept-title"><span class="concept-num">2</span>Which kingdoms have microbes?｜哪些生物界有微生物？</h3>
+                            <button type="button" class="btn-speak no-print" onclick="speakText('Microbes live in three of the five kingdoms: Bacteria, Protist, and Fungus. There are no animal or plant microbes.')">🔊 朗讀</button>
+                        </div>
+                        <ul class="bullet-list">
+                            <li>Microbes live in <span class="kw-blue">3 of the 5 kingdoms</span>：
+                                <ul class="sub-list">
+                                    <li><span class="kw">Bacteria (Monera)</span>（細菌界／原核生物界）</li>
+                                    <li><span class="kw-purple">Protist</span>（原生生物界）</li>
+                                    <li><span class="kw-amber">Fungus</span>（真菌界）</li>
+                                </ul>
+                            </li>
+                            <li><span class="kw-warn">No animal or plant microbes!</span>（<strong>動物界與植物界沒有微生物！</strong>）</li>
+                            <li>Not all fungi or protists are microbes — e.g., <strong>mushrooms</strong>（香菇）and <strong>giant kelp</strong>（巨藻）can be seen without a microscope.</li>
+                        </ul>
+                    </article>
+
+                    <article id="concept-3" class="concept-card tone-emerald">
+                        <div class="concept-header">
+                            <h3 class="concept-title"><span class="concept-num">3</span>Single-cellular vs. Multicellular｜單細胞與多細胞的差別</h3>
+                            <button type="button" class="btn-speak no-print" onclick="speakText('A single-cellular organism has only one cell, such as bacteria, diatoms, and yeast. A multicellular organism has more than one cell working together, such as all plants, all animals including insects, mushrooms, and seaweed.')">🔊 朗讀</button>
+                        </div>
+                        <ul class="bullet-list">
+                            <li><span class="kw">Single-cellular (unicellular) 單細胞生物</span>：only <span class="kw">one cell</span>（只有 1 個細胞）
+                                <ul class="sub-list">
+                                    <li>例子：<strong>bacteria</strong>（細菌）、<strong>diatoms</strong>（矽藻）、<strong>yeast</strong>（酵母菌）</li>
+                                </ul>
+                            </li>
+                            <li><span class="kw-blue">Multicellular 多細胞生物</span>：<span class="kw-blue">more than one cell</span> working together（多個細胞合作）
+                                <ul class="sub-list">
+                                    <li>例子：all plants（所有植物）、all animals including <span class="kw-warn">insects</span>（所有動物含昆蟲）、mushrooms（菇類）、seaweed（海藻）</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </article>
+
+                    <article id="concept-4" class="concept-card tone-purple">
+                        <div class="concept-header">
+                            <h3 class="concept-title"><span class="concept-num">4</span>Why is Protist the “junk drawer” kingdom?｜為什麼原生生物界叫「雜物抽屜」界？</h3>
+                            <button type="button" class="btn-speak no-print" onclick="speakText('Protists are called the junk drawer kingdom because they are a mix of strange organisms that are hard to classify. They can be plant-like, animal-like, fungus-like, or both plant-like and animal-like at the same time.')">🔊 朗讀</button>
+                        </div>
+                        <ul class="bullet-list">
+                            <li>Protists are a mix of strange organisms that are <span class="kw-purple">hard to classify</span>（很難歸類）：
+                                <ul class="sub-list">
+                                    <li><span class="kw">Plant-like</span>（像植物）：<strong>algae</strong>（藻類）</li>
+                                    <li><span class="kw-blue">Animal-like</span>（像動物）：<strong>protozoa</strong>（原生動物）</li>
+                                    <li><span class="kw-amber">Fungus-like</span>（像真菌）</li>
+                                    <li><span class="kw-purple">Both plant-like and animal-like at the same time</span>（同時像動物又像植物：能移動覓食，又有葉綠體可行光合作用）</li>
+                                </ul>
+                            </li>
+                            <li>Protists can be <span class="kw-purple">single-cellular OR multicellular</span>.（有單細胞，也有多細胞。）</li>
+                        </ul>
+                    </article>
+
+                    <article class="concept-card tone-indigo">
+                        <div class="concept-header">
+                            <h3 class="concept-title"><span class="concept-num">5</span>Where do protists live?｜原生生物住在哪裡？</h3>
+                            <button type="button" class="btn-speak no-print" onclick="speakText('Protists can live in fresh water, saltwater or oceans, damp soil, and inside or on other organisms.')">🔊 朗讀</button>
+                        </div>
+                        <ul class="bullet-list">
+                            <li><span class="kw-blue">Fresh water</span>（淡水）</li>
+                            <li><span class="kw-blue">Saltwater / oceans</span>（鹹水／海洋）</li>
+                            <li><span class="kw-amber">Damp soil</span>（潮濕土壤）</li>
+                            <li><span class="kw-purple">Inside or on other organisms</span>（其他生物的體內或體表）</li>
+                        </ul>
+                    </article>
+
+                    <article id="concept-6" class="concept-card tone-rose">
+                        <div class="concept-header">
+                            <h3 class="concept-title"><span class="concept-num">6</span>What is algae? Is it a plant?｜什麼是藻類？它是植物嗎？</h3>
+                            <button type="button" class="btn-speak no-print" onclick="speakText('No! Algae is not a plant. It is a plant-like protist. It has chlorophyll and uses sunlight to photosynthesize.')">🔊 朗讀</button>
+                        </div>
+                        <ul class="bullet-list">
+                            <li><span class="kw-warn">NO! Algae is NOT a plant.</span>（<strong>不是植物！</strong>）It is a <span class="kw-purple">plant-like protist</span>（類植物原生生物）.</li>
+                            <li>It has <span class="kw">chlorophyll</span>（葉綠素）and uses sunlight to <span class="kw">photosynthesize</span>（行光合作用自製養分）.</li>
+                            <li><span class="kw">Single-cellular algae（單細胞藻類）</span>：<strong>diatoms</strong>（矽藻）</li>
+                            <li><span class="kw-blue">Multicellular algae（多細胞藻類）</span>：<strong>seaweed</strong>（海藻）、<strong>giant kelp</strong>（巨藻，可長到 70 公尺！）</li>
+                        </ul>
+                    </article>
+
+                    <article id="concept-1" class="concept-card tone-teal">
+                        <div class="concept-header">
+                            <h3 class="concept-title"><span class="concept-num">7</span>What are diatoms, and why are they so important?｜什麼是矽藻？為什麼這麼重要？</h3>
+                            <button type="button" class="btn-speak no-print" onclick="speakText('Diatoms are the smallest, simplest, and most common single-cellular algae. They have glass-like cell walls. They produce about half of Earths oxygen and form the base of ocean food chains.')">🔊 朗讀</button>
+                        </div>
+                        <ul class="bullet-list">
+                            <li><span class="kw">Diatoms（矽藻）</span> are the smallest, simplest, and <span class="kw">most common single-cellular algae</span>.（最小、最常見的單細胞藻類。）</li>
+                            <li>They have tiny, beautiful <span class="kw-blue">glass-like cell walls (shells)</span> that look like little boxes.（有像小盒子般的<strong>玻璃狀細胞壁</strong>。）</li>
+                            <li><strong>Two big reasons diatoms matter（兩大必背重要性）：</strong>
+                                <ul class="sub-list">
+                                    <li>1. Produce <span class="kw-amber">about half (50%) of Earth’s oxygen</span>.（製造地球約<strong>一半的氧氣</strong>。）</li>
+                                    <li>2. Make up a huge part of <span class="kw-blue">plankton</span>, forming the <span class="kw-blue">base of ocean food chains</span>.（是浮游生物主力，支撐<strong>海洋食物鏈起點</strong>。）</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </article>
+
+                    <article id="concept-8" class="concept-card tone-blue">
+                        <div class="concept-header">
+                            <h3 class="concept-title"><span class="concept-num">8</span>What is plankton?｜什麼是浮游生物？</h3>
+                            <button type="button" class="btn-speak no-print" onclick="speakText('Plankton are tiny organisms that drift near the surface of ocean waters and form the beginning of about ninety-nine percent of ocean food chains. Phytoplankton are plant-like, and zooplankton are animal-like.')">🔊 朗讀</button>
+                        </div>
+                        <ul class="bullet-list">
+                            <li>Any tiny organism that <span class="kw-blue">drifts near the surface of ocean waters</span>.（漂浮在海洋表層的微小生物。）</li>
+                            <li>Most are microscopic protists — <span class="kw">diatoms</span> are the most common（最常見是矽藻）；some like <strong>krill</strong>（磷蝦）are not microscopic.</li>
+                            <li>Forms the beginning of almost all (<span class="kw-amber">99%</span>) <span class="kw-blue">ocean food chains</span>.（<strong>99% 海洋食物鏈的起點</strong>。）</li>
+                            <li><strong>Two types（兩大類）：</strong>
+                                <ul class="sub-list">
+                                    <li><span class="kw">Phytoplankton（浮游植物）</span>：plant-like，行光合作用自製養分。</li>
+                                    <li><span class="kw-purple">Zooplankton（浮游動物）</span>：animal-like，移動並捕食浮游植物或其他浮游動物。</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </article>
+
+                    <article id="concept-9" class="concept-card tone-amber">
+                        <div class="concept-header">
+                            <h3 class="concept-title"><span class="concept-num">9</span>Other Common Microbes｜其他常見微生物速覽</h3>
+                            <button type="button" class="btn-speak no-print" onclick="speakText('Bacteria are all single-celled. Fungi are decomposers like yeast and mold. Protozoa are animal-like protists such as amoeba. Viruses need a host cell to reproduce.')">🔊 朗讀</button>
+                        </div>
+                        <ul class="bullet-list">
+                            <li><span class="kw">Bacteria（細菌）</span>：all single-celled（全為單細胞）；rod（桿狀）、ball（球狀）、spiral（螺旋狀）；部分靠鞭毛 <strong>flagella</strong> 移動。</li>
+                            <li><span class="kw-amber">Fungi（真菌）</span>：decomposers（分解吸收養分）；單細胞如 <strong>yeast</strong>（酵母菌），多細胞如 <strong>mold</strong>（黴菌，具菌絲 <strong>hyphae</strong>）與菇類。</li>
+                            <li><span class="kw-purple">Protozoa（原生動物）</span>：“little animals”，捕食微生物；靠 <strong>cilia</strong>（纖毛）、<strong>flagella</strong>（鞭毛）或變形細胞膜（<strong>amoeba</strong> 變形蟲）移動。</li>
+                            <li><span class="kw-warn">Viruses（病毒）</span>：外殼（<strong>viral coat</strong>）包覆遺傳物質，必須寄生<strong>宿主細胞（host cell）</strong>才能複製。</li>
+                        </ul>
+                    </article>
+                </div>
+            </div>
+
+            <!-- 二、一句話總整理 -->
+            <div id="sec-summary" class="section-block">
+                <div class="section-heading heading-emerald">
+                    <span>二、一句話總整理 Summary</span>
+                </div>
+                <div class="summary-box">
+                    微生物（<span class="kw">microbes</span>）須用顯微鏡觀察，分布在<span class="kw-blue">細菌界、原生生物界、真菌界</span>（動植物界沒有微生物）。<span class="kw-purple">原生生物界（Protist）</span>因特徵多變被稱為「雜物抽屜（junk drawer）」界；其中的<span class="kw-warn">藻類（Algae）</span>會行光合作用但<strong>不是植物</strong>。最常見的單細胞藻類是具玻璃狀外殼的<span class="kw">矽藻（Diatoms）</span>，既製造地球約<span class="kw-amber">一半氧氣</span>，也是海面<span class="kw-blue">浮游生物（Plankton）</span>主力，支撐 <span class="kw-amber">99% 海洋食物鏈</span>。
+                </div>
+            </div>
+
+            <!-- 三、必背單字卡 -->
+            <div id="sec-vocab" class="section-block">
+                <div class="section-heading heading-blue">
+                    <span>三、必背單字卡（12 個核心詞）</span>
+                    <button type="button" class="btn btn-outline no-print" id="toggleVocabBtn" onclick="toggleAllVocab()">🙈 遮住中文自測模式</button>
+                </div>
+                <div class="vocab-grid" id="vocabGrid"></div>
+            </div>
+
+            <!-- 四、五大生物界細胞數速記（無表格卡片版） -->
+            <div id="sec-kingdoms" class="section-block">
+                <div class="section-heading heading-purple">
+                    <span>四、五大生物界細胞數速記（分色卡片）</span>
+                </div>
+                <div class="cards-stack">
+                    <div class="kingdom-card" style="border-left-color: var(--teal);">
+                        <div class="kingdom-top">
+                            <span class="kingdom-name">🦠 Bacteria (Monera) 細菌界</span>
+                            <span class="pill pill-single">只有單細胞 Single-cellular only</span>
+                            <span class="pill pill-microbe-yes">✔ 全是微生物</span>
+                        </div>
+                        <div>代表例子：<strong>bacteria</strong>（如優格益生菌）</div>
+                    </div>
+
+                    <div class="kingdom-card" style="border-left-color: var(--purple);">
+                        <div class="kingdom-top">
+                            <span class="kingdom-name">🧬 Protist 原生生物界</span>
+                            <span class="pill pill-both">單細胞＋多細胞皆有 Both</span>
+                            <span class="pill pill-microbe-yes">✔ 多數是微生物</span>
+                        </div>
+                        <div>代表例子：<strong>diatoms</strong>（單細胞）、<strong>seaweed / giant kelp</strong>（多細胞）、<strong>amoeba</strong>（單細胞）</div>
+                    </div>
+
+                    <div class="kingdom-card" style="border-left-color: var(--amber);">
+                        <div class="kingdom-top">
+                            <span class="kingdom-name">🍄 Fungus 真菌界</span>
+                            <span class="pill pill-both">單細胞＋多細胞皆有 Both</span>
+                            <span class="pill pill-microbe-yes">✔ 部分是微生物</span>
+                        </div>
+                        <div>代表例子：<strong>yeast</strong>（單細胞）、<strong>mold / mushroom</strong>（多細胞）</div>
+                    </div>
+
+                    <div class="kingdom-card" style="border-left-color: var(--emerald);">
+                        <div class="kingdom-top">
+                            <span class="kingdom-name">🌿 Plant 植物界</span>
+                            <span class="pill pill-multi">只有多細胞 Multicellular only</span>
+                            <span class="pill pill-microbe-no">✖ 無微生物</span>
+                        </div>
+                        <div>代表例子：<strong>tree, moss, fern</strong></div>
+                    </div>
+
+                    <div class="kingdom-card" style="border-left-color: var(--rose);">
+                        <div class="kingdom-top">
+                            <span class="kingdom-name">🦋 Animal 動物界</span>
+                            <span class="pill pill-multi">只有多細胞 Multicellular only</span>
+                            <span class="pill pill-microbe-no">✖ 無微生物</span>
+                        </div>
+                        <div>代表例子：<strong>human, whale</strong>、<span class="kw-warn">insects（昆蟲也是多細胞！）</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 五、高頻易錯與陷阱提醒 -->
+            <div id="sec-traps" class="section-block">
+                <div class="section-heading heading-rose">
+                    <span>五、高頻易錯與陷阱提醒</span>
+                </div>
+                <div class="cards-stack">
+                    <div class="trap-card">⚠️ <strong>Algae is NOT a plant!</strong> 藻類有葉綠素也會行光合作用，但屬於 <strong>Protist（原生生物界）</strong>，不是植物界。</div>
+                    <div class="trap-card">⚠️ <strong>No animal or plant microbes：</strong>動植物界沒有微生物；<strong>insects（昆蟲）</strong>雖小，仍是<strong>多細胞（multicellular）</strong>動物。</div>
+                    <div class="trap-card">⚠️ <strong>Diatoms vs. Seaweed / Giant kelp：</strong>同是藻類，但 <strong>diatoms 是單細胞</strong>，<strong>seaweed / giant kelp 是多細胞</strong>。</div>
+                    <div class="trap-card">⚠️ <strong>Bacteria 全是單細胞：</strong>看到「Bacteria are multicellular」一定是 <strong>False</strong>。</div>
+                    <div class="trap-card">⚠️ <strong>Diatoms 兩大必答重點：</strong>① 製造地球約 <strong>50% 氧氣（oxygen）</strong>；② 是浮游生物主力，撐起<strong>海洋食物鏈起點（base of ocean food chain）</strong>。</div>
+                </div>
+            </div>
+
+            <!-- 六、自我檢查 Checklist -->
+            <div id="sec-checklist" class="section-block">
+                <div class="section-heading heading-emerald">
+                    <span>六、自我檢查 Checklist</span>
+                </div>
+                <div class="progress-wrap no-print">
+                    <div class="progress-top">
+                        <span>自我檢查完成進度</span>
+                        <span id="checklistProgressText">0 / 6 完成</span>
+                    </div>
+                    <div class="progress-track">
+                        <div class="progress-fill" id="checklistProgressFill"></div>
+                    </div>
+                </div>
+                <div class="cards-stack" id="checklistContainer"></div>
+            </div>
+        </section>
+
+        <!-- ========================================================= -->
+        <!-- TAB 2: INTERACTIVE STUDENT PRACTICE (100 POINTS)          -->
+        <!-- ========================================================= -->
+        <section id="panel-practice" class="tab-panel">
+            <div class="practice-banner">
+                <h2>✍️ The Wee Beasties — Practice</h2>
+                <div class="practice-meta">
+                    <span>Total: <strong>100 points</strong></span>
+                    <span>Part I: 12 pts • Part II: 32 pts • Part III: 24 pts • Part IV: 32 pts</span>
+                    <span>Name: ___________________</span>
+                </div>
+            </div>
+
+            <!-- Interactive Mode Switcher -->
+            <div class="practice-mode-bar no-print">
+                <button type="button" class="pmode-btn active" id="pmode_submit" onclick="setPracticeMode('submit')">
+                    <span class="pmode-title">🎯 寫完再交卷模式（預設）</span>
+                    <span class="pmode-desc">先專心寫完，按「交卷自動批改」後一次公佈分數、正確答案與雙語解析。</span>
+                </button>
+                <button type="button" class="pmode-btn" id="pmode_instant" onclick="setPracticeMode('instant')">
+                    <span class="pmode-title">⚡ 即時回饋練習模式</span>
+                    <span class="pmode-desc">每作答一題馬上顯示對錯與觀念提醒，適合邊練邊記憶！</span>
+                </button>
+            </div>
+
+            <div class="action-row no-print">
+                <span style="color: var(--text-muted); font-weight: 700; font-size: 15.5px;">💡 卡關時可點每題的「💡 提示」看線索（不直接爆雷答案）！</span>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <button type="button" class="btn btn-outline" onclick="resetPractice()">🔄 重置重寫</button>
+                    <button type="button" class="btn btn-blue" onclick="printSection('practice')">🖨️ 列印空白練習卷</button>
+                </div>
+            </div>
+
+            <!-- Part I. Matching -->
+            <div class="part-card">
+                <h3 class="part-title">Part I. Matching（6 questions × 2 points = 12 points）</h3>
+                <p class="part-instruction">Tap a word, then tap the description that matches it. Each description can be used once.</p>
+                <div class="match-sticky no-print" id="matchStatus">① 先點一個單字　② 再點正確的解釋</div>
+                <div class="match-board no-print">
+                    <div>
+                        <div class="bank-title">① 單字</div>
+                        <div id="matchTerms"></div>
+                    </div>
+                    <div>
+                        <div class="bank-title">② 解釋（順序已打亂）</div>
+                        <div id="matchDefs"></div>
+                    </div>
+                </div>
+                <div class="print-only">
+                    <p style="font-weight:700;">Write the letter of the matching description.</p>
+                    <div class="desc-item"><strong>1. Microbe</strong> ______</div>
+                    <div class="desc-item"><strong>2. Protist</strong> ______</div>
+                    <div class="desc-item"><strong>3. Algae</strong> ______</div>
+                    <div class="desc-item"><strong>4. Diatoms</strong> ______</div>
+                    <div class="desc-item"><strong>5. Plankton</strong> ______</div>
+                    <div class="desc-item"><strong>6. Multicellular organism</strong> ______</div>
+                    <div class="desc-bank">
+                        <div class="desc-item"><span class="desc-letter">A</span>A plant-like protist with chlorophyll that uses sunlight to make its own food.</div>
+                        <div class="desc-item"><span class="desc-letter">B</span>Tiny organisms that drift near the surface of ocean waters and form the base of most ocean food chains.</div>
+                        <div class="desc-item"><span class="desc-letter">C</span>A living thing made up of more than one cell working together.</div>
+                        <div class="desc-item"><span class="desc-letter">D</span>A living thing so tiny that you usually need a microscope to see it.</div>
+                        <div class="desc-item"><span class="desc-letter">E</span>Tiny single-cellular algae with glass-like cell walls that produce about half of Earth’s oxygen.</div>
+                        <div class="desc-item"><span class="desc-letter">F</span>A member of the “junk drawer” kingdom; organisms in this group can be plant-like, animal-like, fungus-like, or both plant-like and animal-like.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Part II. Multiple Choice -->
+            <div class="part-card">
+                <h3 class="part-title">Part II. Multiple Choice（8 questions × 4 points = 32 points）</h3>
+                <p class="part-instruction">Choose the best answer for each question.</p>
+                <div id="mcContainer"></div>
+            </div>
+
+            <!-- Part III. True or False -->
+            <div class="part-card">
+                <h3 class="part-title">Part III. True or False（8 questions × 3 points = 24 points）</h3>
+                <p class="part-instruction">Decide whether each statement is <strong>True (T)</strong> or <strong>False (F)</strong>.</p>
+                <div id="tfContainer"></div>
+            </div>
+
+            <!-- Part IV. Short Answer -->
+            <div class="part-card">
+                <h3 class="part-title">Part IV. Short Answer（4 questions × 8 points = 32 points）</h3>
+                <p class="part-instruction">Do not type. Tap a blank, then tap a button to drop that idea in. Tap a filled blank to take it back. Extra buttons are traps.</p>
+                <div id="saContainer"></div>
+            </div>
+
+            <div class="no-print" style="display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; margin-top: 24px;">
+                <button type="button" class="btn btn-blue" style="font-size: 19px; padding: 15px 32px;" onclick="gradePractice(false)">✅ 交卷自動批改與顯示答案</button>
+                <button type="button" class="btn btn-outline" style="font-size: 17px; padding: 15px 24px;" onclick="resetPractice()">🔄 清除重寫</button>
+            </div>
+
+            <div id="unansweredAlert" class="unanswered-alert no-print"></div>
+
+            <div id="scoreBox" class="score-box no-print">
+                <div style="font-weight: 800; color: var(--text-muted); font-size: 17px;">🎉 本次練習成績總覽</div>
+                <div class="score-big" id="totalScoreDisplay">0 / 100</div>
+                <div id="scoreBreakdown" style="font-size: 16.5px; font-weight: 700; color: var(--text-main); margin-bottom: 10px;"></div>
+                <div style="font-size: 15px; color: var(--purple); font-weight: 700;">💡 簡答依你點進去的按鈕給分，並顯示完整參考答案。勾選可以再手動微調。</div>
+            </div>
+        </section>
+
+        <!-- ========================================================= -->
+        <!-- TAB 3: PARENT ANSWER KEY & BILINGUAL EXPLANATIONS         -->
+        <!-- ========================================================= -->
+        <section id="panel-answers" class="tab-panel">
+            <div id="answersLockCard" class="lock-card no-print">
+                <div class="lock-icon">🔒</div>
+                <h2>家長答案與雙語解析（預設隱藏）</h2>
+                <p>為了讓 Lilian 練習時不受干擾，這份解答與詳細雙語解析預設為隱藏狀態。核對練習卷或陪讀講解時再點下方按鈕解鎖。</p>
+                <button type="button" class="btn btn-purple" style="font-size: 18px; padding: 14px 28px;" onclick="unlockAnswers(true)">🔓 解鎖顯示答案與解析</button>
+            </div>
+
+            <div id="answersContent" class="answers-content">
+                <div class="action-row no-print">
+                    <button type="button" class="btn btn-outline" onclick="unlockAnswers(false)">🔒 重新隱藏答案</button>
+                    <button type="button" class="btn btn-purple" onclick="printSection('answers')">🖨️ 列印家長答案與解析</button>
+                </div>
+
+                <div class="section-block">
+                    <div class="section-heading heading-purple">
+                        <span>Part I. Matching 答案（12 points，每題 2 分）</span>
+                    </div>
+                    <div class="ans-card"><span class="ans-badge">1. D</span><strong>Microbe</strong> — 微生物：需要顯微鏡才看得到的微小生物。</div>
+                    <div class="ans-card"><span class="ans-badge">2. F</span><strong>Protist</strong> — 原生生物：「雜物抽屜」界，可像植物、動物、真菌或兼具兩者特徵。</div>
+                    <div class="ans-card"><span class="ans-badge">3. A</span><strong>Algae</strong> — 藻類：含葉綠素、可行光合作用的類植物原生生物。</div>
+                    <div class="ans-card"><span class="ans-badge">4. E</span><strong>Diatoms</strong> — 矽藻：有玻璃狀細胞壁的單細胞藻類，製造地球約一半氧氣。</div>
+                    <div class="ans-card"><span class="ans-badge">5. B</span><strong>Plankton</strong> — 浮游生物：漂浮在海洋表層、構成多數海洋食物鏈起點的微小生物。</div>
+                    <div class="ans-card"><span class="ans-badge">6. C</span><strong>Multicellular organism</strong> — 多細胞生物：由多個細胞合作組成。</div>
+                </div>
+
+                <div class="section-block">
+                    <div class="section-heading heading-blue">
+                        <span>Part II. Multiple Choice 答案與解析（32 points，每題 4 分）</span>
+                    </div>
+                    <div class="ans-card"><span class="ans-badge">1. B</span>Microbes live in <strong>Bacteria, Protist, and Fungus</strong> kingdoms only; there are no animal or plant microbes.（微生物只存在於細菌、原生生物、真菌三界。）</div>
+                    <div class="ans-card"><span class="ans-badge">2. C</span>Protists include plant-like, animal-like, and fungus-like organisms that are hard to classify, so scientists call it the “junk drawer” kingdom.</div>
+                    <div class="ans-card"><span class="ans-badge">3. A</span>Algae are plant-like <strong>protists</strong>, NOT plants; they contain chlorophyll and photosynthesize.（易錯：藻類屬原生生物界而非植物界。）</div>
+                    <div class="ans-card"><span class="ans-badge">4. D</span><strong>Diatoms</strong> are the most common type of organism found in plankton.</div>
+                    <div class="ans-card"><span class="ans-badge">5. B</span><strong>Phytoplankton</strong> are plant-like and make food by photosynthesis; <strong>zooplankton</strong> are animal-like and move around to eat other organisms.</div>
+                    <div class="ans-card"><span class="ans-badge">6. D</span>Organisms that have traits of both animals and plants belong to the <strong>Protist</strong> kingdom.</div>
+                    <div class="ans-card"><span class="ans-badge">7. A</span><strong>Diatoms</strong> are single-cellular algae, while <strong>seaweed</strong> and <strong>giant kelp</strong> are multicellular algae.</div>
+                    <div class="ans-card"><span class="ans-badge">8. C</span>All animals, including insects, are <strong>multicellular</strong> organisms.（易錯：昆蟲雖小，仍屬多細胞動物。）</div>
+                </div>
+
+                <div class="section-block">
+                    <div class="section-heading heading-teal">
+                        <span>Part III. True or False 答案與解析（24 points，每題 3 分）</span>
+                    </div>
+                    <div class="ans-card"><span class="ans-badge false-b">1. F</span>Algae is a <strong>plant-like protist</strong>, NOT a plant.</div>
+                    <div class="ans-card"><span class="ans-badge true-b">2. T</span>All bacteria are single-cellular organisms.</div>
+                    <div class="ans-card"><span class="ans-badge true-b">3. T</span>Diatoms are single-cellular algae with tiny glass-like cell walls/shells.</div>
+                    <div class="ans-card"><span class="ans-badge false-b">4. F</span>There are <strong>no animal or plant microbes</strong>; all plants and animals are multicellular.</div>
+                    <div class="ans-card"><span class="ans-badge true-b">5. T</span>Protists can be single-cellular (e.g., diatoms, amoeba) or multicellular (e.g., seaweed, giant kelp).</div>
+                    <div class="ans-card"><span class="ans-badge false-b">6. F</span>Diatoms are <strong>single-cellular</strong>, whereas seaweed and giant kelp are multicellular.</div>
+                    <div class="ans-card"><span class="ans-badge true-b">7. T</span>Plankton is the base/beginning of about 99% of ocean food chains.</div>
+                    <div class="ans-card"><span class="ans-badge false-b">8. F</span>Over 95% of microbes are <strong>helpful or harmless</strong> to us, not harmful.</div>
+                </div>
+
+                <div class="section-block">
+                    <div class="section-heading heading-amber">
+                        <span>Part IV. Short Answer 參考答案與配分（32 points，每題 8 分）</span>
+                    </div>
+                    <div class="ans-card">
+                        <div><span class="ans-badge">Q1</span><strong>Microbe comes from two words...</strong></div>
+                        <ul class="bullet-list" style="margin-top: 8px;">
+                            <li><strong>Two words (4 pts):</strong> <strong>microscopic</strong> + <strong>organism</strong>（寫 <em>micro + organism</em> 亦可酌情給分）。</li>
+                            <li><strong>Meaning (4 pts):</strong> A living thing so tiny that you need a microscope to see it.</li>
+                        </ul>
+                    </div>
+                    <div class="ans-card">
+                        <div><span class="ans-badge">Q2</span><strong>Two reasons why diatoms are so important...</strong></div>
+                        <ul class="bullet-list" style="margin-top: 8px;">
+                            <li><strong>Reason 1 (4 pts):</strong> They produce <strong>at least half (about 50%) of Earth’s oxygen</strong> through photosynthesis.（製造地球約一半的氧氣）</li>
+                            <li><strong>Reason 2 (4 pts):</strong> They make up a large part of <strong>plankton</strong>, which forms the <strong>base/beginning of ocean food chains</strong>.（是浮游生物主力，為海洋食物鏈起點）</li>
+                        </ul>
+                    </div>
+                    <div class="ans-card">
+                        <div><span class="ans-badge">Q3</span><strong>Two places where protists can live...</strong></div>
+                        <ul class="bullet-list" style="margin-top: 8px;">
+                            <li><strong>Any two places (4 pts each):</strong> <strong>Fresh water</strong>（淡水）、<strong>Saltwater / oceans</strong>（鹹水／海洋）、<strong>Damp soil</strong>（潮濕土壤）、<strong>Inside or on other organisms</strong>（其他生物體內或體表）。</li>
+                        </ul>
+                    </div>
+                    <div class="ans-card">
+                        <div><span class="ans-badge">Q4</span><strong>Single-cellular vs. Multicellular + Examples...</strong></div>
+                        <ul class="bullet-list" style="margin-top: 8px;">
+                            <li><strong>Difference (4 pts):</strong> A <strong>single-cellular</strong> organism is made up of <strong>only one cell</strong>, while a <strong>multicellular</strong> organism is made up of <strong>more than one cell</strong> working together.</li>
+                            <li><strong>Examples (2 pts each):</strong> Single-cellular: <strong>bacteria</strong>, <strong>diatom</strong>, <strong>yeast</strong>, or <strong>amoeba</strong>；Multicellular: <strong>human</strong>, <strong>insect</strong>, <strong>tree</strong>, <strong>mushroom</strong>, <strong>seaweed</strong>, or <strong>giant kelp</strong>.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // ================= DATA =================
+        const VOCAB_LIST = [
+            { word: 'microbe / microorganism', speak: 'microbe, microorganism', zh: '微生物', desc: 'microscopic + organism，需顯微鏡才看得到。' },
+            { word: 'single-cellular / unicellular', speak: 'single-cellular, unicellular', zh: '單細胞的', desc: '只有 1 個細胞（bacteria, diatoms, yeast）。' },
+            { word: 'multicellular', speak: 'multicellular', zh: '多細胞的', desc: '多個細胞合作（plants, animals, insects, seaweed, giant kelp）。' },
+            { word: 'protist', speak: 'protist', zh: '原生生物', desc: '“junk drawer” kingdom（雜物抽屜界）。' },
+            { word: 'algae', speak: 'algae', zh: '藻類', desc: 'plant-like protist（不是植物），含葉綠素可行光合作用。' },
+            { word: 'chlorophyll', speak: 'chlorophyll', zh: '葉綠素', desc: '讓植物與藻類呈綠色並進行光合作用的物質。' },
+            { word: 'photosynthesis / photosynthesize', speak: 'photosynthesis, photosynthesize', zh: '光合作用／行光合作用', desc: '用陽光自製養分並釋放氧氣。' },
+            { word: 'diatom', speak: 'diatom', zh: '矽藻', desc: '最常見的單細胞藻類，玻璃狀細胞壁，製造約 50% 氧氣。' },
+            { word: 'plankton', speak: 'plankton', zh: '浮游生物', desc: '漂浮海面表層，99% 海洋食物鏈的起點。' },
+            { word: 'phytoplankton', speak: 'phytoplankton', zh: '浮游植物', desc: 'plant-like plankton，靠光合作用製造食物。' },
+            { word: 'zooplankton', speak: 'zooplankton', zh: '浮游動物', desc: 'animal-like plankton，會移動並捕食。' },
+            { word: 'protozoa', speak: 'protozoa', zh: '原生動物', desc: '字義「小動物」，animal-like protist（如 amoeba）。' }
+        ];
+
+        const CHECKLIST_ITEMS = [
+            '我能說出 microbe 是哪兩個詞的組合，以及微生物出現在哪 3 個生物界。',
+            '我能區分 single-cellular 與 multicellular，並說出昆蟲、細菌、矽藻、海藻各屬哪一類。',
+            '我能用英文解釋為什麼科學家稱 Protist 為 “junk drawer” kingdom。',
+            '我知道 algae 不是植物，且能舉出單細胞藻類（diatoms）與多細胞藻類（seaweed / giant kelp）各一例。',
+            '我能用英文寫出 diatoms 對地球生命最重要的 2 個原因。',
+            '我能區分 phytoplankton 與 zooplankton，並說明 plankton 在海洋食物鏈的角色。'
+        ];
+
+        const MATCHING_QS = [
+            { num: 1, term: 'Microbe', answer: 'D', hint: '想想字根 micro-（微小），需要什麼儀器才能看到？', note: 'D — 需要顯微鏡才看得到的微小生物' },
+            { num: 2, term: 'Protist', answer: 'F', hint: '哪個生物界被稱為「雜物抽屜（junk drawer）」？', note: 'F —「雜物抽屜」界，特徵多元不易歸類' },
+            { num: 3, term: 'Algae', answer: 'A', hint: '它有 chlorophyll（葉綠素）能用陽光自製養分，但是屬於原生生物！', note: 'A — 含葉綠素、可行光合作用的類植物原生生物' },
+            { num: 4, term: 'Diatoms', answer: 'E', hint: '關鍵字：glass-like cell walls（玻璃狀細胞壁）＋ 地球一半氧氣！', note: 'E — 有玻璃狀細胞壁的單細胞藻類，製造約一半氧氣' },
+            { num: 5, term: 'Plankton', answer: 'B', hint: '關鍵字：drift near the surface（漂浮海面表層）與海洋食物鏈起點。', note: 'B — 漂浮在海面表層、構成多數海洋食物鏈起點' },
+            { num: 6, term: 'Multicellular organism', answer: 'C', hint: 'multi- 代表「多個」，由多個細胞一起合作！', note: 'C — 由多個細胞合作組成的生物' }
+        ];
+
+        const MC_QS = [
+            {
+                num: 1,
+                prompt: 'Which <strong>three kingdoms</strong> contain microbes?',
+                hint: '記得口訣：No animal or plant microbes！（先把有 Animal 或 Plant 的選項刪掉）',
+                options: [
+                    { key: 'A', text: 'Plant, Animal, and Fungus' },
+                    { key: 'B', text: 'Bacteria, Protist, and Fungus' },
+                    { key: 'C', text: 'Animal, Protist, and Bacteria' },
+                    { key: 'D', text: 'Plant, Protist, and Bacteria' }
+                ],
+                answer: 'B',
+                explain: 'Microbes live in Bacteria, Protist, and Fungus kingdoms only; no animal or plant microbes.（微生物只存在於細菌、原生生物、真菌三界。）'
+            },
+            {
+                num: 2,
+                prompt: 'Why do scientists often call the protist kingdom the <strong>“junk drawer”</strong> kingdom?',
+                hint: '雜物抽屜放的是「很難歸類的各種東西」，對應哪個選項？',
+                options: [
+                    { key: 'A', text: 'Protists live only in trash and polluted water.' },
+                    { key: 'B', text: 'Protists have no cells or chlorophyll.' },
+                    { key: 'C', text: 'Protists are a diverse mix of organisms that are difficult to classify because they can be plant-like, animal-like, or fungus-like.' },
+                    { key: 'D', text: 'Protists are the only multicellular organisms on Earth.' }
+                ],
+                answer: 'C',
+                explain: 'Protists include plant-like, animal-like, and fungus-like organisms that are hard to classify.（原生生物界包含像植物、像動物、像真菌的生物，難以歸類。）'
+            },
+            {
+                num: 3,
+                prompt: 'Which statement about <strong>algae</strong> is <strong>TRUE</strong>?',
+                hint: '陷阱題提醒：Algae is NOT a plant！而且藻類也有多細胞的巨藻喔。',
+                options: [
+                    { key: 'A', text: 'Algae belong to the protist kingdom, not the plant kingdom, and can make their own food using sunlight.' },
+                    { key: 'B', text: 'Algae belong to the plant kingdom because they have chlorophyll.' },
+                    { key: 'C', text: 'All algae are microscopic and single-cellular.' },
+                    { key: 'D', text: 'Algae must hunt other microbes for food.' }
+                ],
+                answer: 'A',
+                explain: 'Algae are plant-like protists (NOT plants) that have chlorophyll and photosynthesize.（藻類屬於原生生物界，不是植物，可行光合作用。）'
+            },
+            {
+                num: 4,
+                prompt: 'Which organism is the <strong>most common type</strong> found in plankton?',
+                hint: '浮游生物中最常見的是有玻璃狀細胞壁的單細胞藻類！',
+                options: [
+                    { key: 'A', text: 'Yeast' },
+                    { key: 'B', text: 'Mushrooms' },
+                    { key: 'C', text: 'Insects' },
+                    { key: 'D', text: 'Diatoms' }
+                ],
+                answer: 'D',
+                explain: 'Diatoms are the most common type of organism found in plankton.（矽藻是浮游生物中最常見的種類。）'
+            },
+            {
+                num: 5,
+                prompt: 'How do <strong>phytoplankton</strong> and <strong>zooplankton</strong> differ?',
+                hint: '看到 zoo- 就想到動物園（animal-like），而 phyto- 是植物性（plant-like）！',
+                options: [
+                    { key: 'A', text: 'Phytoplankton move around and hunt, while zooplankton make food from sunlight.' },
+                    { key: 'B', text: 'Phytoplankton are plant-like and photosynthesize, while zooplankton are animal-like and eat other organisms.' },
+                    { key: 'C', text: 'Phytoplankton live only in damp soil, while zooplankton live only in fresh water.' },
+                    { key: 'D', text: 'Phytoplankton are multicellular, while zooplankton are always plants.' }
+                ],
+                answer: 'B',
+                explain: 'Phytoplankton are plant-like (photosynthesize); zooplankton are animal-like (eat other organisms).（浮游植物行光合作用，浮游動物捕食其他生物。）'
+            },
+            {
+                num: 6,
+                prompt: 'An organism can <strong>move and eat like an animal</strong>, yet its body also has <strong>chloroplasts to make food from sunlight like a plant</strong>. Which kingdom does it belong to?',
+                hint: '既像動物又像植物、很難歸類的奇特生物，會被放進哪個「雜物抽屜」界？',
+                options: [
+                    { key: 'A', text: 'Plant kingdom' },
+                    { key: 'B', text: 'Animal kingdom' },
+                    { key: 'C', text: 'Fungus kingdom' },
+                    { key: 'D', text: 'Protist kingdom' }
+                ],
+                answer: 'D',
+                explain: 'Organisms with both animal-like and plant-like traits belong to the Protist kingdom.（兼具動植物特徵的生物屬於原生生物界。）'
+            },
+            {
+                num: 7,
+                prompt: 'Which pair correctly matches a <strong>single-cellular algae</strong> and a <strong>multicellular algae</strong>?',
+                hint: '先找哪一組兩個都是「藻類（algae）」，而且前者是單細胞、後者是可長到 70 公尺的多細胞！',
+                options: [
+                    { key: 'A', text: 'Diatoms (single-cellular) and giant kelp (multicellular)' },
+                    { key: 'B', text: 'Seaweed (single-cellular) and diatoms (multicellular)' },
+                    { key: 'C', text: 'Bacteria (single-cellular) and moss (multicellular)' },
+                    { key: 'D', text: 'Yeast (single-cellular) and mushrooms (multicellular)' }
+                ],
+                answer: 'A',
+                explain: 'Diatoms are single-cellular algae, while seaweed and giant kelp are multicellular algae.（矽藻是單細胞藻類，巨藻是多細胞藻類。）'
+            },
+            {
+                num: 8,
+                prompt: 'Like other animals, <strong>insects</strong> are _____.',
+                hint: '昆蟲雖然小小隻，但所有動物（Animal kingdom）都是單細胞還是多細胞呢？',
+                options: [
+                    { key: 'A', text: 'single-cellular microbes' },
+                    { key: 'B', text: 'plant-like protists' },
+                    { key: 'C', text: 'multicellular organisms' },
+                    { key: 'D', text: 'part of the bacteria kingdom' }
+                ],
+                answer: 'C',
+                explain: 'All animals, including insects, are multicellular organisms.（所有動物含昆蟲都是多細胞生物。）'
+            }
+        ];
+
+        const TF_QS = [
+            { num: 1, text: '<strong>Algae</strong> is a kind of <strong>plant</strong>.', hint: '想想看：有葉綠素就一定是植物嗎？', answer: 'F', explain: 'False — Algae is a plant-like protist, NOT a plant.（藻類是類植物原生生物，不是植物。）' },
+            { num: 2, text: '<strong>All bacteria</strong> are single-cellular organisms.', hint: '回想五大生物界卡片：細菌界只有單細胞嗎？', answer: 'T', explain: 'True — All bacteria are single-cellular.（所有細菌都是單細胞生物。）' },
+            { num: 3, text: '<strong>Diatoms</strong> are single-cellular algae that have glass-like cell walls.', hint: '矽藻的外殼長得像什麼材質的小盒子？', answer: 'T', explain: 'True — Diatoms have tiny glass-like cell walls/shells.（矽藻有玻璃狀細胞壁。）' },
+            { num: 4, text: 'Some <strong>plants and animals</strong> are microscopic microbes.', hint: '回想：哪些生物界「沒有」微生物？', answer: 'F', explain: 'False — There are NO animal or plant microbes.（動植物界沒有微生物。）' },
+            { num: 5, text: '<strong>Protists</strong> can be either single-cellular or multicellular.', hint: '想想矽藻（diatoms）和巨藻（giant kelp）都屬於哪一界？', answer: 'T', explain: 'True — Protists include both single-cellular (diatoms) and multicellular (kelp) species.（原生生物界同時有單細胞與多細胞。）' },
+            { num: 6, text: '<strong>All diatoms</strong> are multicellular, just like seaweed and giant kelp.', hint: '注意！Diatoms 是單細胞還是多細胞？', answer: 'F', explain: 'False — Diatoms are single-cellular algae.（矽藻是單細胞，海藻與巨藻才是多細胞。）' },
+            { num: 7, text: '<strong>Plankton</strong> forms the beginning of almost all (about 99%) food chains in the ocean.', hint: '回想浮游生物在海洋食物鏈中佔的關鍵百分比！', answer: 'T', explain: 'True — Plankton forms the base of about 99% of ocean food chains.（浮游生物是 99% 海洋食物鏈的起點。）' },
+            { num: 8, text: 'Over <strong>95%</strong> of microbes on Earth are <strong>harmful</strong> and cause disease.', hint: '小心關鍵字！95% 是 helpful/harmless 還是 harmful？', answer: 'F', explain: 'False — Over 95% of microbes are helpful or harmless.（超過 95% 的微生物是有益或無害的！）' }
+        ];
+
+        const MATCH_DEFS = [
+            { id: 'A', text: 'A plant-like protist with chlorophyll that uses sunlight to make its own food.' },
+            { id: 'B', text: 'Tiny organisms that drift near the surface of ocean waters and form the base of most ocean food chains.' },
+            { id: 'C', text: 'A living thing made up of more than one cell working together.' },
+            { id: 'D', text: 'A living thing so tiny that you usually need a microscope to see it.' },
+            { id: 'E', text: 'Tiny single-cellular algae with glass-like cell walls that produce about half of Earth’s oxygen.' },
+            { id: 'F', text: 'A member of the “junk drawer” kingdom; organisms in this group can be plant-like, animal-like, fungus-like, or both plant-like and animal-like.' }
+        ];
+
+        function slotHits(fill, slotIds, goodIds) {
+            const status = {};
+            const used = new Set();
+            slotIds.forEach(id => {
+                const chip = fill[id];
+                if (chip && goodIds.indexOf(chip) !== -1 && !used.has(chip)) {
+                    status[id] = true;
+                    used.add(chip);
+                } else {
+                    status[id] = false;
+                }
+            });
+            return status;
+        }
+
+        function chipIn(fill, slotIds, chipId, status) {
+            return slotIds.some(id => fill[id] === chipId && status[id]);
+        }
+
+        const SA_QS = [
+            {
+                num: 1,
+                prompt: '<strong>Microbe</strong> comes from <strong>two words</strong>. What two words are they, and what does microbe mean?',
+                hint: '拆字提示：micro-（顯微的）＋ 生物（organism）。意思要選「小到需要 microscope 才能看到」。顯微鏡那個字是陷阱。',
+                sampleEn: 'Microbe comes from the words "microscopic" and "organism." It means a living thing so tiny that you need a microscope to see it.',
+                sampleZh: 'Microbe 來自 microscopic（顯微的）與 organism（生物），意思是小到必須用顯微鏡才能看到的生物。',
+                banks: [
+                    { title: '兩個字（各點一次，填進兩個空格）', group: 'word' },
+                    { title: '意思（點一句填進去）', group: 'mean' }
+                ],
+                slots: [
+                    { id: 'w1', label: '第一個字', group: 'word' },
+                    { id: 'w2', label: '第二個字', group: 'word' },
+                    { id: 'mean', label: '意思', group: 'mean' }
+                ],
+                chips: [
+                    { id: 'microscopic', group: 'word', text: 'microscopic' },
+                    { id: 'organism', group: 'word', text: 'organism' },
+                    { id: 'microscope', group: 'word', text: 'microscope' },
+                    { id: 'bacteria', group: 'word', text: 'bacteria' },
+                    { id: 'chlorophyll', group: 'word', text: 'chlorophyll' },
+                    { id: 'mean-ok', group: 'mean', text: 'A living thing so tiny that you need a microscope to see it.', long: true },
+                    { id: 'mean-plant', group: 'mean', text: 'A plant that grows only in the ocean.', long: true },
+                    { id: 'mean-animal', group: 'mean', text: 'A large animal made of many cells.', long: true }
+                ],
+                grade(fill) {
+                    const words = slotHits(fill, ['w1', 'w2'], ['microscopic', 'organism']);
+                    const meanOk = fill.mean === 'mean-ok';
+                    return {
+                        slotStatus: { w1: !!words.w1, w2: !!words.w2, mean: meanOk },
+                        items: [
+                            { pts: chipIn(fill, ['w1', 'w2'], 'microscopic', words) ? 2 : 0, max: 2, label: '有選到 microscopic（+2）' },
+                            { pts: chipIn(fill, ['w1', 'w2'], 'organism', words) ? 2 : 0, max: 2, label: '有選到 organism（+2）' },
+                            { pts: meanOk ? 4 : 0, max: 4, label: '意思：小到要用顯微鏡才看得到（+4）' }
+                        ]
+                    };
+                }
+            },
+            {
+                num: 2,
+                prompt: 'Give <strong>two reasons</strong> why <strong>diatoms</strong> are so important to life on Earth.',
+                hint: '兩大關鍵：① oxygen（約一半）；② plankton／海洋食物鏈的起點。其他按鈕是陷阱。',
+                sampleEn: '1. Diatoms produce about half (50%) of Earth’s oxygen. 2. They make up a large part of plankton, forming the base of ocean food chains.',
+                sampleZh: '① 製造地球約一半（50%）的氧氣；② 是浮游生物主力，構成海洋食物鏈的起點。',
+                banks: [{ title: '點兩句正確的原因', group: 'reason' }],
+                slots: [
+                    { id: 'r1', label: '原因 1', group: 'reason' },
+                    { id: 'r2', label: '原因 2', group: 'reason' }
+                ],
+                chips: [
+                    { id: 'oxygen', group: 'reason', text: 'They produce about half of Earth’s oxygen.', long: true },
+                    { id: 'plankton', group: 'reason', text: 'They make up much of plankton, the start of ocean food chains.', long: true },
+                    { id: 'insects', group: 'reason', text: 'They are multicellular animals, like insects.', long: true },
+                    { id: 'disease', group: 'reason', text: 'They cause most diseases on Earth.', long: true },
+                    { id: 'desert', group: 'reason', text: 'They live only in dry deserts.', long: true }
+                ],
+                grade(fill) {
+                    const st = slotHits(fill, ['r1', 'r2'], ['oxygen', 'plankton']);
+                    return {
+                        slotStatus: st,
+                        items: [
+                            { pts: chipIn(fill, ['r1', 'r2'], 'oxygen', st) ? 4 : 0, max: 4, label: '原因：製造地球約一半氧氣（+4）' },
+                            { pts: chipIn(fill, ['r1', 'r2'], 'plankton', st) ? 4 : 0, max: 4, label: '原因：浮游生物／海洋食物鏈起點（+4）' }
+                        ]
+                    };
+                }
+            },
+            {
+                num: 3,
+                prompt: 'Name <strong>two places</strong> where <strong>protists</strong> can live.',
+                hint: '四個正確棲地任選兩個：淡水、鹹水／海洋、潮濕土壤、其他生物體內或體表。',
+                sampleEn: 'Any two of: fresh water, saltwater (oceans), damp soil, or inside/on other organisms.',
+                sampleZh: '任選兩處：淡水、鹹水／海洋、潮濕土壤、其他生物體內或體表。',
+                banks: [{ title: '點兩個地方（正確的有四個）', group: 'place' }],
+                slots: [
+                    { id: 'p1', label: '地方 1', group: 'place' },
+                    { id: 'p2', label: '地方 2', group: 'place' }
+                ],
+                chips: [
+                    { id: 'fresh', group: 'place', text: 'Fresh water' },
+                    { id: 'salt', group: 'place', text: 'Saltwater / oceans' },
+                    { id: 'soil', group: 'place', text: 'Damp soil' },
+                    { id: 'host', group: 'place', text: 'Inside or on other organisms' },
+                    { id: 'dry', group: 'place', text: 'Only dry deserts' },
+                    { id: 'space', group: 'place', text: 'Outer space' }
+                ],
+                grade(fill) {
+                    const goods = ['fresh', 'salt', 'soil', 'host'];
+                    const st = slotHits(fill, ['p1', 'p2'], goods);
+                    const n = ['p1', 'p2'].filter(id => st[id]).length;
+                    return {
+                        slotStatus: st,
+                        items: [
+                            { pts: n >= 1 ? 4 : 0, max: 4, label: '正確地點 1（淡水／海洋／潮濕土壤／其他生物，任一）（+4）' },
+                            { pts: n >= 2 ? 4 : 0, max: 4, label: '正確地點 2（與上一格不同的正確棲地）（+4）' }
+                        ]
+                    };
+                }
+            },
+            {
+                num: 4,
+                prompt: 'What is the <strong>difference</strong> between a <strong>single-cellular</strong> organism and a <strong>multicellular</strong> organism? Give <strong>one example</strong> of each.',
+                hint: '先選細胞數量（one cell／more than one cell），再各選 1 個例子。例子放錯格就不算。',
+                sampleEn: 'A single-cellular organism has only one cell (e.g., bacteria or a diatom). A multicellular organism has more than one cell working together (e.g., a human, an insect, or giant kelp).',
+                sampleZh: '單細胞只有 1 個細胞（例：細菌、矽藻）；多細胞由多個細胞合作（例：人、昆蟲、巨藻）。',
+                banks: [
+                    { title: '定義（看清楚要填哪一格）', group: 'def' },
+                    { title: '例子（單細胞例子填單細胞格，多細胞例子填多細胞格）', group: 'ex' }
+                ],
+                slots: [
+                    { id: 'defS', label: 'Single-cellular means…', group: 'def' },
+                    { id: 'exS', label: 'One single-cellular example', group: 'ex' },
+                    { id: 'defM', label: 'Multicellular means…', group: 'def' },
+                    { id: 'exM', label: 'One multicellular example', group: 'ex' }
+                ],
+                chips: [
+                    { id: 'def-one', group: 'def', text: 'made of only one cell', long: true },
+                    { id: 'def-many', group: 'def', text: 'made of more than one cell working together', long: true },
+                    { id: 'def-none', group: 'def', text: 'made of no cells at all', long: true },
+                    { id: 'bacteria', group: 'ex', text: 'bacteria' },
+                    { id: 'diatom', group: 'ex', text: 'diatom' },
+                    { id: 'yeast', group: 'ex', text: 'yeast' },
+                    { id: 'human', group: 'ex', text: 'human' },
+                    { id: 'insect', group: 'ex', text: 'insect' },
+                    { id: 'kelp', group: 'ex', text: 'giant kelp' },
+                    { id: 'chlorophyll', group: 'ex', text: 'chlorophyll' }
+                ],
+                grade(fill) {
+                    const singleEx = ['bacteria', 'diatom', 'yeast'];
+                    const multiEx = ['human', 'insect', 'kelp'];
+                    const slotStatus = {
+                        defS: fill.defS === 'def-one',
+                        defM: fill.defM === 'def-many',
+                        exS: singleEx.indexOf(fill.exS) !== -1,
+                        exM: multiEx.indexOf(fill.exM) !== -1
+                    };
+                    return {
+                        slotStatus,
+                        items: [
+                            { pts: slotStatus.defS ? 2 : 0, max: 2, label: '單細胞 = only one cell（+2）' },
+                            { pts: slotStatus.defM ? 2 : 0, max: 2, label: '多細胞 = more than one cell working together（+2）' },
+                            { pts: slotStatus.exS ? 2 : 0, max: 2, label: '單細胞例子正確（bacteria / diatom / yeast）（+2）' },
+                            { pts: slotStatus.exM ? 2 : 0, max: 2, label: '多細胞例子正確（human / insect / giant kelp）（+2）' }
+                        ]
+                    };
+                }
+            }
+        ];
+
+        // ================= STATE =================
+        const CHECKLIST_STORAGE_KEY = 'lilian_g5_science_l5_checklist_v1';
+        let vocabHiddenAll = false;
+        let practiceMode = 'submit';
+        let tfAnswers = {};
+        let hasGraded = false;
+        let matchPairs = {};
+        let matchSelectedTerm = null;
+        let saFill = {};
+        let saSelectedSlot = {};
+
+        // ================= SPEECH =================
+        function speakText(text) {
+            if (!('speechSynthesis' in window)) return;
+            window.speechSynthesis.cancel();
+            const utter = new SpeechSynthesisUtterance(text);
+            utter.lang = 'en-US';
+            utter.rate = 0.92;
+            window.speechSynthesis.speak(utter);
+        }
+
+        // ================= TABS & PRINT =================
+        function switchTab(tabName) {
+            document.querySelectorAll('.mode-tab').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.tab === tabName);
+            });
+            document.querySelectorAll('.tab-panel').forEach(panel => {
+                panel.classList.toggle('active', panel.id === 'panel-' + tabName);
+            });
+            document.body.className = 'print-' + tabName;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function printSection(sectionName) {
+            document.body.className = 'print-' + sectionName;
+            window.print();
+        }
+
+        function unlockAnswers(show) {
+            document.getElementById('answersLockCard').style.display = show ? 'none' : 'block';
+            document.getElementById('answersContent').classList.toggle('unlocked', show);
+        }
+
+        function setPracticeMode(mode) {
+            practiceMode = mode;
+            document.getElementById('pmode_submit').classList.toggle('active', mode === 'submit');
+            document.getElementById('pmode_instant').classList.toggle('active', mode === 'instant');
+        }
+
+        function toggleHint(id) {
+            const el = document.getElementById(id);
+            if (el) el.classList.toggle('show');
+        }
+
+        function jumpToConcept(id) {
+            closeMindMapModal();
+            const el = document.getElementById(id);
+            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function openMindMapModal() {
+            const svg = document.querySelector('#mindmapHost svg');
+            const slot = document.getElementById('mindmapModalSlot');
+            if (svg && slot) {
+                slot.innerHTML = svg.outerHTML;
+                document.getElementById('mindmapModal').classList.add('open');
+            }
+        }
+
+        function closeMindMapModal() {
+            const modal = document.getElementById('mindmapModal');
+            if (modal) modal.classList.remove('open');
+        }
+
+        // ================= RENDER STUDY SECTION =================
+        function renderVocab() {
+            const grid = document.getElementById('vocabGrid');
+            grid.innerHTML = VOCAB_LIST.map((item, idx) => `
+                <div class="vocab-card" id="vocabCard_${idx}" onclick="toggleSingleVocab(${idx})">
+                    <div class="vocab-top">
+                        <div class="vocab-word">${item.word}</div>
+                        <button type="button" class="btn-speak no-print" onclick="event.stopPropagation(); speakText('${item.speak.replace(/'/g, "\\'")}')">🔊</button>
+                    </div>
+                    <div class="vocab-tap-hint">👆 點一下看中文與解釋</div>
+                    <div class="vocab-meaning">
+                        <div style="font-weight: 800; color: var(--teal); margin-bottom: 4px;">${item.zh}</div>
+                        <div style="color: var(--text-muted);">${item.desc}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function toggleSingleVocab(idx) {
+            document.getElementById(`vocabCard_${idx}`).classList.toggle('hidden-meaning');
+        }
+
+        function toggleAllVocab() {
+            vocabHiddenAll = !vocabHiddenAll;
+            document.querySelectorAll('.vocab-card').forEach(card => {
+                card.classList.toggle('hidden-meaning', vocabHiddenAll);
+            });
+            document.getElementById('toggleVocabBtn').textContent = vocabHiddenAll ? '👀 展開全部中文' : '🙈 遮住中文自測模式';
+        }
+
+        function renderChecklist() {
+            let saved = [];
+            try {
+                saved = JSON.parse(localStorage.getItem(CHECKLIST_STORAGE_KEY) || '[]');
+            } catch (e) {
+                saved = [];
+            }
+
+            const container = document.getElementById('checklistContainer');
+            container.innerHTML = CHECKLIST_ITEMS.map((text, idx) => {
+                const isChecked = saved.includes(idx);
+                return `
+                    <label class="check-item ${isChecked ? 'checked' : ''}" id="chkLabel_${idx}">
+                        <input type="checkbox" ${isChecked ? 'checked' : ''} onchange="toggleChecklistItem(${idx}, this.checked)" />
+                        <span>${text}</span>
+                    </label>
+                `;
+            }).join('');
+
+            updateChecklistProgress(saved.length);
+        }
+
+        function toggleChecklistItem(idx, checked) {
+            let saved = [];
+            try {
+                saved = JSON.parse(localStorage.getItem(CHECKLIST_STORAGE_KEY) || '[]');
+            } catch (e) {
+                saved = [];
+            }
+            if (checked && !saved.includes(idx)) saved.push(idx);
+            if (!checked) saved = saved.filter(i => i !== idx);
+            localStorage.setItem(CHECKLIST_STORAGE_KEY, JSON.stringify(saved));
+            document.getElementById(`chkLabel_${idx}`).classList.toggle('checked', checked);
+            updateChecklistProgress(saved.length);
+        }
+
+        function updateChecklistProgress(count) {
+            const total = CHECKLIST_ITEMS.length;
+            const pct = Math.round((count / total) * 100);
+            document.getElementById('checklistProgressFill').style.width = pct + '%';
+            document.getElementById('checklistProgressText').textContent =
+                count === total ? `🎉 ${count} / ${total} 全部達成！準備好寫練習卷囉！` : `${count} / ${total} 完成`;
+        }
+
+        function escHtml(s) {
+            return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        }
+
+        function shuffleIds(list) {
+            const a = list.slice();
+            for (let i = a.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                const tmp = a[i];
+                a[i] = a[j];
+                a[j] = tmp;
+            }
+            return a;
+        }
+
+        // ================= RENDER PRACTICE SECTION =================
+        function renderPractice() {
+            const defOrder = shuffleIds(MATCH_DEFS.map(d => d.id));
+            document.getElementById('matchTerms').innerHTML = MATCHING_QS.map(q => `
+                <div class="term-block">
+                    <button type="button" class="term-btn" id="matchTerm_${q.num}" onclick="selectMatchTerm(${q.num})">
+                        <span class="term-name">${q.num}. ${escHtml(q.term)}</span>
+                        <span class="term-paired" id="matchPaired_${q.num}">尚未配對</span>
+                    </button>
+                    <button type="button" class="btn-hint no-print" onclick="toggleHint('matchHint_${q.num}')">💡 提示</button>
+                    <div class="hint-box" id="matchHint_${q.num}">💡 ${escHtml(q.hint)}</div>
+                    <div class="q-feedback" id="matchFb_${q.num}"></div>
+                </div>
+            `).join('');
+            document.getElementById('matchDefs').innerHTML = defOrder.map(id => {
+                const def = MATCH_DEFS.find(d => d.id === id);
+                return `<button type="button" class="def-btn" id="matchDef_${id}" onclick="selectMatchDef('${id}')">${escHtml(def.text)}</button>`;
+            }).join('');
+            paintMatching();
+
+            // Part II: Multiple Choice
+            document.getElementById('mcContainer').innerHTML = MC_QS.map(q => `
+                <div class="q-card" id="mcCard_${q.num}">
+                    <div class="q-header">
+                        <p class="q-prompt">${q.num}. ${q.prompt}</p>
+                        <button type="button" class="btn-hint no-print" onclick="toggleHint('mcHint_${q.num}')">💡 提示</button>
+                    </div>
+                    <div class="hint-box" id="mcHint_${q.num}" style="margin-bottom: 12px;">💡 ${q.hint}</div>
+                    <div class="options-stack">
+                        ${q.options.map(opt => `
+                            <label class="option-label">
+                                <input type="radio" name="mc_${q.num}" value="${opt.key}" onchange="onMcChange(${q.num})" />
+                                <span><strong>${opt.key}.</strong> ${opt.text}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                    <div class="q-feedback" id="mcFb_${q.num}"></div>
+                </div>
+            `).join('');
+
+            // Part III: True or False
+            document.getElementById('tfContainer').innerHTML = TF_QS.map(q => `
+                <div class="q-card" id="tfCard_${q.num}">
+                    <div class="q-header">
+                        <p class="q-prompt">${q.num}. ${q.text}</p>
+                        <button type="button" class="btn-hint no-print" onclick="toggleHint('tfHint_${q.num}')">💡 提示</button>
+                    </div>
+                    <div class="hint-box" id="tfHint_${q.num}" style="margin-bottom: 12px;">💡 ${q.hint}</div>
+                    <div class="tf-buttons">
+                        <button type="button" class="tf-btn" id="tfBtn_${q.num}_T" onclick="selectTF(${q.num}, 'T')">✔ True (T)</button>
+                        <button type="button" class="tf-btn" id="tfBtn_${q.num}_F" onclick="selectTF(${q.num}, 'F')">✖ False (F)</button>
+                    </div>
+                    <div class="q-feedback" id="tfFb_${q.num}"></div>
+                </div>
+            `).join('');
+
+            // Part IV: button fill-in
+            document.getElementById('saContainer').innerHTML = SA_QS.map(q => `
+                <div class="q-card" id="saCard_${q.num}">
+                    <div class="q-header">
+                        <p class="q-prompt">${q.num}. ${q.prompt}</p>
+                        <button type="button" class="btn-hint no-print" onclick="toggleHint('saHint_${q.num}')">💡 提示</button>
+                    </div>
+                    <div class="hint-box" id="saHint_${q.num}" style="margin-bottom: 12px;">💡 ${escHtml(q.hint)}</div>
+                    <div class="fill-slots" id="saSlots_${q.num}">
+                        ${q.slots.map(slot => `
+                            <button type="button" class="fill-slot" id="saSlot_${q.num}_${slot.id}" onclick="pickSlot(${q.num}, '${slot.id}')">
+                                <span class="fill-slot-label">${escHtml(slot.label)} · 點已填的內容可拿掉</span>
+                                <span class="fill-slot-value" id="saVal_${q.num}_${slot.id}">點這裡，再按下面的按鈕</span>
+                            </button>
+                        `).join('')}
+                    </div>
+                    <div class="sa-note" id="saNote_${q.num}"></div>
+                    ${q.banks.map(bank => `
+                        <div class="chip-group">
+                            <div class="bank-title">${escHtml(bank.title)}</div>
+                            <div class="chip-bank">
+                                ${shuffleIds(q.chips.filter(c => c.group === bank.group)).map(chip => `
+                                    <button type="button" class="chip-btn${chip.long ? ' chip-long' : ''}" id="saChip_${q.num}_${chip.id}" onclick="pickChip(${q.num}, '${chip.id}')">${escHtml(chip.text)}</button>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `).join('')}
+                    <div class="print-lines">
+                        <div class="print-line"></div>
+                        <div class="print-line"></div>
+                        <div class="print-line"></div>
+                    </div>
+                    <div class="sa-rubric" id="saRubric_${q.num}">
+                        <div class="sa-sample-box">
+                            <div style="font-weight: 900; color: var(--teal); margin-bottom: 4px;">✨ 參考答案 Sample Answer</div>
+                            <div><strong>EN:</strong> ${escHtml(q.sampleEn)}</div>
+                            <div style="color: var(--text-muted); margin-top: 4px;"><strong>中文重點：</strong>${escHtml(q.sampleZh)}</div>
+                        </div>
+                        <div style="font-weight: 900; color: var(--purple); margin-bottom: 4px;">🔑 評分要點（滿分 8 分，可手動微調）：</div>
+                        ${q.grade({}).items.map((r, rIdx) => `
+                            <label class="rubric-check">
+                                <input type="checkbox" class="sa-rubric-box" id="saCb_${q.num}_${rIdx}" data-pts="${r.max}" onchange="updateTotalScore()" />
+                                <span>${escHtml(r.label)}<span class="sa-auto-tag" id="saAutoTag_${q.num}_${rIdx}" style="display:none;">✨ 按鈕答對</span></span>
+                            </label>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function paintMatching() {
+            const pairedCount = Object.keys(matchPairs).length;
+            const status = document.getElementById('matchStatus');
+            if (matchSelectedTerm) {
+                const term = MATCHING_QS.find(q => q.num === matchSelectedTerm);
+                status.textContent = `正在配對：${term.term}　→　現在點右邊的解釋`;
+            } else {
+                status.textContent = `已配對 ${pairedCount} / 6　·　① 先點一個單字　② 再點正確的解釋`;
+            }
+            MATCHING_QS.forEach(q => {
+                const btn = document.getElementById(`matchTerm_${q.num}`);
+                const paired = document.getElementById(`matchPaired_${q.num}`);
+                const defId = matchPairs[q.num];
+                const def = defId ? MATCH_DEFS.find(d => d.id === defId) : null;
+                btn.classList.toggle('is-picked', matchSelectedTerm === q.num);
+                btn.classList.toggle('is-paired', !!def);
+                if (!hasGraded && practiceMode !== 'instant') {
+                    btn.classList.remove('is-correct', 'is-wrong');
+                }
+                paired.textContent = def ? def.text : '尚未配對';
+            });
+            MATCH_DEFS.forEach(def => {
+                const used = Object.keys(matchPairs).some(k => matchPairs[k] === def.id);
+                document.getElementById(`matchDef_${def.id}`).classList.toggle('is-used', used);
+            });
+        }
+
+        function selectMatchTerm(num) {
+            if (matchSelectedTerm === num) {
+                if (matchPairs[num]) delete matchPairs[num];
+                matchSelectedTerm = null;
+            } else {
+                matchSelectedTerm = num;
+            }
+            paintMatching();
+            if (!matchPairs[num] && !hasGraded) {
+                const fb = document.getElementById(`matchFb_${num}`);
+                const btn = document.getElementById(`matchTerm_${num}`);
+                fb.className = 'q-feedback';
+                fb.textContent = '';
+                btn.classList.remove('is-correct', 'is-wrong');
+            }
+            if (hasGraded) refreshMatchScore();
+        }
+
+        function selectMatchDef(defId) {
+            if (matchSelectedTerm == null) {
+                document.getElementById('matchStatus').textContent = '先點左邊的單字，再點解釋。';
+                return;
+            }
+            const displaced = [];
+            Object.keys(matchPairs).forEach(k => {
+                if (matchPairs[k] === defId) {
+                    delete matchPairs[k];
+                    displaced.push(Number(k));
+                }
+            });
+            const num = matchSelectedTerm;
+            matchPairs[num] = defId;
+            matchSelectedTerm = null;
+            paintMatching();
+            displaced.forEach(n => {
+                if (matchPairs[n] || hasGraded) return;
+                document.getElementById(`matchTerm_${n}`).classList.remove('is-correct', 'is-wrong');
+                const fb = document.getElementById(`matchFb_${n}`);
+                fb.className = 'q-feedback';
+                fb.textContent = '';
+            });
+            if (hasGraded) refreshMatchScore();
+            else if (practiceMode === 'instant') {
+                evaluateMatchQuestion(MATCHING_QS.find(q => q.num === num));
+            }
+        }
+
+        function refreshMatchScore() {
+            let p1 = 0;
+            MATCHING_QS.forEach(q => { p1 += evaluateMatchQuestion(q); });
+            const box = document.getElementById('scoreBox');
+            box.dataset.p1 = p1;
+            updateTotalScore();
+        }
+
+        // ================= INSTANT FEEDBACK HANDLERS =================
+        function evaluateMatchQuestion(q) {
+            const val = matchPairs[q.num] || '';
+            const btn = document.getElementById(`matchTerm_${q.num}`);
+            const fb = document.getElementById(`matchFb_${q.num}`);
+            const ok = val === q.answer;
+            btn.classList.remove('is-correct', 'is-wrong');
+            if (val) btn.classList.add(ok ? 'is-correct' : 'is-wrong');
+            const correct = MATCH_DEFS.find(d => d.id === q.answer);
+            fb.className = 'q-feedback show ' + (ok ? 'ok' : 'bad');
+            fb.textContent = ok
+                ? `✅ 正確！(+2) ${q.note}`
+                : `❌ 正確配對：${correct.text}`;
+            return ok ? 2 : 0;
+        }
+
+        function evaluateMcQuestion(q) {
+            const chosen = document.querySelector(`input[name="mc_${q.num}"]:checked`);
+            const val = chosen ? chosen.value : '';
+            const card = document.getElementById(`mcCard_${q.num}`);
+            const fb = document.getElementById(`mcFb_${q.num}`);
+            const ok = val === q.answer;
+            card.classList.remove('is-correct', 'is-wrong');
+            card.classList.add(ok ? 'is-correct' : 'is-wrong');
+            fb.className = 'q-feedback show ' + (ok ? 'ok' : 'bad');
+            fb.textContent = ok ? `✅ 正確！(+4 分) ${q.explain}` : `❌ 正確答案是 ${q.answer} — ${q.explain}`;
+            return ok ? 4 : 0;
+        }
+
+        function evaluateTfQuestion(q) {
+            const val = tfAnswers[q.num] || '';
+            const card = document.getElementById(`tfCard_${q.num}`);
+            const fb = document.getElementById(`tfFb_${q.num}`);
+            const ok = val === q.answer;
+            card.classList.remove('is-correct', 'is-wrong');
+            card.classList.add(ok ? 'is-correct' : 'is-wrong');
+            fb.className = 'q-feedback show ' + (ok ? 'ok' : 'bad');
+            fb.textContent = ok ? `✅ 正確！(+3 分) ${q.explain}` : `❌ 正確答案是 ${q.answer} — ${q.explain}`;
+            return ok ? 3 : 0;
+        }
+
+        function onMcChange(num) {
+            if (practiceMode === 'instant') {
+                const q = MC_QS.find(x => x.num === num);
+                if (q) evaluateMcQuestion(q);
+            }
+        }
+
+        function selectTF(num, val) {
+            tfAnswers[num] = val;
+            document.getElementById(`tfBtn_${num}_T`).className = 'tf-btn' + (val === 'T' ? ' selected-t' : '');
+            document.getElementById(`tfBtn_${num}_F`).className = 'tf-btn' + (val === 'F' ? ' selected-f' : '');
+            if (practiceMode === 'instant') {
+                const q = TF_QS.find(x => x.num === num);
+                if (q) evaluateTfQuestion(q);
+            }
+        }
+
+        function paintShortAnswer(q) {
+            const fill = saFill[q.num] || {};
+            const used = new Set(Object.values(fill));
+            q.slots.forEach(slot => {
+                const btn = document.getElementById(`saSlot_${q.num}_${slot.id}`);
+                const val = document.getElementById(`saVal_${q.num}_${slot.id}`);
+                const chip = q.chips.find(c => c.id === fill[slot.id]);
+                btn.classList.toggle('is-filled', !!chip);
+                btn.classList.toggle('is-picked', saSelectedSlot[q.num] === slot.id && !chip);
+                val.textContent = chip ? chip.text : '點這裡，再按下面的按鈕';
+                if (!hasGraded) btn.classList.remove('is-correct', 'is-wrong');
+            });
+            q.chips.forEach(chip => {
+                document.getElementById(`saChip_${q.num}_${chip.id}`).classList.toggle('is-used', used.has(chip.id));
+            });
+        }
+
+        function pickSlot(qnum, slotId) {
+            if (!saFill[qnum]) saFill[qnum] = {};
+            if (saFill[qnum][slotId]) delete saFill[qnum][slotId];
+            saSelectedSlot[qnum] = slotId;
+            afterSaChange(qnum);
+        }
+
+        function pickChip(qnum, chipId) {
+            const q = SA_QS.find(item => item.num === qnum);
+            const chip = q.chips.find(c => c.id === chipId);
+            if (!saFill[qnum]) saFill[qnum] = {};
+            const fill = saFill[qnum];
+            if (Object.values(fill).indexOf(chipId) !== -1) return;
+            const groupSlots = q.slots.filter(s => s.group === chip.group);
+            let target = null;
+            const selected = saSelectedSlot[qnum];
+            if (selected && groupSlots.some(s => s.id === selected)) target = selected;
+            if (!target) {
+                const empty = groupSlots.find(s => !fill[s.id]);
+                target = empty ? empty.id : null;
+            }
+            const note = document.getElementById(`saNote_${qnum}`);
+            if (!target) {
+                note.textContent = '這組空格滿了。先點已填的句子拿掉，再選新的。';
+                return;
+            }
+            fill[target] = chipId;
+            saSelectedSlot[qnum] = null;
+            note.textContent = '';
+            afterSaChange(qnum);
+        }
+
+        function afterSaChange(qnum) {
+            const q = SA_QS.find(item => item.num === qnum);
+            paintShortAnswer(q);
+            const fill = saFill[qnum] || {};
+            const complete = q.slots.every(slot => fill[slot.id]);
+            if (hasGraded || (practiceMode === 'instant' && complete)) {
+                applyShortAnswerGrade(q);
+                if (hasGraded) updateTotalScore();
+            } else {
+                const fb = document.getElementById(`saFb_${qnum}`);
+                if (fb) {
+                    fb.className = 'q-feedback';
+                    fb.textContent = '';
+                }
+            }
+        }
+
+        function applyShortAnswerGrade(q) {
+            const fill = saFill[q.num] || {};
+            const result = q.grade(fill);
+            q.slots.forEach(slot => {
+                const btn = document.getElementById(`saSlot_${q.num}_${slot.id}`);
+                btn.classList.remove('is-correct', 'is-wrong');
+                if (fill[slot.id]) btn.classList.add(result.slotStatus[slot.id] ? 'is-correct' : 'is-wrong');
+            });
+            let fb = document.getElementById(`saFb_${q.num}`);
+            if (!fb) {
+                fb = document.createElement('div');
+                fb.id = `saFb_${q.num}`;
+                document.getElementById(`saCard_${q.num}`).appendChild(fb);
+            }
+            const earned = result.items.reduce((sum, item) => sum + item.pts, 0);
+            const ok = earned === 8;
+            fb.className = 'q-feedback show ' + (ok ? 'ok' : 'bad');
+            fb.textContent = ok ? '✅ 這題 8 分都拿到了。' : `這題目前 ${earned} / 8。紅色空格要換掉。`;
+            document.getElementById(`saRubric_${q.num}`).classList.add('show');
+            result.items.forEach((item, rIdx) => {
+                const cb = document.getElementById(`saCb_${q.num}_${rIdx}`);
+                const tag = document.getElementById(`saAutoTag_${q.num}_${rIdx}`);
+                if (cb) cb.checked = item.pts === item.max && item.pts > 0;
+                if (tag) tag.style.display = cb && cb.checked ? 'inline-block' : 'none';
+            });
+            return earned;
+        }
+
+        // ================= GRADE ALL =================
+        function countUnanswered() {
+            let missing = 0;
+            MATCHING_QS.forEach(q => { if (!matchPairs[q.num]) missing++; });
+            MC_QS.forEach(q => { if (!document.querySelector(`input[name="mc_${q.num}"]:checked`)) missing++; });
+            TF_QS.forEach(q => { if (!tfAnswers[q.num]) missing++; });
+            SA_QS.forEach(q => {
+                const fill = saFill[q.num] || {};
+                if (!q.slots.every(slot => fill[slot.id])) missing++;
+            });
+            return missing;
+        }
+
+        function gradePractice(forceSubmit) {
+            const alertEl = document.getElementById('unansweredAlert');
+            const missing = countUnanswered();
+            if (!forceSubmit && missing > 0 && !hasGraded) {
+                alertEl.innerHTML = `⏰ 還有 <strong>${missing}</strong> 題沒填完。可以先補完，或直接交卷看答案：
+                    <button type="button" class="btn btn-blue" style="margin-left: 10px; padding: 7px 16px; font-size: 15px;" onclick="gradePractice(true)">直接交卷看答案</button>`;
+                alertEl.classList.add('show');
+                alertEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                return;
+            }
+            alertEl.classList.remove('show');
+
+            hasGraded = true;
+            let p1 = 0, p2 = 0, p3 = 0;
+
+            MATCHING_QS.forEach(q => { p1 += evaluateMatchQuestion(q); });
+            MC_QS.forEach(q => { p2 += evaluateMcQuestion(q); });
+            TF_QS.forEach(q => { p3 += evaluateTfQuestion(q); });
+
+            SA_QS.forEach(q => { applyShortAnswerGrade(q); });
+
+            const box = document.getElementById('scoreBox');
+            box.classList.add('show');
+            box.dataset.p1 = p1;
+            box.dataset.p2 = p2;
+            box.dataset.p3 = p3;
+            updateTotalScore();
+            box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        function updateTotalScore() {
+            if (!hasGraded) return;
+            const box = document.getElementById('scoreBox');
+            const p1 = Number(box.dataset.p1 || 0);
+            const p2 = Number(box.dataset.p2 || 0);
+            const p3 = Number(box.dataset.p3 || 0);
+            let p4 = 0;
+            document.querySelectorAll('.sa-rubric-box:checked').forEach(cb => {
+                p4 += Number(cb.dataset.pts || 0);
+            });
+            const total = p1 + p2 + p3 + p4;
+            document.getElementById('totalScoreDisplay').textContent = `${total} / 100`;
+            document.getElementById('scoreBreakdown').textContent =
+                `Part I: ${p1}/12 ｜ Part II: ${p2}/32 ｜ Part III: ${p3}/24 ｜ Part IV 簡答: ${p4}/32`;
+        }
+
+        function resetPractice() {
+            hasGraded = false;
+            tfAnswers = {};
+            matchPairs = {};
+            matchSelectedTerm = null;
+            saFill = {};
+            saSelectedSlot = {};
+            renderPractice();
+            document.getElementById('unansweredAlert').classList.remove('show');
+            document.getElementById('scoreBox').classList.remove('show');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ================= INIT =================
+        renderVocab();
+        renderChecklist();
+        renderPractice();
+    </script>
+</body>
+
+</html>
