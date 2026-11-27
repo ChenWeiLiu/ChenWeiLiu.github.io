@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="en" style="color-scheme: light">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="color-scheme" content="light" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Whose Is It?</title>
+    <style>
+        :root {
+            --ink: #243047;
+            --muted: #5c6b82;
+            --card: #ffffff;
+            --ok: #1b8a4a;
+            --ok-bg: #e5f8ec;
+            --no: #c2413a;
+            --no-bg: #ffeceb;
+            --line: #e7edf5;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "Avenir Next", "Segoe UI", "Chalkboard SE", "Comic Sans MS", sans-serif;
+            color: var(--ink);
+            background: linear-gradient(160deg, #fff4d8 0%, #d9f4ff 55%, #ffe3f2 100%);
+            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+        }
+
+        header {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 16px 16px 0;
+            display: grid;
+            grid-template-columns: 88px 1fr 88px;
+            align-items: center;
+            gap: 8px;
+        }
+
+        h1 {
+            margin: 0;
+            text-align: center;
+            font-size: clamp(1.45rem, 4.5vw, 2.15rem);
+            line-height: 1.15;
+        }
+
+        header button,
+        .ghost {
+            border: 0;
+            background: rgba(255, 255, 255, 0.8);
+            color: var(--ink);
+            border-radius: 999px;
+            min-height: 48px;
+            padding: 8px 14px;
+            font: inherit;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        #stars {
+            text-align: right;
+            font-size: 1.35rem;
+            letter-spacing: 1px;
+            color: #e39b00;
+        }
+
+        main {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 16px 16px 32px;
+        }
+
+        .lead, .zh {
+            color: var(--muted);
+            font-weight: 700;
+        }
+
+        .zh { font-size: 1.05rem; }
+
+        .worlds, .choices, .stack {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .worlds { margin-top: 16px; }
+
+        button { touch-action: manipulation; }
+
+        button:focus-visible {
+            outline: 4px solid #3a6ff0;
+            outline-offset: 3px;
+        }
+
+        .world,
+        .choice,
+        .go {
+            width: 100%;
+            border: 0;
+            border-radius: 24px;
+            font: inherit;
+            font-weight: 800;
+            cursor: pointer;
+            text-align: left;
+        }
+
+        .world {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            min-height: 92px;
+            padding: 14px 16px;
+            color: var(--ink);
+            box-shadow: 0 8px 0 rgba(36, 48, 71, 0.08);
+        }
+
+        .world:active, .choice:active, .go:active { transform: translateY(2px); }
+
+        .world .emo { font-size: 2.6rem; line-height: 1; }
+        .world b { display: block; font-size: 1.35rem; }
+        .world span { display: block; color: var(--muted); font-size: 1rem; margin-top: 2px; }
+
+        .playall {
+            margin-top: 14px;
+            width: 100%;
+            min-height: 64px;
+            border-radius: 22px;
+            border: 4px solid var(--ink);
+            background: #fff;
+            color: var(--ink);
+            font: inherit;
+            font-weight: 800;
+            font-size: 1.25rem;
+            cursor: pointer;
+        }
+
+        .card {
+            background: #ffffff;
+            color: #172033;
+            border-radius: 28px;
+            padding: 18px;
+            box-shadow: 0 12px 30px rgba(36, 48, 71, 0.08);
+        }
+
+        .pic {
+            position: relative;
+            min-height: 180px;
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 6px;
+            padding: 18px 12px 28px;
+        }
+
+        .pic .big { line-height: 1; }
+        .tag, .name {
+            position: absolute;
+            background: var(--ink);
+            color: white;
+            border-radius: 999px;
+            padding: 4px 12px;
+            font-weight: 800;
+        }
+        .tag { top: 10px; left: 10px; }
+        .name { bottom: 10px; left: 10px; background: white; color: var(--ink); }
+
+        .prompt {
+            color: #172033;
+            background: #fff8e8;
+            border-radius: 20px;
+            font-size: clamp(1.85rem, 5.4vw, 2.5rem);
+            font-weight: 800;
+            line-height: 1.45;
+            margin: 14px 0 8px;
+            padding: 14px 12px;
+            text-align: center;
+            -webkit-user-select: none;
+            user-select: none;
+            -webkit-touch-callout: none;
+        }
+
+        .blank {
+            display: inline-block;
+            min-width: 7.5rem;
+            height: 1.4em;
+            margin: 0 6px;
+            vertical-align: middle;
+            background: #ffe08a;
+            border: 3px dashed #e39b00;
+            border-radius: 12px;
+            color: transparent;
+        }
+
+        .blank.filled {
+            height: auto;
+            min-width: 0;
+            padding: 0 10px;
+            color: #146636;
+            background: #e5f8ec;
+            border-style: solid;
+            border-color: #1b8a4a;
+        }
+
+        .slot {
+            display: inline-block;
+            white-space: nowrap;
+            vertical-align: middle;
+        }
+
+        .after {
+            color: #0f4c81;
+            background: #e7f3ff;
+            border-radius: 12px;
+            padding: 0 8px;
+        }
+
+        .hint {
+            display: block;
+            width: fit-content;
+            max-width: 100%;
+            margin: 0 auto 14px;
+            padding: 8px 14px;
+            text-align: center;
+            color: #0f4c81;
+            background: #e7f3ff;
+            border-radius: 999px;
+            font-size: 1.2rem;
+            -webkit-user-select: none;
+            user-select: none;
+            -webkit-touch-callout: none;
+        }
+
+        .choice, .go {
+            min-height: 76px;
+            padding: 16px 18px;
+            font-size: clamp(1.45rem, 4.5vw, 2rem);
+            background: #fff;
+            color: var(--ink);
+            border: 4px solid #c9d6ea;
+            box-shadow: 0 6px 0 #d5e0ef;
+            text-align: center;
+        }
+
+        .choice.bad {
+            background: var(--no-bg);
+            border-color: #f0b4b0;
+            color: var(--no);
+            box-shadow: none;
+        }
+
+        .choice.good {
+            background: var(--ok-bg);
+            border-color: #8ed7aa;
+            color: var(--ok);
+            box-shadow: none;
+        }
+
+        .apo { color: #e23d3d; font-size: 1.2em; }
+
+        .say {
+            margin-top: 14px;
+            border-radius: 20px;
+            padding: 14px 16px;
+        }
+
+        .say.ok { background: var(--ok-bg); }
+        .say.no { background: var(--no-bg); }
+        .say .cheer { margin: 0 0 4px; font-size: 1.45rem; color: var(--ok); }
+        .say .en { margin: 0; font-size: 1.28rem; font-weight: 800; line-height: 1.35; }
+        .say .zh { margin: 6px 0 0; }
+
+        .go {
+            margin-top: 12px;
+            background: #1f8a4d;
+            color: white;
+            border-color: #146636;
+            box-shadow: 0 6px 0 #146636;
+        }
+
+        .hear {
+            margin-top: 8px;
+            background: #fff;
+            color: var(--ink);
+            border-color: #c9d6ea;
+            box-shadow: 0 6px 0 #d5e0ef;
+        }
+
+        .chips, .nope { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+        .chip, .nope b {
+            border-radius: 999px;
+            padding: 8px 12px;
+            font-size: 1.2rem;
+        }
+        .chip { background: #e8f7ee; }
+        .nope b { background: #ffeceb; color: var(--no); text-decoration: line-through; font-weight: 800; }
+
+        .rule-title { font-size: clamp(1.7rem, 5vw, 2.3rem); margin: 0 0 8px; }
+
+        @media (prefers-reduced-motion: reduce) {
+            * { transition: none !important; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <button id="homeBtn" type="button" hidden>Home</button>
+        <h1 id="title">Whose Is It?</h1>
+        <div id="stars" aria-live="polite">☆</div>
+    </header>
+    <main id="app"></main>
+    <script type="application/json" id="game-data">
+{
+  "worlds": [
+    {
+      "id": "next",
+      "emoji": "🧸",
+      "color": "#ffd6a5",
+      "title": "A thing comes next",
+      "zh": "後面有東西",
+      "rule": {
+        "title": "A thing comes next.",
+        "zh": "後面緊接著東西",
+        "chips": ["my ball", "his cap", "our dog"],
+        "nope": ["mine ball"]
+      },
+      "recap": ["A thing comes next → my, your, his, her, its, our, their."],
+      "items": [
+        {
+          "pics": ["👦", "⚽"],
+          "bg": "#d7f0ff",
+          "prompt": "This is ___ ball.",
+          "full": "This is my ball.",
+          "hint": "後面有 ball",
+          "whyEn": "A ball comes next, so we say my.",
+          "whyZh": "後面有東西 → my",
+          "choices": [
+            {"t": "my", "ok": true},
+            {"t": "mine", "whyEn": "Mine stands alone. A ball comes next.", "whyZh": "後面有東西，不用 mine"}
+          ]
+        },
+        {
+          "pics": ["🧒", "✏️"],
+          "bg": "#fff1c9",
+          "name": "you",
+          "prompt": "You have a pencil. Is this ___ pencil?",
+          "full": "You have a pencil. Is this your pencil?",
+          "hint": "空格後面有 pencil",
+          "whyEn": "A pencil comes next, so we say your.",
+          "whyZh": "後面有東西 → your",
+          "choices": [
+            {"t": "your", "ok": true},
+            {"t": "yours", "whyEn": "Yours stands alone. A pencil comes next.", "whyZh": "後面有東西，不用 yours"}
+          ]
+        },
+        {
+          "pics": ["👦", "🧢"],
+          "bg": "#e4f7df",
+          "name": "Sam",
+          "prompt": "Sam has a cap. This is ___ cap.",
+          "full": "Sam has a cap. This is his cap.",
+          "hint": "後面有 cap",
+          "whyEn": "Cap comes next. His tells whose cap.",
+          "whyZh": "後面有東西 → his",
+          "choices": [
+            {"t": "his", "ok": true},
+            {"t": "his's", "whyEn": "His's is not a word. Say his cap.", "whyZh": "沒有 his's 這個字"},
+            {"t": "him", "whyEn": "Him is not for a thing. Say his cap.", "whyZh": "要用 his，不是 him"}
+          ]
+        },
+        {
+          "pics": ["👧", "🧸"],
+          "bg": "#ffe3f1",
+          "name": "Mia",
+          "prompt": "Mia has a doll. This is ___ doll.",
+          "full": "Mia has a doll. This is her doll.",
+          "hint": "後面有 doll",
+          "whyEn": "Doll comes next, so we say her.",
+          "whyZh": "後面有東西 → her",
+          "choices": [
+            {"t": "her", "ok": true},
+            {"t": "hers", "whyEn": "Hers stands alone. Doll comes next.", "whyZh": "後面有東西，不用 hers"}
+          ]
+        },
+        {
+          "pics": ["🐶", "🦴"],
+          "bg": "#f3e8ff",
+          "prompt": "This is ___ bone.",
+          "full": "This is its bone.",
+          "hint": "狗的骨頭",
+          "whyEn": "The bone is the dog's. Say its. No extra mark.",
+          "whyZh": "它的是 its",
+          "choices": [
+            {"t": "its", "ok": true},
+            {"t": "it's", "whyEn": "It's means it is. Say its bone.", "whyZh": "it's 是 it is"}
+          ]
+        },
+        {
+          "pics": ["👨", "👩", "🧒", "🐶"],
+          "bg": "#dff6f0",
+          "prompt": "We have a dog. This is ___ dog.",
+          "full": "We have a dog. This is our dog.",
+          "hint": "後面有 dog",
+          "whyEn": "Dog comes next, so we say our.",
+          "whyZh": "後面有東西 → our",
+          "choices": [
+            {"t": "our", "ok": true},
+            {"t": "ours", "whyEn": "Ours stands alone. Dog comes next.", "whyZh": "後面有東西，不用 ours"}
+          ]
+        },
+        {
+          "pics": ["👦", "👧", "🪁"],
+          "bg": "#e7f0ff",
+          "prompt": "They have a kite. This is ___ kite.",
+          "full": "They have a kite. This is their kite.",
+          "hint": "後面有 kite",
+          "whyEn": "Kite comes next, so we say their.",
+          "whyZh": "後面有東西 → their",
+          "choices": [
+            {"t": "their", "ok": true},
+            {"t": "theirs", "whyEn": "Theirs stands alone. Kite comes next.", "whyZh": "後面有東西，不用 theirs"},
+            {"t": "their's", "whyEn": "Their's is not a word. Say their kite.", "whyZh": "沒有 their's 這個字"}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "alone",
+      "emoji": "⭐",
+      "color": "#caffbf",
+      "title": "The word stands alone",
+      "zh": "後面沒有東西",
+      "rule": {
+        "title": "Nothing comes next.",
+        "zh": "後面空空的。his 兩種都寫 his",
+        "chips": ["The ball is mine.", "The hat is his."],
+        "nope": ["mines", "his's", "hiss", "their's"]
+      },
+      "recap": [
+        "Nothing comes next → mine, yours, his, hers, ours, theirs.",
+        "Not a word: mines, his's, hiss, their's."
+      ],
+      "items": [
+        {
+          "pics": ["⚽"],
+          "bg": "#d7f0ff",
+          "prompt": "This ball is ___.",
+          "full": "This ball is mine.",
+          "hint": "後面沒有東西",
+          "whyEn": "Nothing comes next, so we say mine.",
+          "whyZh": "後面空的 → mine",
+          "choices": [
+            {"t": "mine", "ok": true},
+            {"t": "my", "whyEn": "My needs a thing after it.", "whyZh": "my 後面要有東西"},
+            {"t": "mines", "whyEn": "Mines is not a word. Say mine.", "whyZh": "沒有 mines 這個字"}
+          ]
+        },
+        {
+          "pics": ["✏️"],
+          "bg": "#fff1c9",
+          "prompt": "That pencil is ___.",
+          "full": "That pencil is yours.",
+          "hint": "後面沒有東西",
+          "whyEn": "Nothing comes next, so we say yours.",
+          "whyZh": "後面空的 → yours",
+          "choices": [
+            {"t": "yours", "ok": true},
+            {"t": "your", "whyEn": "Your needs a thing after it.", "whyZh": "your 後面要有東西"}
+          ]
+        },
+        {
+          "pics": ["🧸"],
+          "bg": "#ffe3f1",
+          "prompt": "The doll is ___.",
+          "full": "The doll is hers.",
+          "hint": "後面沒有東西",
+          "whyEn": "Nothing comes next, so we say hers.",
+          "whyZh": "後面空的 → hers",
+          "choices": [
+            {"t": "hers", "ok": true},
+            {"t": "her", "whyEn": "Her needs a thing after it.", "whyZh": "her 後面要有東西"},
+            {"t": "her's", "whyEn": "Her's is not a word. Say hers.", "whyZh": "沒有 her's 這個字"}
+          ]
+        },
+        {
+          "pics": ["🐶"],
+          "bg": "#f3e8ff",
+          "prompt": "The dog is ___.",
+          "full": "The dog is ours.",
+          "hint": "後面沒有東西",
+          "whyEn": "Nothing comes next, so we say ours.",
+          "whyZh": "後面空的 → ours",
+          "choices": [
+            {"t": "ours", "ok": true},
+            {"t": "our", "whyEn": "Our needs a thing after it.", "whyZh": "our 後面要有東西"}
+          ]
+        },
+        {
+          "pics": ["🪁"],
+          "bg": "#e7f0ff",
+          "prompt": "The kite is ___.",
+          "full": "The kite is theirs.",
+          "hint": "後面沒有東西",
+          "whyEn": "Nothing comes next, so we say theirs.",
+          "whyZh": "後面空的 → theirs",
+          "choices": [
+            {"t": "theirs", "ok": true},
+            {"t": "their", "whyEn": "Their needs a thing after it.", "whyZh": "their 後面要有東西"},
+            {"t": "their's", "whyEn": "Their's is not a word. Say theirs.", "whyZh": "沒有 their's 這個字"}
+          ]
+        },
+        {
+          "pics": ["👦", "🧢"],
+          "bg": "#e4f7df",
+          "prompt": "The hat is ___.",
+          "full": "The hat is his.",
+          "hint": "後面沒有東西",
+          "whyEn": "His can stand alone. Same spelling.",
+          "whyZh": "單獨也寫 his",
+          "choices": [
+            {"t": "his", "ok": true},
+            {"t": "hiss", "whyEn": "Hiss is not the word. His stands alone.", "whyZh": "不是 hiss"},
+            {"t": "his's", "whyEn": "His's is not a word. His stays his.", "whyZh": "沒有 his's 這個字"}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "its",
+      "emoji": "🐱",
+      "color": "#9bf6ff",
+      "title": "Its or it's",
+      "zh": "它的，或 it is",
+      "rule": {
+        "title": "its and it's",
+        "zh": "its 是它的。it's 是 it is",
+        "chips": ["its paw", "it's a bug"],
+        "nope": ["its's"]
+      },
+      "recap": ["its = 它的. it's = it is. its's is not a word."],
+      "items": [
+        {
+          "pics": ["🐱", "🐾"],
+          "bg": "#ffe8c7",
+          "prompt": "This is ___ paw.",
+          "full": "This is its paw.",
+          "hint": "貓的腳",
+          "whyEn": "The paw is the cat's. Say its.",
+          "whyZh": "它的 → its",
+          "choices": [
+            {"t": "its", "ok": true},
+            {"t": "it's", "whyEn": "It's means it is. Say its paw.", "whyZh": "這裡不是 it is"}
+          ]
+        },
+        {
+          "pics": ["🐞"],
+          "bg": "#e5f8d8",
+          "prompt": "Look! ___ a big bug.",
+          "full": "Look! It's a big bug.",
+          "hint": "意思是 it is",
+          "whyEn": "It's means it is a big bug.",
+          "whyZh": "it is → it's",
+          "choices": [
+            {"t": "it's", "ok": true},
+            {"t": "its", "whyEn": "Its needs a thing after it.", "whyZh": "its 後面要有東西"}
+          ]
+        },
+        {
+          "pics": ["🐦", "🪺"],
+          "bg": "#e7f0ff",
+          "prompt": "The bird is in ___ nest.",
+          "full": "The bird is in its nest.",
+          "hint": "鳥的窩",
+          "whyEn": "The nest is the bird's. Say its.",
+          "whyZh": "它的 → its",
+          "choices": [
+            {"t": "its", "ok": true},
+            {"t": "it's", "whyEn": "It's would mean it is nest. Say its nest.", "whyZh": "不是 it is nest"}
+          ]
+        },
+        {
+          "pics": ["🦀"],
+          "bg": "#ffe3e3",
+          "prompt": "Wow! ___ a red crab.",
+          "full": "Wow! It's a red crab.",
+          "hint": "意思是 it is",
+          "whyEn": "It's means it is a red crab.",
+          "whyZh": "it is → it's",
+          "choices": [
+            {"t": "it's", "ok": true},
+            {"t": "its", "whyEn": "Its needs a thing after it.", "whyZh": "its 後面要有東西"},
+            {"t": "its's", "whyEn": "Its's is not a word.", "whyZh": "沒有 its's 這個字"}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "one",
+      "emoji": "🚲",
+      "color": "#fdffb6",
+      "title": "One owner",
+      "zh": "一個主人，加 's",
+      "rule": {
+        "title": "One owner. Add 's.",
+        "zh": "一個人或一個，加 's",
+        "chips": ["Mike's bike", "the girl's bag", "the man's hat"],
+        "nope": ["Mikes", "the mans"]
+      },
+      "recap": ["One owner → add 's. Mike's, the girl's, the man's, the dog's."],
+      "items": [
+        {
+          "pics": ["👦", "🚲"],
+          "bg": "#fff1c9",
+          "tag": "1",
+          "name": "Mike",
+          "prompt": "This is ___ bike.",
+          "full": "This is Mike's bike.",
+          "hint": "只有 Mike 一個人",
+          "whyEn": "One boy, Mike. Add 's.",
+          "whyZh": "一個主人 → Mike's",
+          "choices": [
+            {"t": "Mike's", "ok": true},
+            {"t": "Mikes", "whyEn": "Put ' before s: Mike's.", "whyZh": "撇號放在 s 前面"},
+            {"t": "Mike", "whyEn": "Add 's to show the bike is his.", "whyZh": "要加 's"}
+          ]
+        },
+        {
+          "pics": ["👧", "👜"],
+          "bg": "#ffe3f1",
+          "tag": "1",
+          "prompt": "This is ___ bag.",
+          "full": "This is the girl's bag.",
+          "hint": "只有一個女孩",
+          "whyEn": "One girl. Add 's.",
+          "whyZh": "一個 → the girl's",
+          "choices": [
+            {"t": "the girl's", "ok": true},
+            {"t": "the girls'", "whyEn": "Girls' means many girls. This is one girl.", "whyZh": "這是一個，不是很多"},
+            {"t": "the girls", "whyEn": "Add 's: the girl's bag.", "whyZh": "要加 's"}
+          ]
+        },
+        {
+          "pics": ["👨", "🎩"],
+          "bg": "#e7f0ff",
+          "tag": "1",
+          "prompt": "This is ___ hat.",
+          "full": "This is the man's hat.",
+          "hint": "只有一個男人",
+          "whyEn": "One man. Add 's.",
+          "whyZh": "一個 → the man's",
+          "choices": [
+            {"t": "the man's", "ok": true},
+            {"t": "the mans", "whyEn": "Put ' in: the man's.", "whyZh": "撇號放在 s 前面"},
+            {"t": "the men", "whyEn": "Men means many men. This is one man.", "whyZh": "這是一個，不是很多"}
+          ]
+        },
+        {
+          "pics": ["🐶", "🥣"],
+          "bg": "#f3e8ff",
+          "tag": "1",
+          "prompt": "This is ___ bowl.",
+          "full": "This is the dog's bowl.",
+          "hint": "只有一隻狗",
+          "whyEn": "One dog. Add 's.",
+          "whyZh": "一個 → the dog's",
+          "choices": [
+            {"t": "the dog's", "ok": true},
+            {"t": "the dogs'", "whyEn": "Dogs' means many dogs. This is one dog.", "whyZh": "這是一隻，不是很多"},
+            {"t": "the dog", "whyEn": "Add 's: the dog's bowl.", "whyZh": "要加 's"}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "many",
+      "emoji": "👧",
+      "color": "#ffc6ff",
+      "title": "Many owners",
+      "zh": "很多主人",
+      "rule": {
+        "title": "Many owners.",
+        "zh": "已有 s，只加 '。沒有 s，加 's",
+        "chips": ["the boys'", "the girls'", "the children's"],
+        "nope": ["boys's", "childrens'"]
+      },
+      "recap": [
+        "Already ends in s → add ' : the boys', the girls', the students'.",
+        "No s at the end → add 's : the children's, the women's."
+      ],
+      "items": [
+        {
+          "pics": ["👦", "👦", "👦", "⚽"],
+          "bg": "#d7f0ff",
+          "tag": "很多",
+          "prompt": "These are ___ balls.",
+          "full": "These are the boys' balls.",
+          "hint": "boys 已經有 s",
+          "whyEn": "Boys already ends in s. Add only '.",
+          "whyZh": "已有 s，只加 '",
+          "choices": [
+            {"t": "the boys'", "ok": true},
+            {"t": "the boy's", "whyEn": "Boy's means one boy. These are many boys.", "whyZh": "這是很多，不是一個"},
+            {"t": "the boys's", "whyEn": "Do not add another s. Boys' is enough.", "whyZh": "不要再加一個 s"}
+          ]
+        },
+        {
+          "pics": ["👧", "👧", "👧", "👜"],
+          "bg": "#ffe3f1",
+          "tag": "很多",
+          "prompt": "These are ___ bags.",
+          "full": "These are the girls' bags.",
+          "hint": "girls 已經有 s",
+          "whyEn": "Many girls. Girls ends in s, so girls'.",
+          "whyZh": "已有 s → the girls'",
+          "choices": [
+            {"t": "the girls'", "ok": true},
+            {"t": "the girl's", "whyEn": "Girl's means one girl.", "whyZh": "這是很多，不是一個"},
+            {"t": "the girls's", "whyEn": "No extra s. Say the girls'.", "whyZh": "不要再加一個 s"}
+          ]
+        },
+        {
+          "pics": ["🧒", "🧒", "🧒", "📚"],
+          "bg": "#e7f0ff",
+          "tag": "很多",
+          "prompt": "These are ___ books.",
+          "full": "These are the students' books.",
+          "hint": "students 已經有 s",
+          "whyEn": "Students ends in s. Add only '.",
+          "whyZh": "已有 s → the students'",
+          "choices": [
+            {"t": "the students'", "ok": true},
+            {"t": "the student's", "whyEn": "Student's means one student.", "whyZh": "這是很多，不是一個"},
+            {"t": "the students's", "whyEn": "No extra s. Say the students'.", "whyZh": "不要再加一個 s"}
+          ]
+        },
+        {
+          "pics": ["🧒", "🧒", "🧒", "🧸"],
+          "bg": "#fff1c9",
+          "tag": "很多",
+          "prompt": "These are ___ toys.",
+          "full": "These are the children's toys.",
+          "hint": "children 沒有 s",
+          "whyEn": "Children has no s. Still add 's.",
+          "whyZh": "沒有 s → children's",
+          "choices": [
+            {"t": "the children's", "ok": true},
+            {"t": "the childrens'", "whyEn": "Children does not end in s. Use children's.", "whyZh": "不能寫 childrens'"},
+            {"t": "the childrens", "whyEn": "Add 's: children's.", "whyZh": "要加 's"}
+          ]
+        },
+        {
+          "pics": ["👩", "👩", "🎩"],
+          "bg": "#ffe8f6",
+          "tag": "很多",
+          "prompt": "These are ___ hats.",
+          "full": "These are the women's hats.",
+          "hint": "women 沒有 s",
+          "whyEn": "Women has no s. Add 's.",
+          "whyZh": "沒有 s → women's",
+          "choices": [
+            {"t": "the women's", "ok": true},
+            {"t": "the womens'", "whyEn": "Women does not end in s. Use women's.", "whyZh": "不能寫 womens'"},
+            {"t": "the womens", "whyEn": "Add 's: women's.", "whyZh": "要加 's"}
+          ]
+        }
+      ]
+    }
+  ]
+}
+    </script>
+    <script>
+        const DATA = JSON.parse(document.getElementById("game-data").textContent);
+        const app = document.getElementById("app");
+        const homeBtn = document.getElementById("homeBtn");
+        const starsEl = document.getElementById("stars");
+        const titleEl = document.getElementById("title");
+        const cheers = ["Nice!", "You got it!", "Super!", "Great tap!", "Yes!"];
+        let run = null;
+
+        homeBtn.addEventListener("click", function () {
+            window.clearTimeout(speakTimer);
+            if (window.speechSynthesis) window.speechSynthesis.cancel();
+            showHome();
+        });
+
+        function esc(s) {
+            return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        }
+
+        function pretty(s) {
+            return esc(s).split("'").join("<span class='apo'>'</span>");
+        }
+
+        function promptHTML(text, filled) {
+            const parts = String(text).split("___");
+            const before = pretty(parts[0] || "");
+            const afterRaw = parts[1] || "";
+            const afterWord = afterRaw.replace(/[?.!]/g, "").trim();
+            const blank = filled
+                ? "<span class='blank filled'>" + pretty(filled) + "</span>"
+                : "<span class='blank'></span>";
+            if (!afterWord) return before + blank + pretty(afterRaw);
+            return before + "<span class='slot'>" + blank + "<span class='after'>" + pretty(afterRaw) + "</span></span>";
+        }
+
+        function emoSize(n) {
+            if (n <= 2) return 96;
+            if (n === 3) return 78;
+            return 60;
+        }
+
+        function shuffle(list) {
+            const a = list.map(function (item) { return item; });
+            for (let i = a.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                const swap = a[i];
+                a[i] = a[j];
+                a[j] = swap;
+            }
+            return a;
+        }
+
+        function worldById(id) {
+            return DATA.worlds.find(function (world) { return world.id === id; });
+        }
+
+        function currentWorld() {
+            return worldById(run.ids[run.wi]);
+        }
+
+        function itemTotal() {
+            return run.ids.reduce(function (sum, id) {
+                return sum + worldById(id).items.length;
+            }, 0);
+        }
+
+        function starLabel(count) {
+            if (!count) return "☆";
+            return "★ " + count;
+        }
+
+        function paintChrome() {
+            homeBtn.hidden = !run;
+            titleEl.textContent = run ? currentWorld().title : "Whose Is It?";
+            starsEl.textContent = starLabel(run && run.stars);
+        }
+
+        function showHome() {
+            run = null;
+            paintChrome();
+            const buttons = DATA.worlds.map(function (world) {
+                return "<button type='button' class='world' data-id='" + world.id + "' style='background:" + world.color + "'>" +
+                    "<span class='emo'>" + world.emoji + "</span><span><b>" + esc(world.title) + "</b><span>" + esc(world.zh) + "</span></span></button>";
+            }).join("");
+            app.innerHTML =
+                "<p class='lead'>Tap a big button.</p>" +
+                "<p class='zh'>點一關。答錯會告訴你為什麼。</p>" +
+                "<div class='worlds'>" + buttons + "</div>" +
+                "<button type='button' class='playall' id='all'>Play them all<br><span class='zh'>五關都玩</span></button>";
+            app.querySelectorAll(".world").forEach(function (btn) {
+                btn.addEventListener("click", function () {
+                    sfx("tap");
+                    start([btn.dataset.id]);
+                });
+            });
+            document.getElementById("all").addEventListener("click", function () {
+                sfx("tap");
+                start(DATA.worlds.map(function (world) { return world.id; }));
+            });
+        }
+
+        function start(ids) {
+            run = { ids: ids, wi: 0, qi: 0, stars: 0, asked: 0, firstTry: true, locked: false, choices: [] };
+            showRule();
+        }
+
+        function sceneHTML(item) {
+            const pics = item.pics || [];
+            const size = emoSize(pics.length);
+            const emoji = pics.map(function (pic) {
+                return "<span class='big' style='font-size:" + size + "px'>" + pic + "</span>";
+            }).join("");
+            const tag = item.tag ? "<span class='tag'>" + esc(item.tag) + "</span>" : "";
+            const name = item.name ? "<span class='name'>" + esc(item.name) + "</span>" : "";
+            return "<div class='pic' style='background:" + item.bg + "'>" + tag + emoji + name + "</div>";
+        }
+
+        function showRule() {
+            const world = currentWorld();
+            const rule = world.rule;
+            paintChrome();
+            app.innerHTML =
+                "<section class='card'>" +
+                "<p class='rule-title'>" + pretty(rule.title) + "</p>" +
+                "<p class='zh'>" + esc(rule.zh) + "</p>" +
+                "<div class='chips'>" + rule.chips.map(function (chip) { return "<span class='chip'>" + pretty(chip) + "</span>"; }).join("") + "</div>" +
+                "<div class='nope'>" + rule.nope.map(function (word) { return "<b>" + pretty(word) + "</b>"; }).join("") + "</div>" +
+                "<button type='button' class='go' id='go'>Play</button>" +
+                "</section>";
+            document.getElementById("go").addEventListener("click", function () {
+                sfx("tap");
+                showQuestion();
+            });
+        }
+
+        function showQuestion() {
+            const item = currentWorld().items[run.qi];
+            run.firstTry = true;
+            run.locked = false;
+            run.choices = shuffle(item.choices);
+            paintChrome();
+            const buttons = run.choices.map(function (choice, index) {
+                return "<button type='button' class='choice' data-i='" + index + "'>" + pretty(choice.t) + "</button>";
+            }).join("");
+            app.innerHTML =
+                "<section class='card'>" +
+                sceneHTML(item) +
+                "<p class='prompt' id='prompt'>" + promptHTML(item.prompt) + "</p>" +
+                "<p class='zh hint'>" + esc(item.hint) + "</p>" +
+                "<div class='choices' id='choices'>" + buttons + "</div>" +
+                "<div id='say' role='status'></div>" +
+                "</section>";
+            app.querySelectorAll(".choice").forEach(function (btn) {
+                btn.addEventListener("click", function () { pick(Number(btn.dataset.i), btn); });
+            });
+        }
+
+        function pick(index, btn) {
+            if (!run || run.locked || btn.dataset.dead === "1") return;
+            const item = currentWorld().items[run.qi];
+            const choice = run.choices[index];
+            const say = document.getElementById("say");
+            if (choice.ok) {
+                run.locked = true;
+                btn.classList.add("good");
+                app.querySelectorAll(".choice").forEach(function (other) {
+                    if (other !== btn) other.disabled = true;
+                });
+                if (run.firstTry) run.stars += 1;
+                run.asked += 1;
+                paintChrome();
+                document.getElementById("prompt").innerHTML = pretty(item.full);
+                const cheer = cheers[Math.floor(Math.random() * cheers.length)];
+                say.className = "say ok";
+                say.innerHTML = "<p class='cheer'>" + cheer + "</p><p class='en'>" + pretty(item.whyEn) + "</p><p class='zh'>" + esc(item.whyZh) + "</p>";
+                const next = document.createElement("button");
+                next.type = "button";
+                next.className = "go";
+                next.id = "next";
+                next.textContent = "Next";
+                next.addEventListener("click", advance);
+                say.after(next);
+                const hear = document.createElement("button");
+                hear.type = "button";
+                hear.className = "go hear";
+                hear.textContent = "Hear it";
+                hear.addEventListener("click", function () { speak(item.full, 40); });
+                next.after(hear);
+                sfx("ok");
+                speak(item.full, 420);
+            } else {
+                run.firstTry = false;
+                btn.classList.add("bad");
+                btn.dataset.dead = "1";
+                sfx("no");
+                say.className = "say no";
+                say.innerHTML = "<p class='en'>" + pretty(choice.whyEn) + "</p><p class='zh'>" + esc(choice.whyZh) + "</p>";
+            }
+        }
+
+        const NOVELTY = /^(Albert|Bad News|Bahh|Bells|Boing|Bubbles|Cellos|Wobble|Fred|Good News|Jester|Junior|Organ|Superstar|Ralph|Trinoids|Whisper|Zarvox)$/i;
+        let kidVoice = null;
+        let speakTimer = 0;
+        let audioCtx = null;
+
+        function pickVoice() {
+            if (!window.speechSynthesis) return null;
+            const voices = window.speechSynthesis.getVoices().filter(function (voice) {
+                return /^en(-|_)US/i.test(voice.lang || "") && !NOVELTY.test(voice.name);
+            });
+            const prefer = ["Samantha", "Flo", "Reed", "Sandy", "Shelley", "Kathy", "Google US English"];
+            for (let i = 0; i < prefer.length; i++) {
+                const exact = voices.find(function (voice) { return voice.name === prefer[i]; });
+                if (exact) return exact;
+                const close = voices.find(function (voice) { return voice.name.indexOf(prefer[i]) === 0; });
+                if (close) return close;
+            }
+            return voices[0] || null;
+        }
+
+        function loadVoice() {
+            kidVoice = pickVoice();
+        }
+
+        if (window.speechSynthesis) {
+            window.speechSynthesis.onvoiceschanged = loadVoice;
+            loadVoice();
+        }
+
+        function forSpeech(text) {
+            return String(text)
+                .replace(/\bIt's\b/g, "It is")
+                .replace(/\bit's\b/g, "it is")
+                .replace(/(\w+)s'/g, "$1s")
+                .replace(/(\w+)'s/g, "$1s");
+        }
+
+        function toneCtx() {
+            const Ctx = window.AudioContext || window.webkitAudioContext;
+            if (!Ctx) return null;
+            if (!audioCtx) audioCtx = new Ctx();
+            if (audioCtx.state === "suspended") audioCtx.resume();
+            return audioCtx;
+        }
+
+        function blip(freq, start, dur, type, vol) {
+            const ctx = toneCtx();
+            if (!ctx) return;
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, ctx.currentTime + start);
+            gain.gain.setValueAtTime(0.0001, ctx.currentTime + start);
+            gain.gain.exponentialRampToValueAtTime(vol, ctx.currentTime + start + 0.02);
+            gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + start + dur);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(ctx.currentTime + start);
+            osc.stop(ctx.currentTime + start + dur + 0.02);
+        }
+
+        function sfx(kind) {
+            if (kind === "ok") {
+                blip(523, 0, 0.12, "sine", 0.09);
+                blip(659, 0.1, 0.12, "sine", 0.09);
+                blip(784, 0.2, 0.2, "sine", 0.09);
+            } else if (kind === "no") {
+                blip(196, 0, 0.14, "triangle", 0.06);
+                blip(146, 0.09, 0.16, "triangle", 0.05);
+            } else if (kind === "tap") {
+                blip(520, 0, 0.05, "sine", 0.04);
+            } else if (kind === "win") {
+                blip(523, 0, 0.1, "sine", 0.09);
+                blip(659, 0.11, 0.1, "sine", 0.09);
+                blip(784, 0.22, 0.1, "sine", 0.09);
+                blip(1046, 0.33, 0.24, "sine", 0.09);
+            }
+        }
+
+        function speak(text, delay) {
+            try {
+                if (!window.speechSynthesis) return;
+                window.clearTimeout(speakTimer);
+                window.speechSynthesis.cancel();
+                const utter = new SpeechSynthesisUtterance(forSpeech(text));
+                utter.lang = "en-US";
+                utter.rate = 0.82;
+                utter.pitch = 1;
+                if (!kidVoice) kidVoice = pickVoice();
+                if (kidVoice) utter.voice = kidVoice;
+                speakTimer = window.setTimeout(function () {
+                    if (!kidVoice) kidVoice = pickVoice();
+                    if (kidVoice) utter.voice = kidVoice;
+                    window.speechSynthesis.speak(utter);
+                }, delay == null ? 80 : delay);
+            } catch (err) {
+                return;
+            }
+        }
+
+        function advance() {
+            const world = currentWorld();
+            if (run.qi + 1 < world.items.length) {
+                run.qi += 1;
+                showQuestion();
+                return;
+            }
+            if (run.wi + 1 < run.ids.length) {
+                run.wi += 1;
+                run.qi = 0;
+                showBridge();
+                return;
+            }
+            showEnd();
+        }
+
+        function showBridge() {
+            const world = currentWorld();
+            paintChrome();
+            app.innerHTML =
+                "<section class='card'>" +
+                "<p class='rule-title'>" + world.emoji + " " + esc(world.title) + "</p>" +
+                "<p class='zh'>" + esc(world.zh) + "</p>" +
+                "<button type='button' class='go' id='go'>Go</button>" +
+                "</section>";
+            document.getElementById("go").addEventListener("click", showRule);
+        }
+
+        function showEnd() {
+            sfx("win");
+            const total = itemTotal();
+            const played = run.ids.map(worldById);
+            const line = run.stars === total
+                ? "You got every star!"
+                : (run.stars === 0 ? "You finished!" : ("You got " + run.stars + (run.stars === 1 ? " star!" : " stars!")));
+            const recap = played.map(function (world) {
+                return world.recap.map(function (text) { return "<p class='en'>" + pretty(text) + "</p>"; }).join("");
+            }).join("");
+            titleEl.textContent = "Whose Is It?";
+            starsEl.textContent = starLabel(run.stars);
+            app.innerHTML =
+                "<section class='card'>" +
+                "<p class='rule-title'>" + line + "</p>" +
+                "<p class='zh'>可以再玩一次。</p>" +
+                recap +
+                "<button type='button' class='go' id='again'>Play again</button>" +
+                "<button type='button' class='go hear' id='menu'>Home</button>" +
+                "</section>";
+            const ids = run.ids.slice();
+            document.getElementById("again").addEventListener("click", function () { start(ids); });
+            document.getElementById("menu").addEventListener("click", showHome);
+        }
+
+        showHome();
+    </script>
+</body>
+</html>
